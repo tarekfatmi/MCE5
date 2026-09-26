@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agents Cognitifs Conseil — MCE</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#fefbf6;color:#2a1a10;line-height:1.9;position:relative;min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;background:
+  radial-gradient(ellipse at 15% 10%,rgba(232,163,61,.14) 0%,transparent 45%),
+  radial-gradient(ellipse at 85% 20%,rgba(194,65,12,.10) 0%,transparent 45%),
+  radial-gradient(ellipse at 20% 90%,rgba(217,119,6,.10) 0%,transparent 45%),
+  radial-gradient(ellipse at 90% 85%,rgba(180,83,9,.09) 0%,transparent 45%),
+  linear-gradient(180deg,#fefbf6 0%,#fdf6ec 50%,#fefbf6 100%)}
+.container{max-width:1200px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+:root{
+  --gold:#c98a1a;
+  --gold-deep:#a16207;
+  --gold-light:#e8b84a;
+  --amber:#d97706;
+  --orange:#ea580c;
+  --rust:#c2410c;
+  --text:#2a1a10;
+  --text-soft:#5a4030;
+  --card:#ffffff;
+}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#f5e9d6}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:.02em;color:var(--text)}
+h1{font-size:2.6rem;line-height:1.2}
+h2{font-size:2.4rem;color:var(--gold-deep);display:inline-block;position:relative}
+h2::after{content:'';position:absolute;bottom:-8px;left:0;width:60px;height:3px;background:linear-gradient(90deg,var(--gold-light),var(--amber),var(--rust));border-radius:2px;transition:width .6s ease}
+h2:hover::after{width:100%}
+h3{font-size:1.3rem;color:var(--gold-deep);margin-bottom:10px}
+p{font-size:1rem;font-weight:400;color:var(--text-soft);line-height:1.9}
+.gold{color:var(--gold-deep);font-weight:600}
+.divider{width:80px;height:3px;background:linear-gradient(90deg,var(--gold-light),var(--amber),var(--rust));border-radius:2px;margin:22px auto}
+
+/* ===== TOP BAR ===== */
+.top-bar{position:sticky;top:0;z-index:1000;background:rgba(254,251,246,.94);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,138,26,.2);padding:14px 0}
+.top-bar .inner{display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto;padding:0 20px;flex-wrap:wrap;gap:10px}
+.top-bar .brand{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold-deep);font-weight:900;letter-spacing:3px;text-decoration:none}
+.top-bar .back{font-family:'Inter',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--text);text-decoration:none;padding:8px 16px;border:1.5px solid var(--gold);border-radius:20px;transition:all .3s ease;font-weight:500;background:#fff}
+.top-bar .back:hover{color:#fff;border-color:var(--rust);background:var(--rust);transform:translateY(-1px);box-shadow:0 6px 16px rgba(194,65,12,.3)}
+
+/* ===== HERO ===== */
+.hero-landing{padding:70px 0 50px 0;text-align:center;border-bottom:1px solid rgba(201,138,26,.15);position:relative}
+.hero-landing .eyebrow{font-size:.75rem;color:#fff;letter-spacing:5px;text-transform:uppercase;font-weight:600;margin-bottom:22px;display:inline-block;padding:6px 18px;background:linear-gradient(135deg,var(--amber),var(--rust));border-radius:20px;box-shadow:0 4px 14px rgba(234,88,12,.25)}
+.hero-landing h1{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;letter-spacing:3px;margin-bottom:22px;line-height:1.25}
+.hero-landing h1 .line-1{color:var(--gold-deep);display:block}
+.hero-landing h1 .line-2{display:block;font-style:italic;font-weight:700;font-size:2.4rem;margin-top:6px;background:linear-gradient(135deg,var(--amber),var(--rust));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-landing .sous-titre{font-size:1.15rem;color:var(--text-soft);font-weight:400;max-width:780px;margin:0 auto 14px auto;line-height:1.9}
+.hero-landing .tagline{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--gold-deep);font-style:italic;margin-top:28px;font-weight:600}
+
+/* ===== SECTIONS ===== */
+section{padding:80px 0;border-bottom:1px solid rgba(201,138,26,.12);scroll-margin-top:80px;position:relative}
+section:last-of-type{border-bottom:none}
+.section-titre{text-align:center;margin-bottom:50px}
+.section-titre p{max-width:700px;margin:14px auto 0 auto;color:var(--text-soft);font-size:1.05rem;text-align:center}
+
+/* ===== CARTES AGENTS ===== */
+.grille-agents{display:grid;grid-template-columns:1fr;gap:22px;max-width:1100px;margin:0 auto}
+
+.agent-card{
+  position:relative;
+  background:var(--card);
+  border:1px solid rgba(201,138,26,.15);
+  border-radius:8px;
+  padding:0;
+  overflow:hidden;
+  transition:all .5s cubic-bezier(.2,.8,.2,1);
+  cursor:pointer;
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  box-shadow:0 4px 20px rgba(42,26,16,.06);
+}
+.agent-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(232,163,61,.06) 0%,transparent 50%);
+  opacity:0;
+  transition:opacity .5s ease;
+  pointer-events:none;
+}
+.agent-card:hover{
+  transform:translateY(-8px) scale(1.01);
+  border-color:var(--gold);
+  box-shadow:
+    0 0 0 1px rgba(201,138,26,.35),
+    0 25px 50px rgba(201,138,26,.20),
+    0 10px 30px rgba(194,65,12,.10);
+}
+.agent-card:hover::before{opacity:1}
+
+.agent-card .card-inner{
+  padding:40px 28px 32px 28px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:18px;
+  position:relative;
+  z-index:1;
+}
+
+/* Palette automne par carte */
+.agent-card:nth-child(1) .agent-icone{--accent:#dc2626;--accent-soft:rgba(220,38,38,.12);--accent-deep:#b91c1c}
+.agent-card:nth-child(2) .agent-icone{--accent:#ea580c;--accent-soft:rgba(234,88,12,.12);--accent-deep:#c2410c}
+.agent-card:nth-child(3) .agent-icone{--accent:#d97706;--accent-soft:rgba(217,119,6,.12);--accent-deep:#b45309}
+.agent-card:nth-child(4) .agent-icone{--accent:#ca8a04;--accent-soft:rgba(202,138,4,.14);--accent-deep:#a16207}
+.agent-card:nth-child(5) .agent-icone{--accent:#65a30d;--accent-soft:rgba(101,163,13,.12);--accent-deep:#4d7c0f}
+.agent-card:nth-child(6) .agent-icone{--accent:#0891b2;--accent-soft:rgba(8,145,178,.12);--accent-deep:#0e7490}
+.agent-card:nth-child(7) .agent-icone{--accent:#9333ea;--accent-soft:rgba(147,51,234,.12);--accent-deep:#7e22ce}
+.agent-card:nth-child(8) .agent-icone{--accent:#db2777;--accent-soft:rgba(219,39,119,.12);--accent-deep:#be185d}
+.agent-card:nth-child(9) .agent-icone{--accent:#c026d3;--accent-soft:rgba(192,38,211,.12);--accent-deep:#a21caf}
+.agent-card:nth-child(10) .agent-icone{--accent:#16a34a;--accent-soft:rgba(22,163,74,.12);--accent-deep:#15803d}
+
+.agent-card .agent-icone{
+  width:84px;
+  height:84px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, var(--accent-soft, rgba(201,138,26,.15)), rgba(255,255,255,.7));
+  border:2.5px solid var(--accent, rgba(201,138,26,.4));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:1.9rem;
+  color:var(--accent-deep, var(--gold-deep));
+  font-weight:900;
+  transition:all .5s ease;
+  box-shadow:0 8px 20px rgba(0,0,0,.06), inset 0 0 20px var(--accent-soft, rgba(201,138,26,.1));
+}
+.agent-card:hover .agent-icone{
+  transform:scale(1.12) rotate(-4deg);
+  border-color:var(--accent-deep, var(--gold-deep));
+  background:radial-gradient(circle at 30% 30%, var(--accent-soft, rgba(201,138,26,.2)), rgba(255,255,255,.9));
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.1),
+    inset 0 0 30px var(--accent-soft, rgba(201,138,26,.15)),
+    0 0 40px var(--accent-soft, rgba(201,138,26,.2));
+}
+
+.agent-card .nom{
+  font-family:'Playfair Display',serif;
+  font-size:1.7rem;
+  color:var(--gold-deep);
+  font-weight:700;
+  letter-spacing:2px;
+  transition:all .4s ease;
+}
+.agent-card:hover .nom{
+  letter-spacing:3px;
+  text-shadow:0 2px 20px rgba(201,138,26,.35);
+}
+
+.agent-card .desc{
+  font-size:.9rem;
+  color:var(--text-soft);
+  font-weight:400;
+  line-height:1.7;
+  max-width:280px;
+  min-height:44px;
+  transition:color .4s ease;
+}
+.agent-card:hover .desc{color:var(--text)}
+
+.agent-card .card-footer{
+  border-top:1px solid rgba(201,138,26,.18);
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-family:'Inter',sans-serif;
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gold-deep);
+  transition:all .4s ease;
+  position:relative;
+  z-index:1;
+  background:linear-gradient(180deg,transparent,rgba(201,138,26,.03));
+}
+.agent-card:hover .card-footer{
+  background:linear-gradient(135deg,var(--gold-light),var(--amber));
+  color:#fff;
+  letter-spacing:4px;
+  border-top-color:transparent;
+}
+.agent-card .card-footer .arrow{
+  display:inline-block;
+  transition:transform .4s ease;
+}
+.agent-card:hover .card-footer .arrow{transform:translateX(6px)}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:40px 0 24px 0;border-top:1px solid rgba(201,138,26,.15);margin-top:40px}
+.footer p{font-size:.7rem;color:#9a8a78;font-weight:400}
+
+/* ===== RESPONSIVE ===== */
+@media(min-width:640px){
+  .grille-agents{grid-template-columns:repeat(2,1fr)}
+  .hero-landing h1{font-size:3.2rem}
+  .hero-landing h1 .line-2{font-size:2.8rem}
+}
+@media(min-width:900px){
+  .container{padding:0 40px}
+  .hero-landing h1{font-size:3.6rem;letter-spacing:5px}
+  .hero-landing h1 .line-2{font-size:3.2rem}
+  .grille-agents{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:639px){
+  .hero-landing h1{font-size:1.9rem;letter-spacing:2px}
+  .hero-landing h1 .line-2{font-size:1.6rem}
+  section{padding:55px 0}
+  .agent-card .card-inner{padding:32px 22px 26px 22px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+    <div class="inner">
+        <a href="indexmce.html" class="brand">MCE</a>
+        <a href="indexmce.html#plateformes" class="back">← Retour à MCE</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero-landing">
+        <div class="eyebrow">Plateforme conseil — MCE</div>
+        <h1>
+            <span class="line-1">Agents Cognitifs</span>
+            <span class="line-2">Conseil</span>
+        </h1>
+        <p class="sous-titre">
+            Des agents cognitifs vifs et opérationnels, calibrés pour chaque levier de croissance.<br>
+            Du business au e-commerce, transformez votre stratégie en action.
+        </p>
+        <p class="tagline">"Deux univers. Dix agents. Une seule ambition."</p>
+    </section>
+
+    <!-- ===== BUSINESS — 5 AGENTS ===== -->
+    <section id="business">
+        <div class="section-titre">
+            <h2>Business</h2>
+            <div class="divider"></div>
+            <p>Cinq agents pour structurer, vendre et faire croître votre activité.</p>
+        </div>
+        <div class="grille-agents">
+            <a href="publicite.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">01</div>
+                    <div class="nom">Publicité</div>
+                    <div class="desc">Créer des campagnes qui captent et convertissent.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="marketing.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">02</div>
+                    <div class="nom">Marketing</div>
+                    <div class="desc">Construire une stratégie d'acquisition solide.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="vente.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">03</div>
+                    <div class="nom">Vente</div>
+                    <div class="desc">Maîtriser l'art de la vente et de la négociation.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="businessplan.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">04</div>
+                    <div class="nom">Business Plan</div>
+                    <div class="desc">Structurer votre projet avec méthode et clarté.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="entrepreneuriat.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">05</div>
+                    <div class="nom">Entrepreneuriat</div>
+                    <div class="desc">Passer de l'idée à l'action avec confiance.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== E-COMMERCE — 5 AGENTS ===== -->
+    <section id="ecommerce">
+        <div class="section-titre">
+            <h2>E-commerce</h2>
+            <div class="divider"></div>
+            <p>Cinq agents pour optimiser, convertir et fidéliser sur le digital.</p>
+        </div>
+        <div class="grille-agents">
+            <a href="conversion.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">06</div>
+                    <div class="nom">Conversion</div>
+                    <div class="desc">Transformer vos visiteurs en clients réels.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="leads.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">07</div>
+                    <div class="nom">Leads</div>
+                    <div class="desc">Générer et qualifier des prospects de qualité.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="tunnel.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">08</div>
+                    <div class="nom">Tunnel</div>
+                    <div class="desc">Construire un parcours de vente automatisé.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="influenceur.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">09</div>
+                    <div class="nom">Influenceur</div>
+                    <div class="desc">Activer les bonnes voix pour amplifier votre marque.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+            <a href="fidelisation.html" class="agent-card">
+                <div class="card-inner">
+                    <div class="agent-icone">10</div>
+                    <div class="nom">Fidélisation</div>
+                    <div class="desc">Retenir, réengager et faire revenir vos clients.</div>
+                </div>
+                <div class="card-footer">Lancer l'agent <span class="arrow">→</span></div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p>MCE — Mindset Cognitive Experience</p>
+        <p style="margin-top:6px;font-size:.65rem;color:#9a8a78;">Agents Cognitifs Conseil © 2026 — Créé en Tunisie.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

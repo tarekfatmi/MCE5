@@ -1,0 +1,2734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>AGENT TRAFIC — Branding Diagnostique</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --black-rich: #060606;
+            --black-card: #111111;
+            --black-card-hover: #181818;
+            --red: #e63946;
+            --red-light: #ff5a67;
+            --red-subtle: rgba(230, 57, 70, 0.12);
+            --red-glow: rgba(230, 57, 70, 0.15);
+            --white: #f5f5f5;
+            --white-muted: #888888;
+            --white-dim: #555555;
+            --white-pure: #ffffff;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --fs-micro: 0.55rem;
+            --fs-tiny: 0.65rem;
+            --fs-small: 0.75rem;
+            --fs-base: 0.9rem;
+            --fs-md: 1.05rem;
+            --fs-lg: 1.3rem;
+            --fs-xl: 1.7rem;
+            --fs-2xl: 2.4rem;
+            --fs-3xl: 3.6rem;
+            --fs-4xl: 5.2rem;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-full: 9999px;
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 40px rgba(230, 57, 70, 0.06);
+            --shadow-glow-strong: 0 0 60px rgba(230, 57, 70, 0.10);
+            --transition-base: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --header-height: 60px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--black-rich);
+            color: var(--white);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-top: var(--header-height);
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(230, 57, 70, 0.02) 0%, transparent 70%);
+        }
+
+        #brand-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(6, 6, 6, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(230, 57, 70, 0.08);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--header-height);
+            transition: border-color var(--transition-base);
+        }
+
+        #brand-header.scrolled {
+            border-bottom-color: rgba(230, 57, 70, 0.15);
+        }
+
+        #brand-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+            letter-spacing: 0.5px;
+            color: var(--white);
+        }
+
+        #brand-header .brand .red {
+            color: var(--red);
+        }
+
+        #brand-header .brand .marker {
+            color: var(--red);
+            font-size: 0.6rem;
+            opacity: 0.6;
+        }
+
+        #brand-header .phase-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #brand-header .phase-text {
+            font-size: clamp(0.6rem, 1.4vw, 0.75rem);
+            font-weight: 500;
+            color: var(--white-muted);
+            letter-spacing: 0.3px;
+            transition: color var(--transition-base);
+        }
+
+        #brand-header .phase-text.active {
+            color: var(--red);
+        }
+
+        #brand-header .block-counter {
+            font-size: 0.5rem;
+            font-weight: 600;
+            color: var(--red);
+            letter-spacing: 0.5px;
+            background: rgba(230, 57, 70, 0.06);
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(230, 57, 70, 0.08);
+            display: none;
+            white-space: nowrap;
+        }
+
+        #brand-header .block-counter.visible {
+            display: inline-block;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 80vh;
+            padding: 0 var(--space-md) var(--space-xl);
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-16px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .slide-down {
+            animation: slideDown 0.35s ease forwards;
+        }
+
+        @keyframes pulseRed {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes revealScore {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+            60% {
+                transform: scale(1.08);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        /* ===== LANDING PAGE ===== */
+        .welcome {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            min-height: 70vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome.active {
+            display: flex;
+        }
+
+        .welcome.hidden {
+            display: none !important;
+        }
+
+        .welcome .badge {
+            display: inline-block;
+            border: none;
+            color: var(--white-pure);
+            font-size: var(--fs-tiny);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 6px 0;
+            margin-bottom: var(--space-lg);
+            font-weight: 500;
+            background: transparent;
+        }
+
+        .welcome h1 {
+            font-size: clamp(2.4rem, 9vw, 3.6rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: var(--space-sm);
+        }
+
+        .welcome h1 .red {
+            color: var(--red);
+        }
+
+        .welcome .tagline {
+            font-size: clamp(0.95rem, 2.8vw, 1.2rem);
+            color: var(--white-muted);
+            font-weight: 300;
+            max-width: 480px;
+            margin: 0 auto var(--space-sm);
+            line-height: 1.5;
+        }
+
+        .welcome .stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin: var(--space-md) 0 var(--space-2xl);
+            flex-wrap: wrap;
+        }
+
+        .welcome .stats .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .welcome .stats .stat .number {
+            font-size: var(--fs-md);
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: -0.02em;
+        }
+
+        .welcome .stats .stat .label {
+            font-size: var(--fs-micro);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white-dim);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--red);
+            color: var(--white-pure);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-md);
+            padding: 18px 48px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            max-width: 300px;
+            letter-spacing: 0.3px;
+            min-height: 60px;
+            touch-action: manipulation;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            background: var(--red-light);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary.hidden {
+            display: none !important;
+        }
+
+        .btn-small-ghost {
+            background: transparent;
+            border: none;
+            color: var(--white-dim);
+            font-family: var(--font);
+            font-size: var(--fs-tiny);
+            cursor: pointer;
+            padding: var(--space-sm) var(--space-md);
+            transition: var(--transition-base);
+            touch-action: manipulation;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(230, 57, 70, 0.1);
+        }
+
+        .btn-small-ghost:hover {
+            color: var(--red);
+            text-decoration-color: var(--red);
+        }
+
+        /* ===== QUESTIONNAIRE ===== */
+        .question-screen {
+            padding: var(--space-sm) 0 var(--space-md);
+            position: relative;
+        }
+
+        .block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 0 var(--space-md) 0;
+            border-bottom: 1px solid rgba(230, 57, 70, 0.04);
+            margin-bottom: var(--space-md);
+        }
+
+        .block-header .block-title {
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .block-header .block-title .light {
+            font-weight: 300;
+            color: var(--white-muted);
+        }
+
+        .block-header .block-counter {
+            font-size: var(--fs-micro);
+            color: var(--white-dim);
+            letter-spacing: 0.5px;
+            background: rgba(230, 57, 70, 0.04);
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(230, 57, 70, 0.04);
+        }
+
+        .progress-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-md);
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--fs-tiny);
+            color: var(--white-dim);
+            letter-spacing: 0.3px;
+        }
+
+        .progress-top .qnum {
+            font-weight: 600;
+            color: var(--white-muted);
+        }
+
+        .progress-top .qnum span {
+            color: var(--red);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            width: 0%;
+            background: var(--red);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .question-area {
+            padding: var(--space-sm) 0 var(--space-md);
+            scroll-margin-top: 20px;
+        }
+
+        .question-codex {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--white-dim);
+            margin-bottom: var(--space-xs);
+            font-weight: 500;
+        }
+
+        .question-codex strong {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: var(--space-lg);
+            color: var(--white);
+            letter-spacing: -0.01em;
+        }
+
+        .reponses-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .reponse-card {
+            background: var(--black-card);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: var(--transition-base);
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            position: relative;
+        }
+
+        .reponse-card:hover {
+            border-color: rgba(230, 57, 70, 0.15);
+            background: var(--black-card-hover);
+        }
+
+        .reponse-card:active {
+            transform: scale(0.98);
+        }
+
+        .reponse-card .letter {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: var(--fs-tiny);
+            color: var(--white-dim);
+            transition: var(--transition-base);
+        }
+
+        .reponse-card .text {
+            font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+            line-height: 1.4;
+            color: var(--white-muted);
+            padding-top: 1px;
+            transition: color var(--transition-base);
+        }
+
+        .reponse-card.selected {
+            border-color: var(--red);
+            background: rgba(230, 57, 70, 0.04);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .reponse-card.selected .letter {
+            background: var(--red);
+            color: var(--white-pure);
+            border-color: var(--red);
+        }
+
+        .reponse-card.selected .text {
+            color: var(--white);
+        }
+
+        .reponse-card.selected::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius-md);
+            padding: 1px;
+            background: linear-gradient(135deg, var(--red), rgba(230, 57, 70, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .btn-validate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--white-dim);
+            font-family: var(--font);
+            font-size: var(--fs-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+            min-height: 54px;
+            touch-action: manipulation;
+            user-select: none;
+            margin-bottom: var(--space-xs);
+        }
+
+        .btn-validate.active {
+            background: var(--red);
+            color: var(--white-pure);
+            border-color: var(--red);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-validate.active:hover,
+        .btn-validate.active:focus-visible {
+            background: var(--red-light);
+            transform: scale(1.01);
+        }
+
+        .btn-validate.active:active {
+            transform: scale(0.97);
+        }
+
+        .btn-validate .arrow {
+            display: inline-block;
+            transition: transform var(--transition-base);
+        }
+
+        .btn-validate.active .arrow {
+            transform: translateX(4px);
+        }
+
+        .btn-validate-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+            margin-top: var(--space-xs);
+        }
+
+        .btn-validate-row .btn-small-ghost {
+            align-self: center;
+        }
+
+        /* ===== TRANSITION BLOC ===== */
+        .block-transition {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 50vh;
+        }
+
+        .block-transition.active {
+            display: flex;
+        }
+
+        .block-transition .chapter {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--white-dim);
+            margin-bottom: var(--space-sm);
+        }
+
+        .block-transition .block-title {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: var(--space-sm);
+            line-height: 1.1;
+        }
+
+        .block-transition .block-sub {
+            font-size: var(--fs-base);
+            color: var(--white-muted);
+            margin-bottom: var(--space-xs);
+        }
+
+        .block-transition .block-desc {
+            font-size: var(--fs-small);
+            color: var(--white-dim);
+            margin-bottom: var(--space-xl);
+            max-width: 400px;
+        }
+
+        .block-transition .btn-primary {
+            max-width: 260px;
+        }
+
+        .block-transition .btn-primary::after {
+            display: none;
+        }
+
+        /* ===== ANALYSE ===== */
+        .analysis-screen {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 55vh;
+        }
+
+        .analysis-screen.active {
+            display: flex;
+        }
+
+        .analysis-screen .spinner {
+            width: 48px;
+            height: 48px;
+            border: 2px solid rgba(230, 57, 70, 0.06);
+            border-top: 2px solid var(--red);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin-bottom: var(--space-xl);
+        }
+
+        .analysis-screen .title {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            letter-spacing: -0.01em;
+        }
+
+        .analysis-screen .title.pulse {
+            animation: pulseRed 1.5s ease-in-out infinite;
+        }
+
+        .analysis-screen .sub {
+            color: var(--white-dim);
+            font-size: var(--fs-base);
+        }
+
+        .analysis-screen .progress-ring {
+            width: 120px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 4px;
+            margin-top: var(--space-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .analysis-screen .progress-ring .fill {
+            height: 100%;
+            width: 0%;
+            background: var(--red);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .btn-analyse {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--red);
+            color: var(--white-pure);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-base);
+            padding: 18px 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            max-width: 340px;
+            letter-spacing: 0.5px;
+            min-height: 56px;
+            touch-action: manipulation;
+            user-select: none;
+            margin-top: var(--space-sm);
+        }
+
+        .btn-analyse:hover,
+        .btn-analyse:focus-visible {
+            background: var(--red-light);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-analyse:active {
+            transform: scale(0.97);
+        }
+
+        /* ===== RÉSULTATS ===== */
+        .result-screen {
+            padding: var(--space-sm) 0 var(--space-xl);
+        }
+
+        .result-header {
+            text-align: center;
+            padding: var(--space-md) 0 var(--space-xl);
+            position: relative;
+        }
+
+        .result-header .label {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--white-dim);
+            margin-bottom: var(--space-sm);
+        }
+
+        .result-header .score {
+            font-size: clamp(3.6rem, 14vw, 6rem);
+            font-weight: 800;
+            line-height: 1;
+            color: var(--red);
+            letter-spacing: -0.03em;
+            animation: revealScore 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .result-header .score .denom {
+            font-size: 0.35em;
+            font-weight: 400;
+            color: var(--white-dim);
+        }
+
+        .result-header .level {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-weight: 600;
+            margin-top: var(--space-xs);
+            color: var(--white);
+            animation: fadeIn 0.6s ease 0.4s both;
+        }
+
+        .result-header .level-sub {
+            font-size: var(--fs-small);
+            color: var(--white-dim);
+            margin-top: var(--space-xs);
+            animation: fadeIn 0.6s ease 0.6s both;
+        }
+
+        .result-section {
+            margin-top: var(--space-xl);
+            border-top: 1px solid rgba(230, 57, 70, 0.04);
+            padding-top: var(--space-lg);
+            animation: fadeIn 0.5s ease 0.8s both;
+        }
+
+        .result-section .section-title {
+            font-size: var(--fs-base);
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.01em;
+            color: var(--white);
+        }
+
+        .result-section .section-title .red {
+            color: var(--red);
+        }
+
+        .radar-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-md) 0;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            margin-bottom: var(--space-sm);
+            overflow: hidden;
+        }
+
+        .radar-wrapper canvas {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 460px;
+            aspect-ratio: 1/1;
+        }
+
+        .codex-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .codex-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .codex-item .name {
+            flex: 1;
+            font-size: var(--fs-tiny);
+            font-weight: 500;
+            color: var(--white-muted);
+        }
+
+        .codex-item .bar-wrap {
+            flex: 1.2;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .codex-item .bar-wrap .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--red);
+            transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .codex-item .score-val {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--white-dim);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .top-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .top-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.01);
+            border-left: 2px solid var(--red);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-left-width: 2px;
+        }
+
+        .top-item .rank {
+            font-size: var(--fs-tiny);
+            font-weight: 700;
+            color: var(--red);
+            min-width: 24px;
+        }
+
+        .top-item .info {
+            flex: 1;
+        }
+
+        .top-item .info .name {
+            font-size: var(--fs-small);
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .top-item .info .desc {
+            font-size: var(--fs-tiny);
+            color: var(--white-dim);
+        }
+
+        .top-item .score-badge {
+            font-size: var(--fs-small);
+            font-weight: 700;
+            color: var(--red);
+        }
+
+        .diagnostic-box {
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            border-left: 2px solid var(--red);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-left-width: 2px;
+            margin: var(--space-sm) 0;
+        }
+
+        .diagnostic-box p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--white-muted);
+        }
+
+        .diagnostic-box p strong {
+            color: var(--white);
+        }
+
+        .action-item {
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            margin-bottom: var(--space-sm);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .action-item .priority {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .action-item .action-name {
+            font-size: var(--fs-base);
+            font-weight: 600;
+            margin: var(--space-xs) 0 var(--space-xs);
+            color: var(--white);
+        }
+
+        .action-item .action-desc {
+            font-size: var(--fs-small);
+            color: var(--white-muted);
+            line-height: 1.5;
+        }
+
+        .action-item .action-desc p {
+            margin-bottom: var(--space-xs);
+        }
+
+        .action-item .action-desc p strong {
+            color: var(--white);
+        }
+
+        .ia-boost {
+            margin-top: var(--space-sm);
+            padding: var(--space-md) var(--space-md);
+            border-radius: var(--radius-sm);
+            background: rgba(230, 57, 70, 0.02);
+            border: 1px solid rgba(230, 57, 70, 0.04);
+            position: relative;
+        }
+
+        .ia-boost .ia-tag {
+            display: inline-block;
+            font-size: var(--fs-micro);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white-pure);
+            background: var(--red);
+            padding: 2px 12px;
+            border-radius: var(--radius-full);
+            margin-bottom: var(--space-xs);
+        }
+
+        .ia-boost p {
+            font-size: var(--fs-small);
+            color: var(--white-muted);
+            line-height: 1.5;
+        }
+
+        .ia-boost p strong {
+            color: var(--red);
+            font-weight: 500;
+        }
+
+        .result-footer-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .result-footer-actions .btn-small-ghost {
+            align-self: center;
+        }
+
+        /* ===== GOOGLE FORM SECTION ===== */
+        .google-form-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            text-align: center;
+        }
+
+        .google-form-section .icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .google-form-section .title {
+            font-size: var(--fs-md);
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .google-form-section .sub {
+            font-size: var(--fs-small);
+            color: var(--white-muted);
+            line-height: 1.5;
+        }
+
+        .btn-google-form {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--red);
+            color: var(--white-pure);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-base);
+            padding: 18px 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            max-width: 340px;
+            letter-spacing: 0.5px;
+            min-height: 56px;
+            touch-action: manipulation;
+            user-select: none;
+            margin: var(--space-sm) auto 0;
+        }
+
+        .btn-google-form:hover,
+        .btn-google-form:focus-visible {
+            background: var(--red-light);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-google-form:active {
+            transform: scale(0.97);
+        }
+
+        .btn-google-form .arrow {
+            display: inline-block;
+            transition: transform var(--transition-base);
+        }
+
+        .btn-google-form:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .reponse-card:focus-visible,
+        .btn-primary:focus-visible,
+        .btn-validate:focus-visible,
+        .btn-analyse:focus-visible,
+        .btn-small-ghost:focus-visible,
+        .btn-google-form:focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 2px;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding-top: 52px;
+            }
+            :root {
+                --header-height: 52px;
+                --space-xl: 24px;
+                --space-2xl: 32px;
+            }
+            #brand-header {
+                padding: 0 14px;
+            }
+            #brand-header .brand {
+                font-size: 0.65rem;
+                gap: 6px;
+            }
+            #app {
+                padding: 0 var(--space-sm) var(--space-lg);
+            }
+            .welcome {
+                padding: var(--space-xl) var(--space-sm) var(--space-lg);
+                min-height: 60vh;
+            }
+            .welcome h1 {
+                font-size: 2rem;
+            }
+            .welcome .tagline {
+                font-size: 0.9rem;
+            }
+            .reponse-card {
+                padding: 14px 14px;
+            }
+            .reponse-card .text {
+                font-size: 0.82rem;
+            }
+            .btn-primary {
+                font-size: var(--fs-base);
+                padding: 14px 28px;
+                min-height: 52px;
+            }
+            .question-text {
+                font-size: 1.1rem;
+            }
+            .block-header .block-title {
+                font-size: 0.65rem;
+            }
+            .result-header .score {
+                font-size: 3rem;
+            }
+            .action-item {
+                padding: var(--space-md) var(--space-md);
+            }
+            .ia-boost {
+                padding: var(--space-sm) var(--space-sm);
+            }
+            .top-item {
+                padding: var(--space-sm) var(--space-sm);
+            }
+            .radar-wrapper canvas {
+                max-width: 320px;
+            }
+            .google-form-section {
+                padding: var(--space-md);
+            }
+            .btn-google-form {
+                font-size: var(--fs-small);
+                padding: 14px 24px;
+                min-height: 48px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .reponses-grid {
+                gap: var(--space-sm);
+            }
+            .reponse-card {
+                padding: 20px 24px;
+            }
+            .reponse-card .text {
+                font-size: var(--fs-md);
+            }
+            .btn-primary {
+                font-size: var(--fs-lg);
+                padding: 20px 52px;
+                min-height: 68px;
+            }
+            .btn-validate {
+                font-size: var(--fs-md);
+                min-height: 60px;
+            }
+            .question-text {
+                font-size: var(--fs-xl);
+            }
+            .result-header .score {
+                font-size: 5.6rem;
+            }
+            .radar-wrapper canvas {
+                max-width: 460px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .reponse-card .letter {
+                width: 24px;
+                height: 24px;
+                font-size: var(--fs-micro);
+            }
+            .reponse-card .text {
+                font-size: 0.75rem;
+            }
+            .question-text {
+                font-size: 1rem;
+            }
+            .welcome h1 {
+                font-size: 1.7rem;
+            }
+            .welcome .tagline {
+                font-size: 0.8rem;
+            }
+            .btn-primary {
+                font-size: var(--fs-small);
+                padding: 12px 20px;
+                min-height: 44px;
+            }
+            .result-header .score {
+                font-size: 2.6rem;
+            }
+            .radar-wrapper canvas {
+                max-width: 260px;
+            }
+            .btn-google-form {
+                font-size: var(--fs-tiny);
+                padding: 12px 16px;
+                min-height: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== BANDEAU PERMANENT ===== -->
+    <header id="brand-header">
+        <div class="brand">
+            <span class="red">✦</span>
+            <span>AGENT <span class="red">TRAFIC</span></span>
+            <span class="marker">|</span>
+            <span class="phase-text" id="header-phase-text">DIAGNOSTIC</span>
+        </div>
+        <div class="phase-indicator">
+            <span class="block-counter" id="header-block-counter">BLOC 1 / 6</span>
+        </div>
+    </header>
+
+    <div id="app">
+
+        <!-- ===== ÉCRAN D'ACCUEIL ===== -->
+        <div id="screen-welcome" class="screen active welcome">
+            <div class="badge">5 CODEX • 1 DIAGNOSTIC</div>
+            <h1>AGENT<br /><span class="red">TRAFIC</span></h1>
+            <p class="tagline">
+                Découvrez en quelques minutes le niveau de maturité<br />
+                de votre stratégie d'acquisition et de fidélisation.
+            </p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="number">29</span>
+                    <span class="label">Questions</span>
+                </div>
+                <div class="stat">
+                    <span class="number">≈ 5–7</span>
+                    <span class="label">Minutes</span>
+                </div>
+                <div class="stat">
+                    <span class="number">⚡</span>
+                    <span class="label">Résultat immédiat</span>
+                </div>
+            </div>
+            <button class="btn-primary" id="btn-start">COMMENCER</button>
+        </div>
+
+        <!-- ===== ÉCRAN QUESTIONNAIRE ===== -->
+        <div id="screen-question" class="screen question-screen">
+            <div class="block-header">
+                <div class="block-title" id="block-title-display">CODEX <span class="light">PROFIL</span></div>
+                <div class="block-counter" id="block-counter-display">BLOC 1 / 6</div>
+            </div>
+
+            <div class="progress-wrapper">
+                <div class="progress-top">
+                    <span class="qnum">QUESTION <span id="q-current">1</span> / <span id="q-total">29</span></span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="fill" id="progress-fill" style="width:0%;"></div>
+                </div>
+            </div>
+
+            <div class="question-area" id="question-area">
+                <div class="question-codex" id="q-codex-label">CODEX <strong>PROFIL</strong></div>
+                <div class="question-text" id="q-text">Chargement...</div>
+                <div class="reponses-grid" id="reponses-container"></div>
+            </div>
+
+            <div class="btn-validate-row">
+                <button class="btn-validate" id="btn-validate" disabled>
+                    <span id="btn-validate-label">VALIDEZ VOTRE RÉPONSE</span>
+                    <span class="arrow" id="btn-validate-arrow">→</span>
+                </button>
+                <button class="btn-small-ghost" id="btn-restart-ghost">⟳ Recommencer</button>
+            </div>
+        </div>
+
+        <!-- ===== ÉCRAN TRANSITION BLOC ===== -->
+        <div id="screen-block-transition" class="screen block-transition">
+            <div class="chapter" id="bt-number">CHAPITRE 02</div>
+            <div class="block-title" id="bt-title">CODEX LEADS</div>
+            <div class="block-sub" id="bt-sub">5 dimensions — pondération ×1</div>
+            <div class="block-desc" id="bt-desc"></div>
+            <button class="btn-primary" id="bt-continue">DÉMARRER</button>
+        </div>
+
+        <!-- ===== ÉCRAN ANALYSE ===== -->
+        <div id="screen-analysis" class="screen analysis-screen">
+            <div class="spinner"></div>
+            <div class="title pulse">ANALYSE EN COURS</div>
+            <div class="sub">Vos 5 codex sont en train d'être analysés...</div>
+            <div class="progress-ring">
+                <div class="fill" id="analysis-progress" style="width:0%;"></div>
+            </div>
+        </div>
+
+        <!-- ===== ÉCRAN RÉSULTAT ===== -->
+        <div id="screen-result" class="screen result-screen"></div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // DONNÉES DU QUESTIONNAIRE — AGENT TRAFIC
+        // ================================================================
+
+        const QUESTIONS = [{
+            id: 1,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Quel est votre rôle dans l'entreprise ?",
+            reponses: [
+                { texte: "Je donne parfois mon avis quand on me le demande.", valeur: 0 },
+                { texte: "Je participe à certaines décisions marketing ou commerciales.", valeur: 0 },
+                { texte: "Je pilote directement la stratégie d'acquisition et de contenu.", valeur: 0 },
+                { texte: "Je suis le décideur principal sur les sujets de trafic et de croissance.", valeur: 0 }
+            ]
+        }, {
+            id: 2,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Quel est le type d'activité de votre entreprise ?",
+            reponses: [
+                { texte: "B2B (vente aux entreprises).", valeur: 0 },
+                { texte: "B2C (vente aux particuliers).", valeur: 0 },
+                { texte: "B2B2C (intermédiaire entre les deux).", valeur: 0 },
+                { texte: "Mixte (B2B et B2C).", valeur: 0 }
+            ]
+        }, {
+            id: 3,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Combien de clients actifs avez-vous aujourd'hui ?",
+            reponses: [
+                { texte: "Moins de 50 clients.", valeur: 0 },
+                { texte: "Entre 50 et 200 clients.", valeur: 0 },
+                { texte: "Entre 200 et 1000 clients.", valeur: 0 },
+                { texte: "Plus de 1000 clients.", valeur: 0 }
+            ]
+        }, {
+            id: 4,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Quel est votre objectif prioritaire aujourd'hui ?",
+            reponses: [
+                { texte: "Augmenter ma visibilité et mon audience.", valeur: 0 },
+                { texte: "Générer plus de leads qualifiés.", valeur: 0 },
+                { texte: "Améliorer mon taux de conversion.", valeur: 0 },
+                { texte: "Fidéliser mes clients et augmenter leur valeur.", valeur: 0 }
+            ]
+        }, {
+            id: 5,
+            bloc: 2,
+            codex: "LEADS",
+            ponderation: 1,
+            question: "Comment générez-vous aujourd'hui vos leads ?",
+            reponses: [
+                { texte: "Nous attendons surtout que les clients arrivent ou qu'on nous recommande.", valeur: 10 },
+                { texte: "Nous faisons quelques actions ponctuelles (publicité, posts, événements).", valeur: 40 },
+                { texte: "Nous avons plusieurs canaux identifiés et alimentés régulièrement.", valeur: 70 },
+                { texte: "Nous avons un système d'acquisition structuré, mesuré et optimisé en continu.", valeur: 100 }
+            ]
+        }, {
+            id: 6,
+            bloc: 2,
+            codex: "LEADS",
+            ponderation: 1,
+            question: "Combien de leads qualifiés recevez-vous par mois ?",
+            reponses: [
+                { texte: "Moins de 10 leads qualifiés par mois.", valeur: 10 },
+                { texte: "Entre 10 et 50 leads qualifiés par mois.", valeur: 40 },
+                { texte: "Entre 50 et 200 leads qualifiés par mois.", valeur: 70 },
+                { texte: "Plus de 200 leads qualifiés par mois, avec une qualité suivie.", valeur: 100 }
+            ]
+        }, {
+            id: 7,
+            bloc: 2,
+            codex: "LEADS",
+            ponderation: 1,
+            question: "Comment évaluez-vous la qualité de vos leads ?",
+            reponses: [
+                { texte: "Nous ne mesurons pas vraiment la qualité des leads.", valeur: 10 },
+                { texte: "Nous avons une idée approximative de la qualité.", valeur: 40 },
+                { texte: "Nous qualifions les leads selon des critères définis.", valeur: 70 },
+                { texte: "Nous avons un scoring précis et nous ajustons nos canaux en fonction.", valeur: 100 }
+            ]
+        }, {
+            id: 8,
+            bloc: 2,
+            codex: "LEADS",
+            ponderation: 1,
+            question: "Connaissez-vous votre coût d'acquisition client (CAC) ?",
+            reponses: [
+                { texte: "Non, nous ne savons pas combien nous coûte un nouveau client.", valeur: 10 },
+                { texte: "Nous avons une estimation globale, mais imprécise.", valeur: 40 },
+                { texte: "Nous connaissons notre CAC par canal principal.", valeur: 70 },
+                { texte: "Nous pilotons notre CAC par canal, par segment et nous l'optimisons.", valeur: 100 }
+            ]
+        }, {
+            id: 9,
+            bloc: 2,
+            codex: "LEADS",
+            ponderation: 1,
+            question: "Comment mesurez-vous la performance de vos canaux d'acquisition ?",
+            reponses: [
+                { texte: "Nous ne mesurons pas vraiment la performance des canaux.", valeur: 10 },
+                { texte: "Nous regardons quelques statistiques de temps en temps.", valeur: 40 },
+                { texte: "Nous suivons les performances par canal avec des indicateurs clairs.", valeur: 70 },
+                { texte: "Nous mesurons, comparons et réallouons nos budgets en fonction des résultats.", valeur: 100 }
+            ]
+        }, {
+            id: 10,
+            bloc: 3,
+            codex: "CONVERSION",
+            ponderation: 2,
+            question: "Connaissez-vous votre taux de conversion actuel ?",
+            reponses: [
+                { texte: "Non, nous ne savons pas quel pourcentage de prospects deviennent clients.", valeur: 10 },
+                { texte: "Nous avons une idée approximative de notre taux de conversion.", valeur: 40 },
+                { texte: "Nous connaissons notre taux de conversion global.", valeur: 70 },
+                { texte: "Nous connaissons notre taux par étape du parcours et nous l'optimisons.", valeur: 100 }
+            ]
+        }, {
+            id: 11,
+            bloc: 3,
+            codex: "CONVERSION",
+            ponderation: 2,
+            question: "Comment est structuré votre parcours de conversion ?",
+            reponses: [
+                { texte: "Nous n'avons pas vraiment formalisé d'étapes de conversion.", valeur: 10 },
+                { texte: "Nous avons quelques étapes identifiées, mais elles varient selon les cas.", valeur: 40 },
+                { texte: "Nous avons un parcours clair avec des étapes définies.", valeur: 70 },
+                { texte: "Notre parcours est structuré, mesuré à chaque étape et optimisé en continu.", valeur: 100 }
+            ]
+        }, {
+            id: 12,
+            bloc: 3,
+            codex: "CONVERSION",
+            ponderation: 2,
+            question: "Utilisez-vous la preuve sociale pour convertir ?",
+            reponses: [
+                { texte: "Nous n'utilisons pas ou très peu de preuve sociale.", valeur: 10 },
+                { texte: "Nous avons quelques témoignages ou avis, mais sans stratégie.", valeur: 40 },
+                { texte: "Nous utilisons régulièrement des témoignages, études de cas ou avis clients.", valeur: 70 },
+                { texte: "Nous avons une stratégie complète de preuve sociale, intégrée à chaque étape du parcours.", valeur: 100 }
+            ]
+        }, {
+            id: 13,
+            bloc: 3,
+            codex: "CONVERSION",
+            ponderation: 2,
+            question: "Comment traitez-vous les objections de vos prospects ?",
+            reponses: [
+                { texte: "Nous répondons aux objections au fur et à mesure, sans préparation.", valeur: 10 },
+                { texte: "Nous avons identifié les principales objections et préparons quelques réponses.", valeur: 40 },
+                { texte: "Nous avons des réponses structurées et testées pour les objections fréquentes.", valeur: 70 },
+                { texte: "Nous anticipons les objections dans notre parcours et nos contenus, avec des preuves à l'appui.", valeur: 100 }
+            ]
+        }, {
+            id: 14,
+            bloc: 3,
+            codex: "CONVERSION",
+            ponderation: 2,
+            question: "Optimisez-vous régulièrement votre taux de conversion ?",
+            reponses: [
+                { texte: "Nous ne testons pas ou très rarement.", valeur: 10 },
+                { texte: "Nous testons parfois des changements, sans méthode précise.", valeur: 40 },
+                { texte: "Nous testons régulièrement des variantes avec une démarche structurée.", valeur: 70 },
+                { texte: "Nous avons un processus continu d'A/B testing et d'optimisation basé sur les données.", valeur: 100 }
+            ]
+        }, {
+            id: 15,
+            bloc: 4,
+            codex: "CRÉATION DE CONTENU",
+            ponderation: 5,
+            question: "Avez-vous une stratégie de contenu claire ?",
+            reponses: [
+                { texte: "Nous publions sans véritable stratégie, au fil de l'inspiration.", valeur: 10 },
+                { texte: "Nous avons quelques idées de contenu mais pas de plan structuré.", valeur: 40 },
+                { texte: "Nous avons une stratégie de contenu définie avec des objectifs clairs.", valeur: 70 },
+                { texte: "Notre stratégie de contenu est alignée avec nos objectifs business et régulièrement optimisée.", valeur: 100 }
+            ]
+        }, {
+            id: 16,
+            bloc: 4,
+            codex: "CRÉATION DE CONTENU",
+            ponderation: 5,
+            question: "À quelle fréquence publiez-vous du contenu ?",
+            reponses: [
+                { texte: "Moins d'une fois par mois.", valeur: 10 },
+                { texte: "Quelques fois par mois, de manière irrégulière.", valeur: 40 },
+                { texte: "Au moins une fois par semaine, de manière régulière.", valeur: 70 },
+                { texte: "Plusieurs fois par semaine, avec un calendrier éditorial structuré.", valeur: 100 }
+            ]
+        }, {
+            id: 17,
+            bloc: 4,
+            codex: "CRÉATION DE CONTENU",
+            ponderation: 5,
+            question: "Votre contenu est-il aligné avec vos objectifs commerciaux ?",
+            reponses: [
+                { texte: "Nous créons du contenu sans vraiment le relier à nos objectifs.", valeur: 10 },
+                { texte: "Nous avons quelques contenus orientés vers nos objectifs.", valeur: 40 },
+                { texte: "Nos contenus sont pensés pour soutenir nos objectifs commerciaux.", valeur: 70 },
+                { texte: "Chaque contenu est conçu pour un objectif précis et son impact est mesuré.", valeur: 100 }
+            ]
+        }, {
+            id: 18,
+            bloc: 4,
+            codex: "CRÉATION DE CONTENU",
+            ponderation: 5,
+            question: "Quels formats de contenu utilisez-vous ?",
+            reponses: [
+                { texte: "Principalement un seul format (ex : articles ou posts).", valeur: 10 },
+                { texte: "Deux ou trois formats différents, sans stratégie claire.", valeur: 40 },
+                { texte: "Plusieurs formats adaptés à nos audiences et à nos objectifs.", valeur: 70 },
+                { texte: "Une variété de formats pensés pour chaque étape du parcours client.", valeur: 100 }
+            ]
+        }, {
+            id: 19,
+            bloc: 4,
+            codex: "CRÉATION DE CONTENU",
+            ponderation: 5,
+            question: "Mesurez-vous l'impact de votre contenu ?",
+            reponses: [
+                { texte: "Nous ne mesurons pas vraiment l'impact de notre contenu.", valeur: 10 },
+                { texte: "Nous regardons quelques statistiques de base (vues, likes).", valeur: 40 },
+                { texte: "Nous suivons des indicateurs liés à nos objectifs (leads, conversions).", valeur: 70 },
+                { texte: "Nous mesurons précisément le ROI de notre contenu et ajustons notre stratégie.", valeur: 100 }
+            ]
+        }, {
+            id: 20,
+            bloc: 5,
+            codex: "FIDÉLISATION",
+            ponderation: 5,
+            question: "Comment suivez-vous vos clients après leur premier achat ?",
+            reponses: [
+                { texte: "Nous ne suivons pas vraiment nos clients après l'achat.", valeur: 10 },
+                { texte: "Nous restons disponibles s'ils nous contactent.", valeur: 40 },
+                { texte: "Nous avons un suivi structuré (emails, appels, enquêtes de satisfaction).", valeur: 70 },
+                { texte: "Nous avons un parcours de fidélisation complet, personnalisé et mesuré.", valeur: 100 }
+            ]
+        }, {
+            id: 21,
+            bloc: 5,
+            codex: "FIDÉLISATION",
+            ponderation: 5,
+            question: "Avez-vous un programme de fidélisation ?",
+            reponses: [
+                { texte: "Non, nous n'avons pas de programme de fidélisation.", valeur: 10 },
+                { texte: "Nous avons quelques actions ponctuelles de fidélisation.", valeur: 40 },
+                { texte: "Nous avons un programme structuré avec des avantages pour les clients fidèles.", valeur: 70 },
+                { texte: "Notre programme de fidélisation est complet, mesuré et optimisé en continu.", valeur: 100 }
+            ]
+        }, {
+            id: 22,
+            bloc: 5,
+            codex: "FIDÉLISATION",
+            ponderation: 5,
+            question: "Connaissez-vous votre taux de rétention client ?",
+            reponses: [
+                { texte: "Non, nous ne mesurons pas notre taux de rétention.", valeur: 10 },
+                { texte: "Nous avons une idée approximative de notre rétention.", valeur: 40 },
+                { texte: "Nous mesurons notre taux de rétention global.", valeur: 70 },
+                { texte: "Nous mesurons la rétention par segment et agissons sur les causes d'attrition.", valeur: 100 }
+            ]
+        }, {
+            id: 23,
+            bloc: 5,
+            codex: "FIDÉLISATION",
+            ponderation: 5,
+            question: "Développez-vous les ventes auprès de vos clients existants ?",
+            reponses: [
+                { texte: "Nous attendons que les clients demandent autre chose.", valeur: 10 },
+                { texte: "Nous proposons parfois des offres complémentaires.", valeur: 40 },
+                { texte: "Nous avons une démarche active d'upsell et de cross-sell.", valeur: 70 },
+                { texte: "Nous avons une stratégie complète d'upsell/cross-sell, mesurée et optimisée.", valeur: 100 }
+            ]
+        }, {
+            id: 24,
+            bloc: 5,
+            codex: "FIDÉLISATION",
+            ponderation: 5,
+            question: "Vos clients vous recommandent-ils ?",
+            reponses: [
+                { texte: "Nous ne savons pas si nos clients nous recommandent.", valeur: 10 },
+                { texte: "Quelques clients nous recommandent de temps en temps.", valeur: 40 },
+                { texte: "Nous avons un flux régulier de recommandations clients.", valeur: 70 },
+                { texte: "Nous avons un programme structuré qui encourage et mesure les recommandations.", valeur: 100 }
+            ]
+        }, {
+            id: 25,
+            bloc: 6,
+            codex: "TUNNEL & FUNNEL",
+            ponderation: 4,
+            question: "Avez-vous cartographié votre tunnel de conversion ?",
+            reponses: [
+                { texte: "Non, nous n'avons pas de vue claire sur notre tunnel.", valeur: 10 },
+                { texte: "Nous avons une idée globale des étapes, sans documentation.", valeur: 40 },
+                { texte: "Notre tunnel est documenté avec des étapes claires et des indicateurs.", valeur: 70 },
+                { texte: "Notre tunnel est cartographié, mesuré à chaque étape et optimisé en continu.", valeur: 100 }
+            ]
+        }, {
+            id: 26,
+            bloc: 6,
+            codex: "TUNNEL & FUNNEL",
+            ponderation: 4,
+            question: "Connaissez-vous vos taux de passage entre les étapes du tunnel ?",
+            reponses: [
+                { texte: "Non, nous ne mesurons pas les passages entre étapes.", valeur: 10 },
+                { texte: "Nous avons une idée approximative des taux de passage.", valeur: 40 },
+                { texte: "Nous mesurons les taux de passage entre les principales étapes.", valeur: 70 },
+                { texte: "Nous mesurons précisément chaque étape et identifions les points de friction.", valeur: 100 }
+            ]
+        }, {
+            id: 27,
+            bloc: 6,
+            codex: "TUNNEL & FUNNEL",
+            ponderation: 4,
+            question: "Automatisez-vous certaines étapes de votre tunnel ?",
+            reponses: [
+                { texte: "Nous ne faisons aucune automatisation.", valeur: 10 },
+                { texte: "Nous avons quelques automatisations basiques (emails, relances).", valeur: 40 },
+                { texte: "Plusieurs étapes de notre tunnel sont automatisées avec des scénarios définis.", valeur: 70 },
+                { texte: "Notre tunnel est largement automatisé et personnalisé selon le comportement des prospects.", valeur: 100 }
+            ]
+        }, {
+            id: 28,
+            bloc: 6,
+            codex: "TUNNEL & FUNNEL",
+            ponderation: 4,
+            question: "Votre tunnel est-il aligné entre marketing et vente ?",
+            reponses: [
+                { texte: "Marketing et vente travaillent de manière séparée, sans coordination.", valeur: 10 },
+                { texte: "Il y a quelques échanges, mais pas de processus commun.", valeur: 40 },
+                { texte: "Marketing et vente partagent des objectifs et un processus défini.", valeur: 70 },
+                { texte: "Marketing et vente sont totalement alignés avec des indicateurs partagés et des boucles de feedback.", valeur: 100 }
+            ]
+        }, {
+            id: 29,
+            bloc: 6,
+            codex: "TUNNEL & FUNNEL",
+            ponderation: 4,
+            question: "Optimisez-vous régulièrement votre tunnel ?",
+            reponses: [
+                { texte: "Nous ne modifions pas ou très rarement notre tunnel.", valeur: 10 },
+                { texte: "Nous faisons des ajustements ponctuels quand un problème apparaît.", valeur: 40 },
+                { texte: "Nous testons régulièrement des améliorations sur certaines étapes.", valeur: 70 },
+                { texte: "Nous avons un processus continu d'optimisation basé sur les données et les tests.", valeur: 100 }
+            ]
+        }];
+
+        // ================================================================
+        // ÉTAT
+        // ================================================================
+        const state = {
+            currentIndex: 0,
+            reponses: [],
+            isTransitioning: false,
+            blockTransitionShown: { 2: false, 3: false, 4: false, 5: false, 6: false },
+        };
+
+        for (let i = 0; i < QUESTIONS.length; i++) {
+            state.reponses[i] = null;
+        }
+
+        // ================================================================
+        // RÉFÉRENCES DOM
+        // ================================================================
+        const $ = (id) => document.getElementById(id);
+        const screens = {
+            welcome: $('screen-welcome'),
+            question: $('screen-question'),
+            blockTransition: $('screen-block-transition'),
+            analysis: $('screen-analysis'),
+            result: $('screen-result'),
+        };
+
+        const qElements = {
+            current: $('q-current'),
+            total: $('q-total'),
+            progress: $('progress-fill'),
+            progressPercent: $('progress-percent'),
+            codexLabel: $('q-codex-label'),
+            text: $('q-text'),
+            reponses: $('reponses-container'),
+            validate: $('btn-validate'),
+            validateLabel: $('btn-validate-label'),
+            questionArea: $('question-area'),
+            blockTitle: $('block-title-display'),
+            blockCounter: $('block-counter-display'),
+        };
+
+        const btElements = {
+            number: $('bt-number'),
+            title: $('bt-title'),
+            sub: $('bt-sub'),
+            desc: $('bt-desc'),
+            continue: $('bt-continue'),
+        };
+
+        // ================================================================
+        // FONCTIONS
+        // ================================================================
+        function showScreen(name) {
+            Object.keys(screens).forEach(key => {
+                screens[key].classList.remove('active', 'screen-exit');
+            });
+            screens[name].classList.add('active');
+            state.isTransitioning = false;
+            updateHeader();
+        }
+
+        function getBlocShortLabel(blocId) {
+            const labels = {
+                1: 'PROFIL',
+                2: 'LEADS',
+                3: 'CONVERSION',
+                4: 'CRÉATION DE CONTENU',
+                5: 'FIDÉLISATION',
+                6: 'TUNNEL & FUNNEL'
+            };
+            return labels[blocId] || '';
+        }
+
+        function getBlockTransitionData(blocId) {
+            const data = {
+                2: {
+                    number: 'CHAPITRE 02',
+                    title: 'CODEX LEADS',
+                    sub: '5 dimensions — pondération ×1',
+                    desc: 'Ces dimensions mesurent votre capacité à générer un flux régulier de leads qualifiés.'
+                },
+                3: {
+                    number: 'CHAPITRE 03',
+                    title: 'CODEX CONVERSION',
+                    sub: '5 dimensions — pondération ×2',
+                    desc: 'Ces dimensions évaluent votre capacité à transformer vos prospects en clients.'
+                },
+                4: {
+                    number: 'CHAPITRE 04',
+                    title: 'CODEX CRÉATION DE CONTENU',
+                    sub: '5 dimensions — pondération ×5',
+                    desc: 'Ces dimensions mesurent votre capacité à produire du contenu qui attire, engage et convertit.'
+                },
+                5: {
+                    number: 'CHAPITRE 05',
+                    title: 'CODEX FIDÉLISATION',
+                    sub: '5 dimensions — pondération ×5',
+                    desc: 'Ces dimensions évaluent votre capacité à retenir, développer et transformer vos clients en ambassadeurs.'
+                },
+                6: {
+                    number: 'CHAPITRE 06',
+                    title: 'CODEX TUNNEL & FUNNEL',
+                    sub: '5 dimensions — pondération ×4',
+                    desc: 'Ces dimensions mesurent la structuration, l\'automatisation et l\'optimisation de votre tunnel de conversion.'
+                }
+            };
+            return data[blocId] || data[2];
+        }
+
+        function getCurrentBloc() {
+            if (state.currentIndex < QUESTIONS.length) {
+                return QUESTIONS[state.currentIndex].bloc;
+            }
+            return 6;
+        }
+
+        function scrollToCodex() {
+            const target = document.getElementById('question-area');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function updateHeader() {
+            const phaseText = document.getElementById('header-phase-text');
+            const blockCounter = document.getElementById('header-block-counter');
+
+            if (!phaseText) return;
+
+            if (screens.welcome.classList.contains('active')) {
+                phaseText.textContent = 'DIAGNOSTIC';
+                blockCounter.classList.remove('visible');
+            } else if (screens.question.classList.contains('active')) {
+                const currentBloc = getCurrentBloc();
+                const blocLabel = getBlocShortLabel(currentBloc);
+                phaseText.textContent = `BLOC ${currentBloc} — ${blocLabel}`;
+                blockCounter.textContent = `${currentBloc} / 6`;
+                blockCounter.classList.add('visible');
+            } else if (screens.blockTransition.classList.contains('active')) {
+                const btTitle = document.getElementById('bt-title');
+                phaseText.textContent = btTitle ? btTitle.textContent : 'TRANSITION';
+                blockCounter.classList.remove('visible');
+            } else if (screens.analysis.classList.contains('active')) {
+                phaseText.textContent = 'ANALYSE EN COURS';
+                blockCounter.classList.remove('visible');
+            } else if (screens.result.classList.contains('active')) {
+                phaseText.textContent = 'VOS RÉSULTATS';
+                blockCounter.classList.remove('visible');
+            }
+        }
+
+        // ================================================================
+        // RENDER QUESTION
+        // ================================================================
+        function renderQuestion(index) {
+            const q = QUESTIONS[index];
+            if (!q) return;
+
+            updateHeader();
+
+            const blocLabel = getBlocShortLabel(q.bloc);
+            qElements.blockTitle.innerHTML = `CODEX <span class="light">${blocLabel}</span>`;
+            qElements.blockCounter.textContent = `BLOC ${q.bloc} / 6`;
+
+            qElements.current.textContent = index + 1;
+            qElements.total.textContent = QUESTIONS.length;
+
+            const progress = ((index + 1) / QUESTIONS.length) * 100;
+            qElements.progress.style.width = progress + '%';
+            qElements.progressPercent.textContent = Math.round(progress) + '%';
+
+            qElements.codexLabel.innerHTML = `CODEX <strong>${q.codex}</strong>`;
+            qElements.text.textContent = q.question;
+
+            const letters = ['A', 'B', 'C', 'D'];
+            const selected = state.reponses[index];
+
+            let html = '';
+            q.reponses.forEach((r, i) => {
+                const isSelected = (selected === i);
+                html += `
+                            <div class="reponse-card ${isSelected ? 'selected' : ''}" 
+                                 data-index="${i}" 
+                                 role="button" 
+                                 tabindex="0"
+                                 aria-label="Réponse ${letters[i]} : ${r.texte}">
+                                <span class="letter">${letters[i]}</span>
+                                <span class="text">${r.texte}</span>
+                            </div>
+                        `;
+            });
+            qElements.reponses.innerHTML = html;
+
+            document.querySelectorAll('.reponse-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (state.isTransitioning) return;
+                    const idx = parseInt(this.dataset.index, 10);
+                    selectAnswer(index, idx);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (state.isTransitioning) return;
+                        const idx = parseInt(this.dataset.index, 10);
+                        selectAnswer(index, idx);
+                    }
+                });
+            });
+
+            updateValidateButton(index);
+
+            qElements.questionArea.classList.remove('slide-down');
+            void qElements.questionArea.offsetWidth;
+            qElements.questionArea.classList.add('slide-down');
+
+            setTimeout(() => { scrollToCodex(); }, 80);
+        }
+
+        // ================================================================
+        // SELECTION
+        // ================================================================
+        function selectAnswer(questionIndex, answerIndex) {
+            if (state.isTransitioning) return;
+            if (questionIndex !== state.currentIndex) return;
+
+            const previous = state.reponses[questionIndex];
+            if (previous === answerIndex) return;
+
+            state.reponses[questionIndex] = answerIndex;
+
+            const cards = document.querySelectorAll('.reponse-card');
+            cards.forEach((card, i) => {
+                card.classList.toggle('selected', i === answerIndex);
+            });
+
+            updateValidateButton(questionIndex);
+            qElements.validate.focus();
+        }
+
+        // ================================================================
+        // VALIDATION
+        // ================================================================
+        function updateValidateButton(index) {
+            const selected = state.reponses[index];
+            const btn = qElements.validate;
+            const label = qElements.validateLabel;
+
+            if (selected !== null && selected !== undefined) {
+                btn.disabled = false;
+                btn.classList.add('active');
+                label.textContent = 'VALIDER →';
+            } else {
+                btn.disabled = true;
+                btn.classList.remove('active');
+                label.textContent = 'VALIDEZ VOTRE RÉPONSE';
+            }
+        }
+
+        // ================================================================
+        // HANDLE VALIDATE
+        // ================================================================
+        function handleValidate() {
+            if (state.isTransitioning) return;
+            const index = state.currentIndex;
+            const selected = state.reponses[index];
+
+            if (selected === null || selected === undefined) return;
+
+            state.isTransitioning = true;
+            qElements.validate.disabled = true;
+
+            if (index >= QUESTIONS.length - 1) {
+                setTimeout(() => { showAnalyseTrigger(); }, 300);
+                return;
+            }
+
+            const currentBloc = QUESTIONS[index].bloc;
+            const nextBloc = QUESTIONS[index + 1].bloc;
+
+            if (nextBloc > currentBloc) {
+                setTimeout(() => { showBlockTransition(nextBloc); }, 350);
+                return;
+            }
+
+            state.currentIndex = index + 1;
+            renderQuestion(state.currentIndex);
+
+            setTimeout(() => {
+                state.isTransitioning = false;
+                updateValidateButton(state.currentIndex);
+            }, 100);
+        }
+
+        // ================================================================
+        // TRANSITION BLOC
+        // ================================================================
+        function showBlockTransition(blocId) {
+            const data = getBlockTransitionData(blocId);
+            btElements.number.textContent = data.number;
+            btElements.title.textContent = data.title;
+            btElements.sub.textContent = data.sub;
+            btElements.desc.textContent = data.desc;
+            btElements.continue.textContent = 'DÉMARRER';
+
+            screens.question.classList.remove('active');
+            screens.blockTransition.classList.add('active');
+            screens.blockTransition.classList.remove('screen-exit');
+
+            state.isTransitioning = false;
+            updateHeader();
+        }
+
+        // ================================================================
+        // ANALYSE TRIGGER
+        // ================================================================
+        function showAnalyseTrigger() {
+            btElements.number.textContent = 'ANALYSE';
+            btElements.title.textContent = 'VOS CODEX SONT PRÊTS';
+            btElements.sub.textContent = '5 dimensions analysées';
+            btElements.desc.textContent = 'Cliquez sur le bouton ci-dessous pour découvrir votre AGENT TRAFIC SCORE.';
+
+            const oldBtn = btElements.continue;
+            const newBtn = document.createElement('button');
+            newBtn.className = 'btn-analyse';
+            newBtn.id = 'btn-analyse-trigger';
+            newBtn.textContent = 'DÉMARRER';
+            newBtn.addEventListener('click', function() {
+                showAnalysis();
+            });
+
+            if (oldBtn && oldBtn.parentNode) {
+                oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+            }
+
+            screens.question.classList.remove('active');
+            screens.blockTransition.classList.add('active');
+            screens.blockTransition.classList.remove('screen-exit');
+
+            state.isTransitioning = false;
+            updateHeader();
+        }
+
+        // ================================================================
+        // ANALYSE
+        // ================================================================
+        function showAnalysis() {
+            screens.blockTransition.classList.remove('active');
+            screens.analysis.classList.add('active');
+            updateHeader();
+
+            const progressFill = document.getElementById('analysis-progress');
+            if (progressFill) {
+                let p = 0;
+                const interval = setInterval(() => {
+                    p += 2;
+                    if (p >= 100) {
+                        p = 100;
+                        clearInterval(interval);
+                    }
+                    progressFill.style.width = p + '%';
+                }, 80);
+            }
+
+            setTimeout(() => {
+                const results = computeResults();
+                showResults(results);
+            }, 5000);
+        }
+
+        // ================================================================
+        // COMPUTE RESULTS
+        // ================================================================
+        function computeResults() {
+            const scoredQuestions = QUESTIONS.filter(q => q.ponderation > 0);
+            const results = [];
+
+            let totalWeightedScore = 0;
+            let totalWeight = 0;
+
+            scoredQuestions.forEach(q => {
+                const answerIndex = state.reponses[q.id - 1];
+                let score = 0;
+                if (answerIndex !== null && answerIndex !== undefined) {
+                    score = q.reponses[answerIndex].valeur || 0;
+                }
+                const weighted = score * q.ponderation;
+                totalWeightedScore += weighted;
+                totalWeight += q.ponderation;
+
+                results.push({
+                    codex: q.codex,
+                    score: score,
+                    ponderation: q.ponderation,
+                    weighted: weighted,
+                    id: q.id,
+                    bloc: q.bloc,
+                });
+            });
+
+            const globalScore = totalWeight > 0 ? Math.round(totalWeightedScore / totalWeight) : 0;
+            const finalScore = Math.min(100, Math.max(10, globalScore));
+
+            let niveau = '';
+            if (finalScore < 40) niveau = 'TRAFIC FRAGILE';
+            else if (finalScore < 60) niveau = 'TRAFIC EN STRUCTURATION';
+            else if (finalScore < 75) niveau = 'TRAFIC STRUCTURÉ';
+            else if (finalScore < 90) niveau = 'TRAFIC PERFORMANT';
+            else niveau = 'TRAFIC AUGMENTÉ';
+
+            const sorted = [...results].sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return b.id - a.id;
+            });
+
+            const forces = sorted.slice(0, 3);
+            const priorities = sorted.slice(-3).reverse();
+
+            const diag = generateDiagnostic(finalScore, niveau, results, forces, priorities);
+
+            return {
+                globalScore: finalScore,
+                niveau: niveau,
+                results: results,
+                forces: forces,
+                priorities: priorities,
+                diagnostic: diag,
+            };
+        }
+
+        // ================================================================
+        // GENERATE DIAGNOSTIC
+        // ================================================================
+        function generateDiagnostic(score, niveau, results, forces, priorities) {
+            const bloc2 = results.filter(r => r.bloc === 2);
+            const bloc3 = results.filter(r => r.bloc === 3);
+            const bloc4 = results.filter(r => r.bloc === 4);
+            const bloc5 = results.filter(r => r.bloc === 5);
+            const bloc6 = results.filter(r => r.bloc === 6);
+
+            const avgBloc2 = bloc2.length ? Math.round(bloc2.reduce((s, r) => s + r.score, 0) / bloc2.length) : 0;
+            const avgBloc3 = bloc3.length ? Math.round(bloc3.reduce((s, r) => s + r.score, 0) / bloc3.length) : 0;
+            const avgBloc4 = bloc4.length ? Math.round(bloc4.reduce((s, r) => s + r.score, 0) / bloc4.length) : 0;
+            const avgBloc5 = bloc5.length ? Math.round(bloc5.reduce((s, r) => s + r.score, 0) / bloc5.length) : 0;
+            const avgBloc6 = bloc6.length ? Math.round(bloc6.reduce((s, r) => s + r.score, 0) / bloc6.length) : 0;
+
+            let diagText = '';
+
+            if (score < 40) {
+                diagText =
+                    `Votre stratégie de trafic est encore très réactive. Vous dépendez principalement de ce qui arrive naturellement, sans véritable système d'acquisition. Le risque est de subir votre croissance plutôt que de la piloter. Votre priorité absolue : poser les bases d'un système d'acquisition structuré et mesurable.`;
+            } else if (score < 60) {
+                diagText =
+                    `Vous avez commencé à structurer votre acquisition, mais de nombreux leviers restent sous-exploités. Vous avez probablement quelques actions en place, mais elles manquent encore de cohérence et de mesure. Votre prochain gain viendra de la systématisation et de la mesure de vos efforts.`;
+            } else if (score < 75) {
+                diagText =
+                    `Votre stratégie de trafic possède de bonnes bases, mais certains leviers sont encore en retrait. Vous êtes à un point de bascule : soit vous accélérez sur les dimensions clés (contenu, fidélisation, tunnel), soit vous stagnez. Votre prochain cap : passer d'un trafic structuré à un trafic performant et prévisible.`;
+            } else if (score < 90) {
+                diagText =
+                    `Vous êtes clairement dans le top des entreprises performantes sur l'acquisition. Vous maîtrisez vos canaux, vous pilotez votre tunnel et vous fidélisez vos clients. Mais le vrai challenge n'est pas de maintenir cette performance, c'est de la transformer en avantage durable. Les meilleurs continuent à tester, mesurer et optimiser.`;
+            } else {
+                diagText =
+                    `Vous êtes au sommet du diagnostic AGENT TRAFIC. Vous avez construit un système d'acquisition augmenté, où chaque dimension est pensée, mesurée et optimisée. Mais le vrai test pour vous n'est plus la performance : c'est la capacité à rester en mouvement, à tester de nouveaux canaux et à ne pas laisser la routine s'installer.`;
+            }
+
+            if (avgBloc2 < 60) {
+                diagText +=
+                    ` Vos fondamentaux d'acquisition (génération de leads) sont à renforcer. Sans un flux régulier de leads qualifiés, tous les autres efforts peinent à porter leurs fruits.`;
+            } else if (avgBloc3 < 60) {
+                diagText +=
+                    ` Votre capacité de conversion est fragile. Chaque point de conversion gagné a un impact direct sur votre rentabilité.`;
+            } else if (avgBloc4 < 60) {
+                diagText +=
+                    ` Votre création de contenu reste sous-exploitée. C'est pourtant un levier majeur pour attirer, éduquer et convertir durablement.`;
+            } else if (avgBloc5 < 60) {
+                diagText +=
+                    ` Votre fidélisation est à renforcer. Fidéliser un client coûte beaucoup moins cher que d'en acquérir un nouveau.`;
+            } else if (avgBloc6 < 60) {
+                diagText +=
+                    ` Votre tunnel de conversion mérite d'être structuré et optimisé. Un tunnel clair et automatisé transforme durablement votre performance.`;
+            }
+
+            return diagText;
+        }
+
+        // ================================================================
+        // SHOW RESULTS avec RADAR + Google Form pré-rempli
+        // ================================================================
+        function showResults(data) {
+            screens.analysis.classList.remove('active');
+
+            const container = screens.result;
+            const { globalScore, niveau, results, forces, priorities, diagnostic } = data;
+
+            const radarResults = results;
+
+            // Formatage des forces et priorités
+            const forcesText = forces.map((f, i) => `${i+1}. ${f.codex} (${f.score}/100)`).join('\n');
+            const prioritiesText = priorities.map((p, i) => `${i+1}. ${p.codex} (${p.score}/100)`).join('\n');
+
+            // Formatage des codex détaillés
+            const codexDetails = results
+                .sort((a, b) => a.codex.localeCompare(b.codex))
+                .map(r => `${r.codex}: ${r.score}/100`)
+                .join('\n');
+
+            // Construction de l'URL Google Form
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdaFXTRIGwT5VohpUOdWS4uws7dOqKM0_XvhXybEN5Ci28YKg/viewform?usp=pp_url' +
+                '&entry.1419344534=' + encodeURIComponent(globalScore) +
+                '&entry.58110243=' + encodeURIComponent(niveau) +
+                '&entry.2143644899=' + encodeURIComponent(forcesText) +
+                '&entry.669742441=' + encodeURIComponent(prioritiesText) +
+                '&entry.1166974658=' + encodeURIComponent(diagnostic) +
+                '&entry.839337160=' + encodeURIComponent(codexDetails);
+
+            let html = `
+                        <div class="result-header">
+                            <div class="label">VOTRE AGENT TRAFIC SCORE</div>
+                            <div class="score">${globalScore}<span class="denom"> / 100</span></div>
+                            <div class="level">${niveau}</div>
+                            <div class="level-sub">Basé sur l'analyse de vos 5 dimensions</div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VISUALISATION <span class="red">RADAR</span></div>
+                            <div class="radar-wrapper">
+                                <canvas id="radarChart"></canvas>
+                            </div>
+                            <div style="text-align:center;font-size:var(--fs-tiny);color:var(--white-dim);padding-top:var(--space-xs);">
+                                Les 5 codex : Leads, Conversion, Création de contenu, Fidélisation, Tunnel & Funnel
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">LES <span class="red">5 CODEX</span></div>
+                            <div class="codex-list">
+                    `;
+
+            const sortedAlpha = [...results].sort((a, b) => a.codex.localeCompare(b.codex));
+            sortedAlpha.forEach(r => {
+                const pct = r.score;
+                html += `
+                            <div class="codex-item">
+                                <span class="name">${r.codex}</span>
+                                <div class="bar-wrap">
+                                    <div class="bar-fill" style="width:${pct}%;"></div>
+                                </div>
+                                <span class="score-val">${pct}</span>
+                            </div>
+                        `;
+            });
+
+            html += `
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VOS <span class="red">3 FORCES</span></div>
+                            <div class="top-grid">
+                    `;
+
+            forces.forEach((f, i) => {
+                const desc = getForceDescription(f.codex);
+                html += `
+                            <div class="top-item">
+                                <span class="rank">0${i + 1}</span>
+                                <div class="info">
+                                    <div class="name">${f.codex}</div>
+                                    <div class="desc">${desc}</div>
+                                </div>
+                                <span class="score-badge">${f.score}</span>
+                            </div>
+                        `;
+            });
+
+            html += `
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VOS <span class="red">3 PRIORITÉS</span></div>
+                            <div class="top-grid">
+                    `;
+
+            priorities.forEach((p, i) => {
+                const desc = getPriorityDescription(p.codex);
+                html += `
+                            <div class="top-item">
+                                <span class="rank">0${i + 1}</span>
+                                <div class="info">
+                                    <div class="name">${p.codex}</div>
+                                    <div class="desc">${desc}</div>
+                                </div>
+                                <span class="score-badge">${p.score}</span>
+                            </div>
+                        `;
+            });
+
+            html += `
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">DIAGNOSTIC <span class="red">AGENT TRAFIC</span></div>
+                            <div class="diagnostic-box">
+                                <p>${diagnostic}</p>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VOTRE <span class="red">PLAN D'ACTION</span></div>
+                    `;
+
+            priorities.forEach((p, i) => {
+                const action = getActionPlan(p.codex);
+                html += `
+                            <div class="action-item">
+                                <div class="priority">PRIORITÉ 0${i + 1}</div>
+                                <div class="action-name">${p.codex}</div>
+                                <div class="action-desc">
+                                    <p><strong>Ce que vous devriez travailler :</strong> ${action}</p>
+                                </div>
+                            </div>
+                        `;
+            });
+
+            html += `
+                        </div>
+
+                        <div class="result-section">
+                            <div class="google-form-section">
+                                <div class="icon">📋</div>
+                                <div class="title">Recevez votre diagnostic complet</div>
+                                <div class="sub">
+                                    Vos résultats sont automatiquement pré-remplis dans le formulaire.<br />
+                                    Il ne vous reste plus qu'à renseigner vos coordonnées pour les recevoir.
+                                </div>
+                                <button class="btn-google-form" id="btn-google-form">
+                                    <span>📩 Accéder au formulaire</span>
+                                    <span class="arrow">→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-footer-actions">
+                            <button class="btn-small-ghost" id="btn-restart" style="font-size:var(--fs-base);padding:var(--space-md);">⟳ REFAIRE LE TEST</button>
+                        </div>
+                    `;
+
+            container.innerHTML = html;
+            container.classList.add('active');
+            updateHeader();
+
+            setTimeout(() => { createRadarChart(radarResults); }, 100);
+
+            document.getElementById('btn-google-form').addEventListener('click', function() {
+                window.open(formUrl, '_blank');
+            });
+
+            document.getElementById('btn-restart').addEventListener('click', function() {
+                goToWelcome();
+            });
+        }
+
+        // ================================================================
+        // RADAR CHART — 5 codex
+        // ================================================================
+        function createRadarChart(results) {
+            const canvas = document.getElementById('radarChart');
+            if (!canvas || results.length === 0) return;
+
+            const ctx = canvas.getContext('2d');
+
+            const size = Math.min(460, window.innerWidth - 60);
+            canvas.width = size;
+            canvas.height = size;
+
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const radius = Math.min(size / 2 - 60, 160);
+
+            // Ordre des codex pour le radar (ordre naturel)
+            const orderedCodex = ['LEADS', 'CONVERSION', 'CRÉATION DE CONTENU', 'FIDÉLISATION', 'TUNNEL & FUNNEL'];
+            const orderedResults = orderedCodex.map(codex => {
+                const found = results.find(r => r.codex === codex);
+                return found || { codex: codex, score: 0 };
+            });
+
+            const labels = orderedResults.map(r => r.codex);
+            const scores = orderedResults.map(r => r.score / 100);
+
+            const numPoints = labels.length;
+            const angleStep = (Math.PI * 2) / numPoints;
+
+            ctx.clearRect(0, 0, size, size);
+
+            // Cercles concentriques
+            const levels = 4;
+            for (let i = 1; i <= levels; i++) {
+                const r = (radius / levels) * i;
+                ctx.beginPath();
+                for (let j = 0; j < numPoints; j++) {
+                    const angle = -Math.PI / 2 + j * angleStep;
+                    const x = centerX + r * Math.cos(angle);
+                    const y = centerY + r * Math.sin(angle);
+                    if (j === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                const val = Math.round((i / levels) * 100);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.font = '9px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(val + '%', centerX + 5, centerY - r + 5);
+            }
+
+            // Lignes radiales + labels
+            for (let i = 0; i < numPoints; i++) {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                const labelRadius = radius + 28;
+                const lx = centerX + labelRadius * Math.cos(angle);
+                const ly = centerY + labelRadius * Math.sin(angle);
+
+                const cosA = Math.cos(angle);
+                const sinA = Math.sin(angle);
+
+                ctx.fillStyle = '#aaaaaa';
+                ctx.font = '8px Inter, sans-serif';
+
+                if (cosA > 0.2) ctx.textAlign = 'left';
+                else if (cosA < -0.2) ctx.textAlign = 'right';
+                else ctx.textAlign = 'center';
+
+                if (sinA > 0.5) ctx.textBaseline = 'top';
+                else if (sinA < -0.5) ctx.textBaseline = 'bottom';
+                else ctx.textBaseline = 'middle';
+
+                ctx.fillText(labels[i], lx, ly);
+            }
+
+            // Tracé des données
+            ctx.beginPath();
+            for (let i = 0; i < numPoints; i++) {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const val = Math.min(1, Math.max(0, scores[i] || 0));
+                const r = radius * val;
+                const x = centerX + r * Math.cos(angle);
+                const y = centerY + r * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(230, 57, 70, 0.15)';
+            ctx.fill();
+            ctx.strokeStyle = '#e63946';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Points de données
+            for (let i = 0; i < numPoints; i++) {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const val = Math.min(1, Math.max(0, scores[i] || 0));
+                const r = radius * val;
+                const x = centerX + r * Math.cos(angle);
+                const y = centerY + r * Math.sin(angle);
+
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#e63946';
+                ctx.fill();
+                ctx.shadowColor = 'rgba(230, 57, 70, 0.4)';
+                ctx.shadowBlur = 10;
+            }
+            ctx.shadowBlur = 0;
+
+            // Score moyen au centre
+            const avgScore = Math.round(results.reduce((s, r) => s + r.score, 0) / results.length);
+            ctx.fillStyle = 'rgba(255,255,255,0.03)';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 30, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#e63946';
+            ctx.font = 'bold 22px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(avgScore, centerX, centerY - 5);
+            ctx.fillStyle = '#888888';
+            ctx.font = '7px Inter, sans-serif';
+            ctx.fillText('MOYENNE', centerX, centerY + 18);
+        }
+
+        // ================================================================
+        // DESCRIPTIONS
+        // ================================================================
+        function getForceDescription(codex) {
+            const map = {
+                'LEADS': 'Vous générez un flux régulier de leads qualifiés.',
+                'CONVERSION': 'Vous transformez efficacement vos prospects en clients.',
+                'CRÉATION DE CONTENU': 'Votre contenu attire, engage et convertit durablement.',
+                'FIDÉLISATION': 'Vous retenez et développez vos clients existants.',
+                'TUNNEL & FUNNEL': 'Votre tunnel est structuré, automatisé et optimisé.',
+            };
+            return map[codex] || 'Cette dimension est un point fort de votre stratégie de trafic.';
+        }
+
+        function getPriorityDescription(codex) {
+            const map = {
+                'LEADS': 'Renforcer votre capacité à générer un flux régulier de leads qualifiés.',
+                'CONVERSION': 'Améliorer votre taux de conversion à chaque étape du parcours.',
+                'CRÉATION DE CONTENU': 'Structurer une stratégie de contenu alignée avec vos objectifs.',
+                'FIDÉLISATION': 'Mettre en place un système de fidélisation pour augmenter la valeur client.',
+                'TUNNEL & FUNNEL': 'Structurer, mesurer et optimiser votre tunnel de conversion.',
+            };
+            return map[codex] || 'Cette dimension mérite votre attention pour progresser.';
+        }
+
+        function getActionPlan(codex) {
+            const map = {
+                'LEADS': 'Définissez clairement vos personas, identifiez 2 à 3 canaux prioritaires, mettez en place un système de capture et mesurez votre coût d\'acquisition par canal.',
+                'CONVERSION': 'Cartographiez votre parcours de conversion, identifiez les points de friction, mettez en place des tests A/B réguliers et utilisez la preuve sociale à chaque étape.',
+                'CRÉATION DE CONTENU': 'Définissez une ligne éditoriale claire, un calendrier de publication réaliste, réutilisez vos contenus sur plusieurs formats et mesurez l\'impact sur vos objectifs business.',
+                'FIDÉLISATION': 'Mettez en place un suivi post-achat structuré, mesurez votre taux de rétention, créez un programme de fidélisation et encouragez les recommandations clients.',
+                'TUNNEL & FUNNEL': 'Cartographiez chaque étape de votre tunnel, mesurez les taux de passage, automatisez les étapes clés et alignez marketing et vente autour d\'objectifs communs.',
+            };
+            return map[codex] || 'Concentrez-vous sur cette dimension pour générer un impact significatif.';
+        }
+
+        // ================================================================
+        // GO TO WELCOME
+        // ================================================================
+        function goToWelcome() {
+            state.currentIndex = 0;
+            state.isTransitioning = false;
+            state.blockTransitionShown = { 2: false, 3: false, 4: false, 5: false, 6: false };
+
+            for (let i = 0; i < QUESTIONS.length; i++) {
+                state.reponses[i] = null;
+            }
+
+            const analyseBtn = document.getElementById('btn-analyse-trigger');
+            if (analyseBtn && analyseBtn.parentNode) {
+                const newBtn = document.createElement('button');
+                newBtn.className = 'btn-primary';
+                newBtn.id = 'bt-continue';
+                newBtn.textContent = 'DÉMARRER';
+                newBtn.addEventListener('click', function() {
+                    const currentBloc = state.currentIndex < QUESTIONS.length ? QUESTIONS[state.currentIndex]
+                        .bloc : 0;
+                    if (currentBloc >= 2 && currentBloc <= 6) {
+                        state.blockTransitionShown[currentBloc] = true;
+                    }
+                    screens.blockTransition.classList.remove('active');
+                    screens.question.classList.add('active');
+                    state.currentIndex = state.currentIndex + 1;
+                    renderQuestion(state.currentIndex);
+                    state.isTransitioning = false;
+                    updateValidateButton(state.currentIndex);
+                });
+                analyseBtn.parentNode.replaceChild(newBtn, analyseBtn);
+                btElements.continue = newBtn;
+            }
+
+            screens.result.classList.remove('active');
+            screens.analysis.classList.remove('active');
+            screens.blockTransition.classList.remove('active');
+            screens.question.classList.remove('active');
+
+            const welcomeContent = document.querySelector('.welcome');
+            if (welcomeContent) welcomeContent.classList.remove('hidden');
+
+            const btnStart = document.getElementById('btn-start');
+            if (btnStart) btnStart.classList.remove('hidden');
+
+            screens.welcome.classList.add('active');
+
+            qElements.progress.style.width = '0%';
+            qElements.progressPercent.textContent = '0%';
+            updateHeader();
+        }
+
+        // ================================================================
+        // ÉVÉNEMENTS PRINCIPAUX
+        // ================================================================
+
+        document.getElementById('btn-start').addEventListener('click', function() {
+            this.classList.add('hidden');
+            const welcomeContent = document.querySelector('.welcome');
+            if (welcomeContent) welcomeContent.classList.add('hidden');
+            screens.welcome.classList.remove('active');
+            screens.question.classList.add('active');
+            state.currentIndex = 0;
+            renderQuestion(0);
+        });
+
+        qElements.validate.addEventListener('click', handleValidate);
+
+        btElements.continue.addEventListener('click', function() {
+            const currentBloc = state.currentIndex < QUESTIONS.length ? QUESTIONS[state.currentIndex].bloc : 0;
+            if (currentBloc >= 2 && currentBloc <= 6) {
+                state.blockTransitionShown[currentBloc] = true;
+            }
+            screens.blockTransition.classList.remove('active');
+            screens.question.classList.add('active');
+            state.currentIndex = state.currentIndex + 1;
+            renderQuestion(state.currentIndex);
+            state.isTransitioning = false;
+            updateValidateButton(state.currentIndex);
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const btn = qElements.validate;
+                if (!btn.disabled && screens.question.classList.contains('active')) {
+                    handleValidate();
+                }
+            }
+        });
+
+        document.getElementById('btn-restart-ghost').addEventListener('click', goToWelcome);
+
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('brand-header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            const canvas = document.getElementById('radarChart');
+            if (canvas && screens.result.classList.contains('active')) {
+                const results = computeResults();
+                setTimeout(() => { createRadarChart(results.results); }, 100);
+            }
+        });
+
+        // ================================================================
+        // INITIALISATION
+        // ================================================================
+        showScreen('welcome');
+        updateHeader();
+        console.log('🚀 AGENT TRAFIC — Branding Diagnostique');
+        console.log('✅ 5 codex : LEADS, CONVERSION, CRÉATION DE CONTENU, FIDÉLISATION, TUNNEL & FUNNEL');
+        console.log('✅ Pondérations : LEADS ×1, CONVERSION ×2, CONTENU ×5, FIDÉLISATION ×5, TUNNEL ×4');
+        console.log('✅ Couleur d\'accent : ROUGE');
+        console.log('✅ Google Form : pré-remplissage automatique');
+    </script>
+</body>
+</html>

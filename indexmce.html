@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MCE — Mindset Cognitive Experience</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fafaf8;line-height:1.9;position:relative;min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(201,168,76,.05) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(26,26,46,.4) 0%,transparent 60%),linear-gradient(180deg,#0a0a0a 0%,#0f0f1a 50%,#0a0a0a 100%)}
+.container{max-width:1100px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+:root{--gold:#c9a84c;--gold-light:#e8d5a3;--black:#0a0a0a;--black-light:#141414;--gray:#2a2a2a;--off-white:#e8e6e0}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#c9a84c;border-radius:0}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:.02em}
+h1{font-size:2.6rem;color:#c9a84c;line-height:1.2}
+h2{font-size:2rem;color:#c9a84c;display:inline-block;position:relative}
+h2::after{content:'';position:absolute;bottom:-8px;left:0;width:50px;height:2px;background:#c9a84c;transition:width .6s ease}
+h2:hover::after{width:100%}
+h3{font-size:1.3rem;color:#c9a84c;margin-bottom:10px}
+p{font-size:1rem;font-weight:300;color:#e8e6e0;line-height:1.9}
+.gold{color:#c9a84c}
+.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:18px auto}
+
+/* ===== LOGO ===== */
+.logo-block{text-align:center;padding:60px 0 40px 0}
+.logo-block .mce-titre{font-family:'Playfair Display',serif;font-size:6rem;font-weight:900;color:#c9a84c;letter-spacing:14px;line-height:1;margin-bottom:14px}
+.logo-block .mce-sous-titre{font-family:'Inter',sans-serif;font-size:1rem;color:#e8e6e0;letter-spacing:6px;text-transform:uppercase;font-weight:300;margin-bottom:20px}
+.logo-block .tagline{font-family:'Playfair Display',serif;font-size:1.6rem;color:#e8d5a3;letter-spacing:3px;font-weight:400;font-style:italic}
+
+/* ===== MENU ===== */
+.menu-fixe{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.15);padding:14px 0;transition:all .3s ease}
+.menu-fixe.scrolled{padding:10px 0;background:rgba(10,10,10,.98)}
+.menu{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 24px;max-width:1100px;margin:0 auto;padding:0 20px}
+.menu a{font-family:'Inter',sans-serif;font-size:.68rem;text-transform:uppercase;letter-spacing:2px;color:#e8e6e0;text-decoration:none;padding:4px 0;border-bottom:1px solid transparent;transition:all .3s ease;font-weight:400;position:relative}
+.menu a::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1px;background:#c9a84c;transition:width .4s ease}
+.menu a:hover::after,.menu a.active::after{width:100%}
+.menu a:hover,.menu a.active{color:#c9a84c}
+
+/* ===== SECTIONS ===== */
+section{padding:80px 0;border-bottom:1px solid rgba(255,255,255,.03);scroll-margin-top:80px;position:relative}
+section:last-of-type{border-bottom:none}
+.section-titre{text-align:center;margin-bottom:40px}
+.section-titre p{max-width:640px;margin:12px auto 0 auto;color:#e8e6e0;font-size:1rem;text-align:center}
+
+/* ===== HERO ===== */
+.hero-content{max-width:820px;margin:0 auto;text-align:center}
+.hero .sous-titre-hero{font-size:1.15rem;color:#e8e6e0;font-weight:300;line-height:2}
+
+/* ===== BOUTONS ===== */
+.btn-hero{display:inline-block;padding:12px 32px;background:linear-gradient(135deg,#c9a84c,#b8960c);border:none;border-radius:4px;color:#0a0a0a;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:2px;text-decoration:none;text-transform:uppercase}
+.btn-hero:hover{background:#e8d5a3;transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.2)}
+.btn-hero-outline{display:inline-block;padding:12px 32px;background:transparent;border:1px solid rgba(201,168,76,.4);border-radius:4px;color:#c9a84c;font-size:.85rem;font-weight:400;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:2px;text-decoration:none;text-transform:uppercase}
+.btn-hero-outline:hover{background:rgba(201,168,76,.08);border-color:#c9a84c}
+
+/* ===== PLATEFORMES ===== */
+.grille-plateformes{display:grid;grid-template-columns:1fr;gap:20px;max-width:900px;margin:0 auto}
+.plateforme-card{background:#141414;padding:32px 24px;border:1px solid rgba(201,168,76,.1);border-radius:6px;text-align:center;transition:all .4s ease}
+.plateforme-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.35);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.plateforme-card .nom{font-family:'Playfair Display',serif;font-size:1.4rem;color:#c9a84c;font-weight:700;margin-bottom:10px}
+.plateforme-card .desc{font-size:.9rem;color:#e8e6e0;font-weight:300;margin-bottom:20px;min-height:48px}
+
+/* ===== BLOC CONCEPT ===== */
+.bloc-concept{max-width:760px;margin:0 auto;text-align:center;background:#141414;padding:48px 32px;border:1px solid rgba(201,168,76,.08);border-radius:6px;transition:all .4s ease}
+.bloc-concept:hover{border-color:rgba(201,168,76,.2)}
+.bloc-concept p{font-size:1rem;margin-bottom:20px}
+.bloc-concept .btn-hero{margin-top:8px}
+
+/* ===== AGENT K ===== */
+.agent-k-fonction{font-size:.9rem;color:#e8d5a3;letter-spacing:3px;text-transform:uppercase;font-weight:400;margin-bottom:24px}
+.agent-k-desc{font-size:1rem;color:#e8e6e0;font-weight:300}
+
+/* ===== QUESTIONNAIRES ===== */
+.toggle-section{margin-bottom:20px}
+.toggle-header{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:14px 20px;background:#141414;border:1px solid rgba(201,168,76,.08);border-radius:4px;transition:all .3s ease;user-select:none}
+.toggle-header:hover{border-color:rgba(201,168,76,.25)}
+.toggle-header h3{margin-bottom:0;font-size:1rem}
+.toggle-header .icon{font-size:1.1rem;color:#c9a84c;transition:transform .3s ease}
+.toggle-header .icon.open{transform:rotate(180deg)}
+.toggle-content{max-height:0;overflow:hidden;transition:max-height .6s ease,padding .3s ease,opacity .4s ease;opacity:0;padding:0 4px}
+.toggle-content.open{max-height:6000px;opacity:1;padding:20px 4px}
+
+.question-item{background:#141414;padding:20px 24px;border:1px solid rgba(201,168,76,.06);border-radius:4px;margin-bottom:12px;transition:all .3s ease}
+.question-item:hover{border-color:rgba(201,168,76,.18)}
+.question-item .q-num{font-size:.6rem;color:#c9a84c;font-weight:500;letter-spacing:2px;text-transform:uppercase}
+.question-item .q-text{font-size:.95rem;color:#fafaf8;margin:8px 0 14px 0;font-weight:400;font-family:'Playfair Display',serif}
+.reponses-grid{display:grid;grid-template-columns:1fr;gap:6px}
+.reponse{background:#0a0a0a;border:1px solid rgba(255,255,255,.05);border-radius:4px;padding:10px 14px;text-align:left;cursor:pointer;transition:all .3s ease;color:#e8e6e0;font-size:.85rem;font-weight:300;display:flex;align-items:center;gap:8px;user-select:none}
+.reponse:hover{border-color:rgba(201,168,76,.3)}
+.reponse.selected{border-color:#c9a84c;background:rgba(201,168,76,.05)}
+.reponse .label{font-weight:500;color:#c9a84c;margin-right:4px;font-size:.7rem}
+
+.progress-bar{display:flex;gap:6px;justify-content:center;margin-bottom:16px}
+.progress-bar .step{width:24px;height:3px;background:#2a2a2a;border-radius:2px;transition:background .3s ease}
+.progress-bar .step.active{background:#c9a84c}
+.progress-bar .step.done{background:#e8d5a3}
+
+.btn-secondary{padding:8px 20px;background:transparent;border:1px solid rgba(201,168,76,.2);border-radius:4px;color:#c9a84c;font-size:.75rem;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:1px;font-weight:400}
+.btn-secondary:hover{border-color:#c9a84c;background:rgba(201,168,76,.03)}
+.btn-secondary.reset{border-color:rgba(255,255,255,.1);color:#e8e6e0}
+.btn-secondary.reset:hover{border-color:rgba(255,255,255,.3)}
+.btn-group{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px}
+
+.resultat{margin-top:24px;padding:24px 28px;background:#141414;border:1px solid rgba(201,168,76,.1);border-radius:4px;max-width:800px;margin-left:auto;margin-right:auto;text-align:center;display:none}
+.resultat.visible{display:block;animation:fadeInUp .6s ease}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.resultat .archetype{font-family:'Playfair Display',serif;font-size:1.6rem;color:#c9a84c;font-weight:700;letter-spacing:1px}
+.resultat .description{font-size:.9rem;color:#e8e6e0;margin-top:10px;font-weight:300;text-align:left;max-width:700px;margin-left:auto;margin-right:auto}
+.resultat .description p{margin-bottom:6px;font-size:.9rem}
+.resultat .profil-label{font-size:.6rem;color:#c9a84c;margin-bottom:6px;text-transform:uppercase;letter-spacing:2px;font-weight:500}
+.btn-submit-questionnaire{display:block;width:100%;max-width:400px;margin:32px auto 0;padding:14px;background:#c9a84c;border:none;border-radius:4px;color:#0a0a0a;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:2px;text-transform:uppercase}
+.btn-submit-questionnaire:hover{background:#e8d5a3}
+
+/* ===== FORMULAIRES ===== */
+.form{max-width:700px;margin:0 auto;background:#141414;padding:28px 24px;border:1px solid rgba(201,168,76,.08);border-radius:4px}
+.form .group{margin-bottom:16px}
+.form label{display:block;font-size:.7rem;color:#c9a84c;font-weight:500;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.form input,.form select,.form textarea{width:100%;padding:12px 16px;background:#0a0a0a;border:1px solid rgba(255,255,255,.05);border-radius:4px;color:#fafaf8;font-size:.9rem;font-family:'Inter',sans-serif;transition:all .3s ease;font-weight:300}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:#c9a84c}
+.btn{display:block;width:100%;padding:14px;background:#c9a84c;border:none;border-radius:4px;color:#0a0a0a;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:2px;text-transform:uppercase}
+.btn:hover{background:#e8d5a3}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.btn-reset{padding:14px 20px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:4px;color:#e8e6e0;font-size:.75rem;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:1px;font-weight:300}
+.btn-reset:hover{border-color:rgba(255,255,255,.3)}
+.btn-group-form{display:flex;gap:10px;margin-top:10px}
+.btn-group-form .btn-reset{flex:1}
+.info-rib{font-size:.8rem;color:#e8e6e0;background:rgba(201,168,76,.05);padding:14px 20px;border:1px solid rgba(201,168,76,.1);border-radius:4px;margin-bottom:20px;text-align:center;font-weight:300;line-height:1.7}
+
+.payment{max-width:700px;margin:20px auto 0;background:#141414;padding:20px 24px;border:1px solid rgba(201,168,76,.08);border-radius:4px}
+.payment h4{font-family:'Playfair Display',serif;color:#c9a84c;font-size:.95rem;margin-bottom:12px;text-align:center}
+.payment .method{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.payment .method:last-child{border-bottom:none}
+.payment .method .label{font-size:.8rem;color:#e8e6e0;font-weight:300}
+.payment .method .value{font-size:.85rem;color:#fff;font-weight:500;letter-spacing:.5px}
+.payment .method .value.gold{color:#c9a84c}
+.payment .note{font-size:.7rem;color:#2a2a2a;text-align:center;margin-top:10px}
+
+#syntheseInscription{max-width:700px;margin:0 auto 20px auto;display:none}
+#syntheseInscription .box{background:#141414;padding:16px 20px;border:1px solid rgba(201,168,76,.08);border-radius:4px}
+#syntheseInscription .label{font-size:.6rem;color:#c9a84c;font-weight:500;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+
+/* ===== CONTACT ===== */
+.contact-ligne{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 32px;font-size:.9rem;padding:8px 0;color:#e8e6e0;font-weight:300}
+.contact-ligne strong{color:#c9a84c;font-weight:500;font-size:.7rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:2px}
+.contact-rib{text-align:center;font-size:.8rem;color:#e8e6e0;background:rgba(201,168,76,.05);padding:12px 20px;border:1px solid rgba(201,168,76,.1);border-radius:4px;max-width:600px;margin:20px auto 0;font-weight:300}
+.contact-rib .gold{font-weight:500}
+
+/* ===== FAQ ===== */
+.faq-grid{display:grid;grid-template-columns:1fr;gap:12px;max-width:900px;margin:0 auto}
+.faq-item{background:#141414;padding:20px 24px;border:1px solid rgba(201,168,76,.06);border-radius:4px}
+.faq-item:hover{border-color:rgba(201,168,76,.18)}
+.faq-item .faq-q{font-family:'Playfair Display',serif;font-size:.9rem;color:#c9a84c;font-weight:600;margin-bottom:8px}
+.faq-item .faq-a{font-size:.8rem;color:#e8e6e0;font-weight:300}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:40px 0 24px 0;border-top:1px solid rgba(255,255,255,.03);margin-top:40px}
+.footer p{font-size:.7rem;color:#2a2a2a;font-weight:300}
+.footer .social{display:flex;justify-content:center;gap:10px;margin-top:12px}
+.footer .social a{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;text-decoration:none;transition:all .3s ease}
+.footer .social a svg{width:18px;height:18px;fill:#fff}
+.footer .social a.whatsapp{background:#25D366}
+.footer .social a.whatsapp:hover{transform:scale(1.05)}
+
+/* ===== FLOATING ===== */
+.back-top{position:fixed;bottom:80px;right:16px;z-index:199;width:38px;height:38px;border-radius:50%;background:#141414;border:1px solid rgba(201,168,76,.2);color:#c9a84c;font-size:1rem;cursor:pointer;transition:all .3s ease;opacity:0;visibility:hidden;transform:translateY(10px);display:flex;align-items:center;justify-content:center}
+.back-top.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.back-top:hover{background:#c9a84c;color:#0a0a0a}
+.floating-counter{position:fixed;bottom:16px;right:16px;z-index:500;background:#141414;border:1px solid rgba(201,168,76,.15);border-radius:30px;padding:6px 16px;font-family:'Inter',sans-serif;font-size:.7rem;color:#c9a84c;font-weight:500;letter-spacing:1px;box-shadow:0 4px 30px rgba(0,0,0,.6);display:none}
+.floating-counter.visible{display:block}
+.floating-counter .num{color:#fff;font-weight:600}
+.btn-flottant-mobile{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);z-index:500;background:#c9a84c;border:none;border-radius:30px;padding:12px 28px;color:#0a0a0a;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:1px;text-decoration:none;box-shadow:0 4px 30px rgba(201,168,76,.3);display:none}
+.btn-flottant-mobile:hover{background:#e8d5a3;transform:translateX(-50%) scale(1.03)}
+
+/* ===== RESPONSIVE ===== */
+@media(min-width:640px){
+  .grille-plateformes{grid-template-columns:repeat(3,1fr)}
+  .reponses-grid{grid-template-columns:1fr 1fr}
+  .faq-grid{grid-template-columns:1fr 1fr}
+}
+@media(min-width:900px){
+  .container{padding:0 40px}
+  .menu a{font-size:.72rem;letter-spacing:2.5px}
+  .logo-block .mce-titre{font-size:7rem;letter-spacing:18px}
+  .btn-flottant-mobile{display:none !important}
+}
+@media(max-width:899px){
+  .btn-flottant-mobile{display:block}
+  .logo-block .mce-titre{font-size:3.4rem;letter-spacing:6px}
+  .logo-block .mce-sous-titre{font-size:.75rem;letter-spacing:3px}
+  .logo-block .tagline{font-size:1.2rem}
+  section{padding:50px 0}
+  .bloc-concept{padding:32px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== MENU FIXE ===== -->
+<div class="menu-fixe" id="mainMenuFixed">
+    <nav class="menu" id="mainMenu">
+        <a href="#plateformes">Plateformes</a>
+        <a href="#newvision">New Vision</a>
+        <a href="#cbi">CBI</a>
+        <a href="#agentk">Agent K</a>
+        <a href="#inscriptions">Inscriptions</a>
+    </nav>
+</div>
+
+<div class="container">
+
+    <!-- ===== 1. PRESENTATION MCE (HERO) ===== -->
+    <section id="hero" class="hero" style="padding-top:20px;padding-bottom:60px;border-bottom:none;">
+        <div class="logo-block" style="padding:20px 0 30px 0;">
+            <div class="mce-titre">MCE</div>
+            <div class="mce-sous-titre">Mindset Cognitive Experience</div>
+            <div class="tagline">Comprendre, Visualiser, Avancer.</div>
+        </div>
+        <div class="hero-content">
+            <p class="sous-titre-hero">
+                L'écosystème tunisien pour l'entrepreneuriat.<br>
+                Une nouvelle manière de penser, décider et construire.<br>
+                Dans un monde augmenté par l'IA.
+            </p>
+        </div>
+    </section>
+
+    <!-- ===== 2. PLATEFORMES D'INCLUSION ENTREPRENEURIALE ===== -->
+    <section id="plateformes">
+        <div class="section-titre">
+            <h2>Plateformes d'inclusion entrepreneuriale</h2>
+            <div class="divider"></div>
+            <p>
+                Trois espaces pour apprendre, tester et décider.<br>
+                Pensés pour les jeunes entrepreneurs.
+            </p>
+        </div>
+        <div class="grille-plateformes">
+            <div class="plateforme-card">
+                <div class="nom">Inclusif</div>
+                <div class="desc">
+                    Acquérir la culture business.<br>
+                    Les réflexes de base de l'entrepreneur.
+                </div>
+                <a href="plateinclusif.html" class="btn-hero-outline">Explorer Inclusif</a>
+            </div>
+            <div class="plateforme-card">
+                <div class="nom">Métiers</div>
+                <div class="desc">
+                    Tester les stratégies métier.<br>
+                    Se confronter à des situations réelles.
+                </div>
+                <a href="platemetier.html" class="btn-hero-outline">Explorer Métiers</a>
+            </div>
+            <div class="plateforme-card">
+                <div class="nom">Conseil</div>
+                <div class="desc">
+                    Structurer la croissance business.<br>
+                    Optimiser le e-commerce.
+                </div>
+                <a href="plateconseil.html" class="btn-hero-outline">Explorer Conseil</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 3. NEW VISION ===== -->
+    <section id="newvision">
+        <div class="section-titre">
+            <h2>New Vision</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="bloc-concept">
+            <p>
+                Une expérience immersive qui combine Intelligence Artificielle, Marketing, Banque, Management et Entrepreneuriat.<br>
+                Pour transformer votre vision et votre capacité d'action.
+            </p>
+            <a href="newvision.html" class="btn-hero">Découvrir New Vision</a>
+        </div>
+    </section>
+
+    <!-- ===== 4. CBI ===== -->
+    <section id="cbi">
+        <div class="section-titre">
+            <h2>Cognitive Business Impact</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="bloc-concept">
+            <p>
+                Un diagnostic stratégique augmenté par l'IA pour révéler votre vision 360°.<br>
+                Structurer votre plan d'action et intégrer les leviers cognitifs de votre croissance.
+            </p>
+            <a href="cbi.html" class="btn-hero">Découvrir CBI</a>
+        </div>
+    </section>
+
+    <!-- ===== 5. AGENT K ===== -->
+    <section id="agentk">
+        <div class="section-titre">
+            <h2>Agent K</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="bloc-concept">
+            <div class="agent-k-fonction">Comité Directeur Augmenté</div>
+            <p class="agent-k-desc">
+                Un consulting augmenté par l'IA en No Prompt.<br>
+                Votre conseil d'administration personnel — local, offline, calibré pour vous.
+            </p>
+            <a href="saas.html" class="btn-hero">Découvrir les capacités de l'Agent K</a>
+        </div>
+    </section>
+
+    <!-- ===== 6. ARCHÉTYPES (PROFIL) ===== -->
+    <section id="archetype">
+        <div class="section-titre">
+            <h2>Quel entrepreneur êtes-vous ?</h2>
+            <div class="divider"></div>
+            <p>Deux questionnaires pour identifier votre profil.</p>
+        </div>
+
+        <div class="toggle-section">
+            <div class="toggle-header" onclick="toggleSection(this)">
+                <h3>🧠 Opérationnel</h3>
+                <span class="icon">▼</span>
+            </div>
+            <div class="toggle-content">
+                <p style="text-align:center;font-size:.75rem;color:#2a2a2a;margin-bottom:16px;">Aptitudes en gestion et prise de décision.</p>
+                <div style="text-align:center;margin-bottom:16px;"><button class="btn-secondary reset" id="btnResetTop">⟳ Réinitialiser</button></div>
+                <div class="progress-bar" id="progressOpera"><span class="step active"></span><span class="step"></span><span class="step"></span><span class="step"></span><span class="step"></span></div>
+                <div id="questionnaireOperaBlock"></div>
+                <div class="btn-group"><button class="btn-secondary" id="btnProfilOpera">Voir profil</button></div>
+                <div class="resultat" id="resultatOperaBlock"><div class="profil-label">Profil Opérationnel</div><div class="archetype" id="resultOperaArchetype"></div><div class="description" id="resultOperaDescription"></div></div>
+            </div>
+        </div>
+
+        <div class="toggle-section">
+            <div class="toggle-header" onclick="toggleSection(this)">
+                <h3>🧠 Cognitif</h3>
+                <span class="icon">▼</span>
+            </div>
+            <div class="toggle-content">
+                <p style="text-align:center;font-size:.75rem;color:#2a2a2a;margin-bottom:16px;">Aptitudes psychologiques : risque, résilience, créativité.</p>
+                <div class="progress-bar" id="progressCognitif"><span class="step active"></span><span class="step"></span><span class="step"></span><span class="step"></span><span class="step"></span></div>
+                <div id="questionnaireCognitifBlock"></div>
+                <div class="btn-group"><button class="btn-secondary" id="btnProfilCognitif">Voir profil</button></div>
+                <div class="resultat" id="resultatCognitifBlock"><div class="profil-label">Profil Cognitif</div><div class="archetype" id="resultCognitifArchetype"></div><div class="description" id="resultCognitifDescription"></div></div>
+            </div>
+        </div>
+
+        <button class="btn-submit-questionnaire" id="btnSubmitArchetype">Voir mon Archétype</button>
+        <div class="resultat" id="resultatBlock"><div class="profil-label">Archétype final</div><div class="archetype" id="resultArchetype"></div><div class="description" id="resultDescription"></div></div>
+    </section>
+
+    <!-- ===== 7. INSCRIPTIONS ===== -->
+    <section id="inscriptions">
+        <div class="section-titre">
+            <h2>Inscriptions</h2>
+            <div class="divider"></div>
+            <p>Formulaire d'inscription à nos formations et coachings.</p>
+        </div>
+
+        <div id="syntheseInscription">
+            <div class="box">
+                <div class="label">Synthèse de vos résultats</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+                    <div style="text-align:center;"><div style="font-size:.6rem;color:#2a2a2a;text-transform:uppercase;letter-spacing:1px;">Opérationnel</div><div style="font-size:1.1rem;color:#c9a84c;font-weight:300;" id="syntheseOpera">-</div></div>
+                    <div style="text-align:center;"><div style="font-size:.6rem;color:#2a2a2a;text-transform:uppercase;letter-spacing:1px;">Cognitif</div><div style="font-size:1.1rem;color:#c9a84c;font-weight:300;" id="syntheseCognitif">-</div></div>
+                    <div style="text-align:center;"><div style="font-size:.6rem;color:#2a2a2a;text-transform:uppercase;letter-spacing:1px;">Archétype</div><div style="font-size:1.1rem;color:#c9a84c;font-weight:300;" id="syntheseArchetype">-</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toggle-section">
+            <div class="toggle-header" onclick="toggleSection(this)">
+                <h3>📋 Formulaire d'inscription</h3>
+                <span class="icon">▼</span>
+            </div>
+            <div class="toggle-content" id="inscriptionFormContent">
+                <div class="form">
+                    <div class="info-rib">
+                        <span class="gold">Un conseiller vous contactera pour finaliser la procédure.</span><br>
+                        Une fois votre demande validée, vous pourrez procéder au paiement de <span class="gold">20%</span> sur notre RIB ou par D17 pour confirmer votre réservation.<br>
+                        Le reste à la première séance, avec possibilité de payer en deux fois.
+                    </div>
+                    <form id="formInscription" action="https://formspree.io/f/xvzjrrwp" method="POST">
+                        <input type="hidden" name="resultat_operationnel" id="resultatOperaHidden" value="Non renseigné" />
+                        <input type="hidden" name="resultat_cognitif" id="resultatCognitifHidden" value="Non renseigné" />
+                        <input type="hidden" name="resultat_archetype" id="resultatArchetypeHidden" value="Non renseigné" />
+                        <div class="group"><label for="nom">Nom</label><input type="text" id="nom" name="nom" required placeholder="Votre nom" /></div>
+                        <div class="group"><label for="prenom">Prénom</label><input type="text" id="prenom" name="prenom" required placeholder="Votre prénom" /></div>
+                        <div class="group"><label for="telephone">Téléphone</label><input type="tel" id="telephone" name="telephone" required placeholder="Votre numéro" /></div>
+                        <div class="group"><label for="email">Email</label><input type="email" id="email" name="email" required placeholder="votre@email.com" /></div>
+                        <div class="group"><label for="service">Service souhaité</label><select id="service" name="service" required>
+                            <option value="">Choisissez un service</option>
+                            <option value="New Vision Online">New Vision Online</option>
+                            <option value="New Vision Express">New Vision Express</option>
+                            <option value="New Vision Premium">New Vision Premium</option>
+                            <option value="Diagnostic stratégique MCE">Diagnostic stratégique MCE</option>
+                            <option value="Agent K — 1 Jour">Agent K — 1 Jour (5 consultations)</option>
+                            <option value="Agent K — 1 Semaine">Agent K — 1 Semaine (15 consultations)</option>
+                            <option value="Agent K — 1 Mois">Agent K — 1 Mois (30 consultations)</option>
+                            <option value="Agent K — 1 Trim">Agent K — 1 Trim (50 consultations)</option>
+                        </select></div>
+                        <div class="btn-group-form"><button type="submit" class="btn" id="btnSubmitInscription">Envoyer</button><button type="button" class="btn-reset" id="btnResetForm">Réinitialiser</button></div>
+                    </form>
+                    <div class="payment">
+                        <h4>💳 Moyens de paiement</h4>
+                        <div class="method"><span class="label">Virement bancaire</span><span class="value gold">17535940103736222101</span></div>
+                        <div class="method"><span class="label">Paiement mobile D17</span><span class="value">+216 93 399 107</span></div>
+                        <div class="note">Justificatif à <span style="color:#c9a84c;">tarekfatmi98@gmail.com</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 8. CONTACT ===== -->
+    <section id="contact">
+        <div class="section-titre">
+            <h2>Contact</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="contact-ligne">
+            <span><strong>Email</strong> tarekfatmi98@gmail.com</span>
+            <span><strong>Téléphone</strong> +216 93 399 107</span>
+            <span><strong>Adresse</strong> Tunisie</span>
+        </div>
+        <div class="contact-rib"><span class="gold">RIB :</span> 17535940103736222101</div>
+
+        <div style="margin-top:32px;">
+            <div class="toggle-section">
+                <div class="toggle-header" onclick="toggleSection(this)"><h3>📧 Nous écrire</h3><span class="icon">▼</span></div>
+                <div class="toggle-content">
+                    <div class="form">
+                        <form id="contactForm" action="https://formspree.io/f/xwvdarak" method="POST">
+                            <div class="group"><label for="contact_email">Email</label><input type="email" id="contact_email" name="contact_email" required placeholder="votre@email.com" /></div>
+                            <div class="group"><label for="contact_telephone">Téléphone</label><input type="tel" id="contact_telephone" name="contact_telephone" required placeholder="Votre numéro" /></div>
+                            <div class="group"><label for="contact_objectif">Quel est votre objectif principal ?</label>
+                                <select id="contact_objectif" name="contact_objectif" required>
+                                    <option value="">Choisissez</option>
+                                    <option value="Creer un projet">Créer un projet</option>
+                                    <option value="Developper une activite">Développer une activité</option>
+                                    <option value="Ameliorer mes competences">Améliorer mes compétences</option>
+                                    <option value="Explorer l'IA">Explorer l'IA</option>
+                                </select>
+                            </div>
+                            <div class="group"><label for="contact_message">Message</label><textarea id="contact_message" name="contact_message" rows="4" placeholder="Votre message..."></textarea></div>
+                            <button type="submit" class="btn">Recevoir mon orientation MCE</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 9. FAQ ===== -->
+    <section id="faq">
+        <div class="section-titre">
+            <h2>FAQ</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item"><div class="faq-q">Qu'est-ce que New Vision ?</div><div class="faq-a">Formation exclusive combinant IA, Marketing, Banque et Management pour l'entrepreneuriat augmenté.</div></div>
+            <div class="faq-item"><div class="faq-q">Qui peut bénéficier du coaching ?</div><div class="faq-a">Entrepreneurs, managers ou porteurs de projet souhaitant booster leur performance.</div></div>
+            <div class="faq-item"><div class="faq-q">Comment s'inscrire ?</div><div class="faq-a">Formulaire d'inscription, acompte 20%, nous vous contactons pour finaliser.</div></div>
+            <div class="faq-item"><div class="faq-q">Qu'est-ce que l'Agent K ?</div><div class="faq-a">Un comité directeur augmenté par l'IA en No Prompt. Un consulting local, offline et calibré pour vous.</div></div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p>MCE — Mindset Cognitive Experience</p>
+        <p style="margin-top:6px;font-size:.65rem;color:#2a2a2a;">Créé en Tunisie. Pensé pour une nouvelle génération d'entrepreneurs augmentés.</p>
+        <p style="margin-top:6px;font-size:.6rem;color:#2a2a2a;">MCE Framework © 2026</p>
+        <div class="social">
+            <a href="https://wa.me/21693399107" target="_blank" class="whatsapp" aria-label="WhatsApp">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </a>
+        </div>
+    </footer>
+
+</div>
+
+<a href="https://wa.me/21693399107" target="_blank" class="btn-flottant-mobile">📱 Parler à MCE</a>
+
+<div class="floating-counter" id="floatingCounter">
+    Question <span class="num" id="counterNum">0</span> / <span id="counterTotal">5</span>
+</div>
+
+<button class="back-top" id="backToTop" aria-label="Retour en haut">↑</button>
+
+<script>
+// ===== MENU =====
+const menuFixed = document.getElementById('mainMenuFixed');
+window.addEventListener('scroll', function() { menuFixed.classList.toggle('scrolled', window.scrollY > 60); });
+const menuLinks = document.querySelectorAll('#mainMenu a');
+const sections = document.querySelectorAll('section');
+function updateActiveMenu() {
+    let current = '';
+    sections.forEach(s => { if (s.getBoundingClientRect().top <= 100) current = s.id; });
+    menuLinks.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+}
+window.addEventListener('scroll', updateActiveMenu);
+window.addEventListener('resize', updateActiveMenu);
+updateActiveMenu();
+
+// ===== BACK TO TOP =====
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', function() { backToTop.classList.toggle('visible', window.scrollY > 300); });
+backToTop.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+// ===== TOGGLE =====
+function toggleSection(header) {
+    const content = header.nextElementSibling, icon = header.querySelector('.icon');
+    content.classList.toggle('open');
+    icon.classList.toggle('open');
+}
+
+// ===== QUESTIONNAIRES =====
+let lastOperaPercent = 'Non renseigné', lastCognitifPercent = 'Non renseigné';
+let lastOperaNom = '-', lastCognitifNom = '-';
+let selectedOpera = {}, selectedCognitif = {};
+
+const questionsOpera = [
+    { text: 'Un projet prend du retard. Vous :', reponses: [{ label: 'A', text: 'Analysez les causes et proposez des solutions', value: 3, correct: true }, { label: 'B', text: 'Accélérez le rythme', value: -1 }, { label: 'C', text: 'Revoir le planning', value: 0 }, { label: 'D', text: 'Attendez la fin', value: 0 }] },
+    { text: 'Vous devez arbitrer entre deux solutions. Vous :', reponses: [{ label: 'A', text: 'Comparez avantages et inconvénients', value: 3, correct: true }, { label: 'B', text: 'Choisissez la plus rapide', value: -1 }, { label: 'C', text: 'Consultez un tiers', value: 0 }, { label: 'D', text: 'Retardez la décision', value: 0 }] },
+    { text: 'Vous êtes confronté à une situation de stress intense. Vous :', reponses: [{ label: 'A', text: 'Prenez du recul et respirez', value: 3, correct: true }, { label: 'B', text: 'Agissez immédiatement', value: -1 }, { label: 'C', text: 'Demandez de l\'aide', value: 0 }, { label: 'D', text: 'Vous laissez déborder', value: 0 }] },
+    { text: 'Après une erreur, vous :', reponses: [{ label: 'A', text: 'Analysez ce qui n\'a pas fonctionné', value: 3, correct: true }, { label: 'B', text: 'Recommencez autrement', value: 0 }, { label: 'C', text: 'Vous excusez et passez à autre chose', value: -1 }, { label: 'D', text: 'Vous culpabilisez', value: 0 }] },
+    { text: 'Face à une décision importante, vous :', reponses: [{ label: 'A', text: 'Analysez les options', value: 3, correct: true }, { label: 'B', text: 'Suivez votre intuition', value: 0 }, { label: 'C', text: 'Consultez plusieurs personnes', value: 0 }, { label: 'D', text: 'Décidez vite', value: -1 }] }
+];
+
+const questionsCognitif = [
+    { text: 'Vous êtes confronté à une décision risquée mais payante. Vous :', reponses: [{ label: 'A', text: 'Évaluez le risque et vous lancez', value: 3, correct: true }, { label: 'B', text: 'Vous lancez sans hésiter', value: -1 }, { label: 'C', text: 'Consultez avant de décider', value: 0 }, { label: 'D', text: 'Vous abstenez', value: 0 }] },
+    { text: 'Vous êtes critiqué en public. Vous :', reponses: [{ label: 'A', text: 'Accueillez la critique et en tirez profit', value: 3, correct: true }, { label: 'B', text: 'Répondez calmement et argumentez', value: 0 }, { label: 'C', text: 'Vous mettez en colère', value: -1 }, { label: 'D', text: 'Vous renfermez', value: 0 }] },
+    { text: 'Pour améliorer un résultat, vous créez un nouveau processus. Vous :', reponses: [{ label: 'A', text: 'Imaginez une approche complètement nouvelle', value: 3, correct: true }, { label: 'B', text: 'Améliorez un processus existant', value: 0 }, { label: 'C', text: 'Reproduisez ce qui se fait ailleurs', value: -1 }, { label: 'D', text: 'Vous contentez de l\'existant', value: 0 }] },
+    { text: 'En tant que leader, votre priorité est :', reponses: [{ label: 'A', text: 'Montrer l\'exemple par vos actions', value: 3, correct: true }, { label: 'B', text: 'Donner des consignes claires', value: 0 }, { label: 'C', text: 'Motiver votre équipe', value: 0 }, { label: 'D', text: 'Assurer le suivi', value: -1 }] },
+    { text: 'Après un échec, vous :', reponses: [{ label: 'A', text: 'Analysez et tirez les leçons', value: 3, correct: true }, { label: 'B', text: 'Recommencez avec détermination', value: 0 }, { label: 'C', text: 'Vous découragez', value: -1 }, { label: 'D', text: 'Cherchez un responsable', value: 0 }] }
+];
+
+const profilsOpera = [
+    { min: -5, max: 3, nom: 'Le Stratège en Rodage', description: 'Vous avez le potentiel, mais la méthode vous manque encore. Votre instinct est bon, vos réflexes aussi. Il manque juste la structure. Avec un peu de cadre et d\'entraînement cognitif, vous passerez du statut de "je gère" à "je domine". La formation New Vision est votre prochaine étape.' },
+    { min: 4, max: 10, nom: 'Le Manager Augmenté', description: 'Vous savez organiser, prioriser et exécuter. Vous êtes le ciment de votre équipe. Mais vous pouvez encore monter en puissance en maîtrisant les leviers du management augmenté et de l\'IA. Le coaching CBI vous fera passer du bon gestionnaire au leader d\'exception.' },
+    { min: 11, max: 15, nom: 'Le Maître Stratège', description: 'Vous avez une vision, une méthode, et une capacité d\'analyse redoutable. Vous êtes un chef d\'orchestre né. Votre potentiel est immense. L\'accompagnement CBI vous aidera à déployer votre vision à grande échelle. Le monde a besoin de vos projets.' }
+];
+
+const profilsCognitif = [
+    { min: -5, max: 3, nom: 'Le Phoenix en Devenir', description: 'Vous développez votre résilience et votre confiance. Vous apprenez à gérer le risque et l\'incertitude. Vous êtes en train de construire votre armure. La formation New Vision vous donnera les bases cognitives solides pour transformer vos peurs en leviers de croissance.' },
+    { min: 4, max: 10, nom: 'L\'Équilibriste Éclairé', description: 'Vous alliez prudence et audace avec une élégance rare. Vous savez gérer le stress et prendre des risques mesurés. Vous êtes sur le bon chemin. Renforcez votre leadership et votre créativité avec le coaching CBI. Vous avez le potentiel pour devenir un leader d\'exception.' },
+    { min: 11, max: 15, nom: 'Le Visionnaire Cosmique', description: 'Vous êtes résilient, créatif, audacieux et inspirant. Votre intelligence émotionnelle et cognitive est hors norme. Vous êtes un phare dans la tempête. Le monde a besoin de vos projets. L\'accompagnement CBI vous permettra de déployer votre vision et de créer un impact durable.' }
+];
+
+const profilsFinal = [
+    { min: -10, max: 6, nom: 'Le Gravitationnel', description: 'Vous flottez encore. Des idées, de l\'énergie, mais pas assez de structure pour décoller. La bonne nouvelle : vous êtes au bon endroit. Une formation solide vous donnera le cadre et la méthode pour transformer votre élan en trajectoire durable. New Vision est votre rampe de lancement.' },
+    { min: 7, max: 20, nom: 'Le Propulseur', description: 'Vous avez des bases solides, un mental d\'acier et une vision qui commence à prendre forme. Vous êtes sur la bonne orbite. Avec un accompagnement ciblé, vous pouvez franchir le cap et performer durablement. Le coaching CBI vous donnera l\'élan pour atteindre votre pleine mesure.' },
+    { min: 21, max: 30, nom: 'Le Magnétique', description: 'Vous alliez une maîtrise opérationnelle exceptionnelle à une intelligence cognitive hors norme. Vous êtes fait pour entreprendre, innover et fédérer. Votre énergie est contagieuse. Le monde a besoin de vos projets. Ne tardez pas à passer à l\'action. Vous êtes prêt.' }
+];
+
+function shuffleArray(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+function renderQuestions(containerId, questions, selected, progressId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    questions.forEach((q, index) => {
+        const shuffled = shuffleArray([...q.reponses]);
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.dataset.index = index;
+        div.innerHTML = `<div class="q-num">Question ${index+1}/${questions.length}</div><div class="q-text">${q.text}</div><div class="reponses-grid" data-q="${index}">${shuffled.map((r,ri)=>`<div class="reponse" data-q="${index}" data-ri="${ri}" data-value="${r.value}" data-correct="${r.correct?1:0}"><span class="label">${r.label}</span> ${r.text}</div>`).join('')}</div>`;
+        container.appendChild(div);
+    });
+    container.querySelectorAll('.reponse').forEach(carre => {
+        carre.addEventListener('click', function() {
+            const qIndex = parseInt(this.dataset.q), value = parseInt(this.dataset.value);
+            this.closest('.reponses-grid').querySelectorAll('.reponse').forEach(el => el.classList.remove('selected'));
+            this.classList.add('selected');
+            selected[qIndex] = value;
+            updateProgress(progressId, selected, questions.length);
+            updateCounter(selected, questions.length);
+        });
+    });
+    updateProgress(progressId, selected, questions.length);
+    updateCounter(selected, questions.length);
+}
+
+function updateProgress(progressId, selected, total) {
+    const bar = document.getElementById(progressId);
+    if (!bar) return;
+    const steps = bar.querySelectorAll('.step');
+    let answered = 0;
+    for (let i = 0; i < total; i++) if (selected[i] !== undefined) answered++;
+    steps.forEach((step, index) => {
+        step.classList.remove('active', 'done');
+        if (index < answered) step.classList.add('done');
+        else if (index === answered) step.classList.add('active');
+    });
+}
+
+function updateCounter(selected, total) {
+    const counter = document.getElementById('floatingCounter');
+    const num = document.getElementById('counterNum');
+    const totalEl = document.getElementById('counterTotal');
+    if (!counter || !num || !totalEl) return;
+    let answered = 0;
+    for (let i = 0; i < total; i++) if (selected[i] !== undefined) answered++;
+    totalEl.textContent = total;
+    if (answered > 0) {
+        num.textContent = answered;
+        counter.classList.add('visible');
+    } else {
+        counter.classList.remove('visible');
+    }
+}
+
+function calculerScore(selected, questions) {
+    let total = 0, count = 0;
+    for (let i = 0; i < questions.length; i++) {
+        if (selected[i] !== undefined) { total += selected[i]; count++; }
+    }
+    if (count < questions.length) return null;
+    return total;
+}
+
+function getProfilOpera(score) {
+    if (score >= 11 && score <= 15) return profilsOpera[2];
+    if (score >= 4 && score <= 10) return profilsOpera[1];
+    return profilsOpera[0];
+}
+
+function getProfilCognitif(score) {
+    if (score >= 11 && score <= 15) return profilsCognitif[2];
+    if (score >= 4 && score <= 10) return profilsCognitif[1];
+    return profilsCognitif[0];
+}
+
+function getProfilFinal(score) {
+    if (score >= 21 && score <= 30) return profilsFinal[2];
+    if (score >= 7 && score <= 20) return profilsFinal[1];
+    return profilsFinal[0];
+}
+
+renderQuestions('questionnaireOperaBlock', questionsOpera, selectedOpera, 'progressOpera');
+renderQuestions('questionnaireCognitifBlock', questionsCognitif, selectedCognitif, 'progressCognitif');
+
+document.getElementById('btnProfilOpera').addEventListener('click', function() {
+    const score = calculerScore(selectedOpera, questionsOpera);
+    if (score === null) { alert('Répondez aux 5 questions pour voir votre profil.'); return; }
+    const profil = getProfilOpera(score);
+    const min = -5, max = 15;
+    const percent = Math.round(((score - min) / (max - min)) * 100);
+    lastOperaPercent = percent + '%';
+    lastOperaNom = profil.nom;
+    document.getElementById('resultOperaArchetype').textContent = profil.nom + ' (' + percent + '%)';
+    document.getElementById('resultOperaDescription').innerHTML = '<p>' + profil.description + '</p>';
+    document.getElementById('resultatOperaBlock').classList.add('visible');
+});
+
+document.getElementById('btnProfilCognitif').addEventListener('click', function() {
+    const score = calculerScore(selectedCognitif, questionsCognitif);
+    if (score === null) { alert('Répondez aux 5 questions pour voir votre profil.'); return; }
+    const profil = getProfilCognitif(score);
+    const min = -5, max = 15;
+    const percent = Math.round(((score - min) / (max - min)) * 100);
+    lastCognitifPercent = percent + '%';
+    lastCognitifNom = profil.nom;
+    document.getElementById('resultCognitifArchetype').textContent = profil.nom + ' (' + percent + '%)';
+    document.getElementById('resultCognitifDescription').innerHTML = '<p>' + profil.description + '</p>';
+    document.getElementById('resultatCognitifBlock').classList.add('visible');
+});
+
+document.getElementById('btnSubmitArchetype').addEventListener('click', function() {
+    const operaScore = calculerScore(selectedOpera, questionsOpera);
+    const cognScore = calculerScore(selectedCognitif, questionsCognitif);
+    if (operaScore === null || cognScore === null) { alert('Répondez aux 5 questions des deux questionnaires.'); return; }
+    const total = operaScore + cognScore;
+    const profil = getProfilFinal(total);
+    const min = -10, max = 30;
+    const percent = Math.round(((total - min) / (max - min)) * 100);
+    document.getElementById('resultArchetype').textContent = profil.nom + ' (' + percent + '%)';
+    document.getElementById('resultDescription').innerHTML = '<p>' + profil.description + '</p>';
+    document.getElementById('resultatBlock').classList.add('visible');
+    document.getElementById('syntheseInscription').style.display = 'block';
+    document.getElementById('syntheseOpera').textContent = lastOperaPercent;
+    document.getElementById('syntheseCognitif').textContent = lastCognitifPercent;
+    document.getElementById('syntheseArchetype').textContent = profil.nom;
+    document.getElementById('resultatOperaHidden').value = lastOperaPercent + ' - ' + lastOperaNom;
+    document.getElementById('resultatCognitifHidden').value = lastCognitifPercent + ' - ' + lastCognitifNom;
+    document.getElementById('resultatArchetypeHidden').value = profil.nom + ' (' + percent + '%)';
+});
+
+// ===== RESET =====
+document.getElementById('btnResetTop').addEventListener('click', function() {
+    selectedOpera = {};
+    document.querySelectorAll('#questionnaireOperaBlock .reponse.selected').forEach(el => el.classList.remove('selected'));
+    updateProgress('progressOpera', selectedOpera, questionsOpera.length);
+    updateCounter(selectedOpera, questionsOpera.length);
+    document.getElementById('resultatOperaBlock').classList.remove('visible');
+});
+
+document.getElementById('btnResetForm').addEventListener('click', function() {
+    document.getElementById('formInscription').reset();
+});
+
+// ===== FORMULAIRES =====
+document.getElementById('formInscription').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnSubmitInscription');
+    btn.textContent = 'Envoi...';
+    btn.disabled = true;
+    const formData = new FormData(this);
+    fetch(this.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } })
+    .then(r => { if (r.ok) { btn.textContent = '✅ Envoyé'; btn.style.background = '#22c55e'; } else { btn.textContent = '❌ Erreur'; btn.style.background = '#ef4444'; } })
+    .catch(() => { btn.textContent = '❌ Erreur'; btn.style.background = '#ef4444'; });
+    setTimeout(() => { btn.textContent = 'Envoyer'; btn.disabled = false; btn.style.background = '#c9a84c'; }, 5000);
+});
+
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.btn');
+    btn.textContent = 'Envoi...';
+    btn.disabled = true;
+    const formData = new FormData(this);
+    fetch(this.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } })
+    .then(r => { if (r.ok) { btn.textContent = '✅ Envoyé'; btn.style.background = '#22c55e'; } else { btn.textContent = '❌ Erreur'; btn.style.background = '#ef4444'; } })
+    .catch(() => { btn.textContent = '❌ Erreur'; btn.style.background = '#ef4444'; });
+    setTimeout(() => { btn.textContent = 'Recevoir mon orientation MCE'; btn.disabled = false; btn.style.background = '#c9a84c'; }, 5000);
+});
+</script>
+</body>
+</html>

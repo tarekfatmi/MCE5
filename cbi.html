@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CBI — Cognitive Business Impact | MCE</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fafaf8;line-height:1.9;position:relative;min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(201,168,76,.05) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(26,26,46,.4) 0%,transparent 60%),linear-gradient(180deg,#0a0a0a 0%,#0f0f1a 50%,#0a0a0a 100%)}
+.container{max-width:1100px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+:root{--gold:#c9a84c;--gold-light:#e8d5a3;--black:#0a0a0a;--black-light:#141414;--gray:#2a2a2a;--off-white:#e8e6e0}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#c9a84c;border-radius:0}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:.02em}
+h1{font-size:2.6rem;color:#c9a84c;line-height:1.2}
+h2{font-size:2.4rem;color:#c9a84c;display:inline-block;position:relative}
+h2::after{content:'';position:absolute;bottom:-8px;left:0;width:60px;height:2px;background:#c9a84c;transition:width .6s ease}
+h2:hover::after{width:100%}
+h3{font-size:1.3rem;color:#c9a84c;margin-bottom:10px}
+p{font-size:1rem;font-weight:300;color:#e8e6e0;line-height:1.9}
+.gold{color:#c9a84c}
+.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:22px auto}
+
+/* ===== TOP BAR ===== */
+.top-bar{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.15);padding:14px 0}
+.top-bar .inner{display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto;padding:0 20px;flex-wrap:wrap;gap:10px}
+.top-bar .brand{font-family:'Playfair Display',serif;font-size:1rem;color:#c9a84c;font-weight:700;letter-spacing:3px;text-decoration:none}
+.top-bar .back{font-family:'Inter',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:#e8e6e0;text-decoration:none;padding:6px 14px;border:1px solid rgba(201,168,76,.3);border-radius:4px;transition:all .3s ease}
+.top-bar .back:hover{color:#c9a84c;border-color:#c9a84c;background:rgba(201,168,76,.05)}
+
+/* ===== HERO ===== */
+.hero-landing{padding:60px 0 40px 0;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)}
+.hero-landing .eyebrow{font-size:.7rem;color:#c9a84c;letter-spacing:4px;text-transform:uppercase;font-weight:500;margin-bottom:16px}
+.hero-landing h1{font-size:3.8rem;font-weight:900;letter-spacing:4px;margin-bottom:20px}
+.hero-landing .cbi-full{font-family:'Playfair Display',serif;font-size:1.6rem;color:#c9a84c;font-weight:700;letter-spacing:3px;margin-bottom:24px;display:block}
+.hero-landing .sous-titre{font-size:1.25rem;color:#e8e6e0;font-weight:300;max-width:720px;margin:0 auto 12px auto;line-height:1.8}
+.hero-landing .tagline{font-family:'Playfair Display',serif;font-size:1.55rem;color:#e8d5a3;font-style:italic;margin-top:24px}
+
+/* ===== SECTIONS ===== */
+section{padding:70px 0;border-bottom:1px solid rgba(255,255,255,.03);scroll-margin-top:80px;position:relative}
+section:last-of-type{border-bottom:none}
+.section-titre{text-align:center;margin-bottom:40px}
+.section-titre p{max-width:640px;margin:14px auto 0 auto;color:#e8e6e0;font-size:1.05rem;text-align:center}
+
+/* ===== METHODE (4 étapes) ===== */
+.grille-methode{display:grid;grid-template-columns:1fr;gap:18px;max-width:900px;margin:0 auto}
+.methode-card{background:#141414;padding:32px 24px;border:1px solid rgba(201,168,76,.1);border-radius:6px;text-align:center;transition:all .4s ease}
+.methode-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.35);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.methode-card .num{font-family:'Playfair Display',serif;font-size:2.2rem;color:#c9a84c;font-weight:900;margin-bottom:10px;letter-spacing:2px}
+.methode-card .nom{font-family:'Playfair Display',serif;font-size:1.4rem;color:#c9a84c;font-weight:700}
+
+/* ===== LIVRABLES ===== */
+.grille-livrables{display:grid;grid-template-columns:1fr;gap:14px;max-width:900px;margin:0 auto}
+.livrable-card{background:#141414;padding:22px 24px;border:1px solid rgba(201,168,76,.1);border-radius:6px;text-align:center;transition:all .3s ease;display:flex;align-items:center;justify-content:center;min-height:70px}
+.livrable-card:hover{border-color:rgba(201,168,76,.3)}
+.livrable-card .txt{font-size:1rem;color:#e8e6e0;font-weight:300;font-family:'Playfair Display',serif}
+.livrable-card .txt .gold{font-weight:600}
+
+/* ===== INCLUS ===== */
+.grille-inclus{display:grid;grid-template-columns:1fr;gap:12px;max-width:900px;margin:0 auto}
+.inclus-card{background:#0a0a0a;padding:16px 22px;border:1px solid rgba(201,168,76,.08);border-radius:4px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px}
+.inclus-card .check{color:#c9a84c;font-size:1rem;font-weight:700;line-height:1}
+.inclus-card .txt{font-size:.9rem;color:#e8e6e0;font-weight:300}
+
+/* ===== FORMULE (paragraphe) ===== */
+.formule-para{max-width:800px;margin:0 auto}
+.formule-para .para{background:#141414;border:1px solid rgba(201,168,76,.1);border-radius:6px;border-left:3px solid #c9a84c;padding:40px 32px;text-align:center}
+.formule-para .para-titre{font-family:'Playfair Display',serif;font-size:1.8rem;color:#c9a84c;font-weight:700;letter-spacing:1px;margin-bottom:14px}
+.formule-para .para-sous{font-size:1rem;color:#e8e6e0;font-weight:300;margin-bottom:14px;line-height:1.8}
+.formule-para .para-prix{font-family:'Inter',sans-serif;font-size:3rem;color:#c9a84c;font-weight:300;letter-spacing:3px;margin:20px 0 6px 0}
+.formule-para .para-prix small{font-size:1.1rem;color:#e8e6e0;font-weight:300;letter-spacing:1px}
+.formule-para .para-note{font-size:.75rem;color:#2a2a2a;margin-top:10px;letter-spacing:1px}
+
+/* ===== CTA ===== */
+.cta-final{text-align:center;padding:70px 0 40px 0}
+.cta-final h2{margin-bottom:16px}
+.cta-final .btn-hero{margin-top:20px}
+.cta-final .sessions-info{max-width:640px;margin:20px auto 0 auto;font-size:1rem;color:#e8d5a3;font-family:'Playfair Display',serif;font-style:italic;letter-spacing:1px;text-align:center;line-height:2}
+.cta-final .sessions-info .gold{font-weight:600;font-style:normal}
+.btn-hero{display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#c9a84c,#b8960c);border:none;border-radius:4px;color:#0a0a0a;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:2px;text-decoration:none;text-transform:uppercase}
+.btn-hero:hover{background:#e8d5a3;transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.2)}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:40px 0 24px 0;border-top:1px solid rgba(255,255,255,.03);margin-top:40px}
+.footer p{font-size:.7rem;color:#2a2a2a;font-weight:300}
+
+/* ===== RESPONSIVE ===== */
+@media(min-width:640px){
+  .grille-methode{grid-template-columns:repeat(2,1fr)}
+  .grille-livrables{grid-template-columns:repeat(2,1fr)}
+  .grille-inclus{grid-template-columns:repeat(2,1fr)}
+  .hero-landing h1{font-size:4.4rem}
+}
+@media(min-width:900px){
+  .container{padding:0 40px}
+  .hero-landing h1{font-size:5.2rem;letter-spacing:10px}
+  .grille-methode{grid-template-columns:repeat(4,1fr)}
+  .grille-livrables{grid-template-columns:repeat(3,1fr)}
+  .grille-inclus{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:639px){
+  .hero-landing h1{font-size:2.6rem;letter-spacing:2px}
+  section{padding:50px 0}
+  .formule-para .para{padding:28px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+    <div class="inner">
+        <a href="indexmce.html" class="brand">MCE</a>
+        <a href="indexmce.html#cbi" class="back">← Retour à MCE</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero-landing" style="border-bottom:1px solid rgba(255,255,255,.03);">
+        <div class="eyebrow">Diagnostic stratégique individuel — MCE</div>
+        <h1>CBI</h1>
+        <span class="cbi-full">Cognitive Business Impact</span>
+        <p class="sous-titre">
+            Un diagnostic stratégique augmenté par l'IA.<br>
+            Pour révéler votre vision 360°.
+        </p>
+        <p class="tagline">"Un regard nouveau sur votre business."</p>
+    </section>
+
+    <!-- ===== METHODE ===== -->
+    <section id="methode">
+        <div class="section-titre">
+            <h2>La Méthode</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="grille-methode">
+            <div class="methode-card">
+                <div class="num">01</div>
+                <div class="nom">Exploration</div>
+            </div>
+            <div class="methode-card">
+                <div class="num">02</div>
+                <div class="nom">Diagnostic</div>
+            </div>
+            <div class="methode-card">
+                <div class="num">03</div>
+                <div class="nom">Plan de développement</div>
+            </div>
+            <div class="methode-card">
+                <div class="num">04</div>
+                <div class="nom">Actions</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== LIVRABLES ===== -->
+    <section id="livrables">
+        <div class="section-titre">
+            <h2>Livrables</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="grille-livrables">
+            <div class="livrable-card"><span class="txt">Vision <span class="gold">360°</span></span></div>
+            <div class="livrable-card"><span class="txt">Plan <span class="gold">d'action</span></span></div>
+            <div class="livrable-card"><span class="txt">Diagnostic <span class="gold">Cognitif</span></span></div>
+            <div class="livrable-card"><span class="txt">Diagnostic <span class="gold">Opérationnel</span></span></div>
+            <div class="livrable-card"><span class="txt">Étude de <span class="gold">marché</span></span></div>
+            <div class="livrable-card"><span class="txt">Tableau de <span class="gold">Bord</span></span></div>
+        </div>
+    </section>
+
+    <!-- ===== INCLUS ===== -->
+    <section id="inclus">
+        <div class="section-titre">
+            <h2>Inclus</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="grille-inclus">
+            <div class="inclus-card"><span class="check">✓</span><span class="txt">Analyse de la situation actuelle</span></div>
+            <div class="inclus-card"><span class="check">✓</span><span class="txt">Identification des leviers</span></div>
+            <div class="inclus-card"><span class="check">✓</span><span class="txt">Roadmap personnalisée</span></div>
+            <div class="inclus-card"><span class="check">✓</span><span class="txt">Plan d'action 90 jours</span></div>
+        </div>
+    </section>
+
+    <!-- ===== FORMULE ===== -->
+    <section id="formule">
+        <div class="formule-para">
+            <div class="para">
+                <div class="para-titre">Diagnostic Stratégique MCE</div>
+                <div class="para-sous">
+                    4 séances de 3h.<br>
+                    Un accompagnement individuel ciblé pour structurer votre croissance.
+                </div>
+                <div class="para-prix">490 <small>DT</small></div>
+                <div class="para-note">* Tarif en DT. Non assujetti à la TVA.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA FINAL ===== -->
+    <div class="cta-final">
+        <h2>Prêt à révéler votre vision 360° ?</h2>
+        <div class="divider"></div>
+        <div class="sessions-info">
+            Les sessions débutent <span class="gold">début Octobre</span>.<br>
+            Accompagnement <span class="gold">individuel</span> sur rendez-vous.
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;">
+            <a href="indexmce.html#inscriptions" class="btn-hero">Réserver un échange stratégique</a>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p>MCE — Mindset Cognitive Experience</p>
+        <p style="margin-top:6px;font-size:.65rem;color:#2a2a2a;">Cognitive Business Impact © 2026 — Créé en Tunisie.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

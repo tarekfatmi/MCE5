@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>CAS · Publicité</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <style>
+        :root {
+            --couleur-principale: #c0392b;
+            --couleur-secondaire: #e74c3c;
+            --couleur-accent: #f1948a;
+            --couleur-fond: #fdf2f0;
+            --couleur-texte: #2c1a18;
+            --couleur-badge: #a93226;
+            --couleur-bordure: #d95b4a;
+            --couleur-avatar1: #e74c3c;
+            --couleur-avatar2: #c0392b;
+            --couleur-ombre: rgba(192, 57, 43, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: var(--couleur-fond);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            margin: 0;
+            touch-action: manipulation;
+        }
+        .agent-card {
+            max-width: 760px;
+            width: 100%;
+            background: rgba(253, 242, 240, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 56px 56px 48px 48px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 10px 25px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            padding: 24px 20px 32px;
+            border: 1px solid rgba(217, 91, 74, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(192, 57, 43, 0.10) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .agent-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(192, 57, 43, 0.07) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+        .avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(145deg, var(--couleur-avatar1), var(--couleur-avatar2));
+            border-radius: 28px 12px 28px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fdf2f0;
+            font-size: 30px;
+            box-shadow: 0 8px 14px var(--couleur-ombre);
+            flex-shrink: 0;
+        }
+        .title-group {
+            flex: 1;
+        }
+        .title-group h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: var(--couleur-texte);
+            line-height: 1.2;
+        }
+        .title-group span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #7a4a3a;
+            opacity: 0.8;
+            letter-spacing: 0.2px;
+        }
+        .status-badge {
+            background: #e4d4d0;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--couleur-texte);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #d0b8b0;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        .status-badge i {
+            font-size: 0.65rem;
+            color: #2a7a4a;
+        }
+        .btn-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-nav:active {
+            transform: scale(0.96);
+        }
+        .btn-hub {
+            background: #1a2a4a;
+            color: #f5f0ea;
+            border: 1px solid #2a4a7a;
+        }
+        .btn-hub:hover {
+            background: #2a4a7a;
+        }
+        .btn-mce {
+            background: #b48a6a;
+            color: #f5f0ea;
+            border: 1px solid #c8a080;
+        }
+        .btn-mce:hover {
+            background: #c8a080;
+        }
+        .btn-coaching {
+            background: #3a6a3a;
+            color: #f5f0ea;
+            border: 1px solid #5a8a5a;
+        }
+        .btn-coaching:hover {
+            background: #5a8a5a;
+        }
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        .chat-window {
+            background: rgba(253, 242, 240, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            margin: 12px 0 20px;
+            min-height: 180px;
+            max-height: 420px;
+            overflow-y: auto;
+            border: 1px solid rgba(217, 91, 74, 0.15);
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.02);
+            position: relative;
+            z-index: 2;
+            transition: all 0.2s;
+        }
+        .chat-window p,
+        .chat-window div {
+            color: var(--couleur-texte);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .chat-window .agent-msg {
+            font-weight: 500;
+            color: var(--couleur-principale);
+        }
+        .chat-window .user-msg {
+            background: #e4d4d0;
+            padding: 8px 16px;
+            border-radius: 24px 24px 8px 24px;
+            display: inline-block;
+            margin: 6px 0 10px;
+            color: var(--couleur-texte);
+        }
+        .chat-window strong {
+            color: var(--couleur-principale);
+        }
+        .chat-window em {
+            color: #7a4a3a;
+        }
+        .chat-window .msg-block {
+            background: rgba(235, 215, 210, 0.3);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid var(--couleur-principale);
+            margin: 10px 0;
+        }
+        .chat-window .conseil-block {
+            background: rgba(235, 215, 210, 0.3);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid var(--couleur-principale);
+            margin: 10px 0;
+        }
+        .chat-window .conseil-block .analyse {
+            color: #7a4a3a;
+            font-style: italic;
+        }
+        .chat-window .conseil-block .constat {
+            color: #8a3a2a;
+            font-weight: 500;
+        }
+        .chat-window .conseil-block .conseil {
+            color: #1a6a3a;
+            font-weight: 600;
+        }
+        .chat-window .conseil-block .score {
+            display: inline-block;
+            background: var(--couleur-principale);
+            color: #fdf2f0;
+            font-size: 0.7rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-top: 4px;
+        }
+        .chat-window .swot-block {
+            background: rgba(235, 215, 210, 0.3);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #2a7a4a;
+            margin: 10px 0;
+        }
+        .chat-window .swot-block .force {
+            color: #2a7a4a;
+        }
+        .chat-window .swot-block .faiblesse {
+            color: #8a3a2a;
+        }
+        .chat-window .swot-block .opportunite {
+            color: #2a5a8a;
+        }
+        .chat-window .swot-block .menace {
+            color: #8a5a2a;
+        }
+        .chat-window .smart-block {
+            background: rgba(235, 215, 210, 0.3);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #2a5a8a;
+            margin: 10px 0;
+        }
+        .question-block {
+            background: rgba(240, 225, 220, 0.5);
+            padding: 18px 20px;
+            border-radius: 24px;
+            margin: 12px 0;
+            border: 1px solid #d0b8b0;
+        }
+        .question-block .question-label {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--couleur-texte);
+            display: block;
+            margin-bottom: 12px;
+        }
+        .question-block .question-number {
+            display: inline-block;
+            background: var(--couleur-principale);
+            color: #fdf2f0;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-bottom: 6px;
+        }
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 6px 0 10px;
+        }
+        .option-btn {
+            background: rgba(253, 242, 240, 0.7);
+            border: 2px solid #d0b8b0;
+            padding: 12px 18px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--couleur-texte);
+            transition: all 0.15s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+        }
+        .option-btn:hover {
+            background: rgba(235, 215, 210, 0.3);
+        }
+        .option-btn:active,
+        .option-btn.active {
+            background: #d0b8b0;
+            border-color: var(--couleur-principale);
+            box-shadow: 0 2px 8px var(--couleur-ombre);
+            transform: scale(0.98);
+            color: var(--couleur-texte);
+        }
+        .option-btn .opt-letter {
+            display: inline-block;
+            background: var(--couleur-principale);
+            color: #fdf2f0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .option-btn.active .opt-letter {
+            background: var(--couleur-avatar2);
+        }
+        .response-feedback {
+            background: #e4d4d0;
+            border-radius: 40px;
+            padding: 4px 16px 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--couleur-texte);
+            margin-top: 8px;
+        }
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-primary {
+            background: var(--couleur-principale);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #fcf6f0;
+            box-shadow: 0 6px 14px var(--couleur-ombre);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            touch-action: manipulation;
+            cursor: pointer;
+            border: 1px solid var(--couleur-secondaire);
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+            background: var(--couleur-avatar2);
+            box-shadow: 0 2px 6px var(--couleur-ombre);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #a08a82;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #3a2a22;
+            touch-action: manipulation;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-secondary:active {
+            background: #e4d4d0;
+            border-color: #8a7a72;
+        }
+        .btn-pdf {
+            background: var(--couleur-secondaire);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #fcf6f0;
+            box-shadow: 0 6px 14px var(--couleur-ombre);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            touch-action: manipulation;
+            cursor: pointer;
+            border: 1px solid var(--couleur-accent);
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-pdf:active {
+            transform: scale(0.96);
+            background: var(--couleur-principale);
+        }
+        .footer {
+            margin-top: 22px;
+            font-size: 0.7rem;
+            color: #7a4a3a;
+            text-align: center;
+            border-top: 1px solid rgba(180, 140, 130, 0.15);
+            padding-top: 16px;
+            letter-spacing: 0.4px;
+            position: relative;
+            z-index: 2;
+        }
+        .footer i {
+            margin: 0 4px;
+            color: #8a5a4a;
+        }
+        .chat-window::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-window::-webkit-scrollbar-thumb {
+            background: #d0b8b0;
+            border-radius: 12px;
+        }
+        .chat-window::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .decor-illustration {
+            display: flex;
+            justify-content: flex-end;
+            margin: 4px 0 -6px;
+            opacity: 0.2;
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
+        }
+        .decor-illustration i {
+            font-size: 3.2rem;
+            color: var(--couleur-principale);
+            transform: rotate(8deg);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.03));
+        }
+        .badge-conseil {
+            display: inline-block;
+            background: var(--couleur-principale);
+            color: #fdf2f0;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-swot {
+            display: inline-block;
+            background: #2a7a4a;
+            color: #fdf2f0;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        .badge-smart {
+            display: inline-block;
+            background: #2a5a8a;
+            color: #fdf2f0;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        .serie-display {
+            background: #ece0dc;
+            padding: 12px 18px;
+            border-radius: 16px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            margin: 8px 0;
+            letter-spacing: 2px;
+            border: 1px dashed var(--couleur-bordure);
+        }
+        @media (max-width: 480px) {
+            .agent-card {
+                padding: 16px;
+            }
+            .header {
+                gap: 10px;
+            }
+            .title-group h1 {
+                font-size: 1.2rem;
+            }
+            .option-btn {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+            .action-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-nav {
+                justify-content: center;
+            }
+        }
+        #pdf-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="agent-card" id="app">
+        <div class="header">
+            <div class="avatar"><i class="fas fa-bullhorn"></i></div>
+            <div class="title-group">
+                <h1>CAS <span style="font-weight:400;font-size:0.9rem;">· Publicité</span></h1>
+                <span><i class="fas fa-circle" style="color:#2a7a4a;font-size:0.5rem;"></i> Coaching publicitaire premium</span>
+            </div>
+            <div class="status-badge"><i class="fas fa-check-circle"></i> Ready</div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="../index.html" class="btn-nav btn-hub"><i class="fas fa-home"></i> Hub Central</a>
+            <a href="http://tarekfatmi.github.io/MCE" target="_blank" class="btn-nav btn-mce"><i class="fas fa-arrow-left"></i> Retour vers MCE</a>
+            <a href="http://tarekfatmi.github.io/MCE/inscriptions" target="_blank" class="btn-nav btn-coaching"><i class="fas fa-graduation-cap"></i> Programme Coaching</a>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <p class="agent-msg"><i class="fas fa-comment-dots" style="margin-right:8px;"></i>CAS Publicité...Ready!</p>
+            <p style="font-size:0.9rem;color:#4a3a32;">Bienvenue. Pour un coaching publicitaire premium, tapez <strong>"Go"</strong> ou cliquez sur le bouton ci-dessous.</p>
+            <p style="font-size:0.8rem;color:#7a4a3a;font-style:italic;">Stratégie · Création · Impact</p>
+        </div>
+
+        <div id="dynamicZone"></div>
+
+        <div class="action-row">
+            <button class="btn-primary" id="mainActionBtn"><i class="fas fa-play"></i> Go</button>
+            <button class="btn-secondary" id="resetBtn"><i class="fas fa-undo-alt"></i> Réinitialiser</button>
+        </div>
+
+        <div class="decor-illustration"><i class="fas fa-bullhorn"></i></div>
+        <div class="footer"><i class="fas fa-gem"></i> coaching publicitaire · <i class="fas fa-arrow-right"></i> MCE Coaching <i class="fas fa-crown" style="opacity:0.4;"></i></div>
+    </div>
+
+    <div id="pdf-content"></div>
+
+    <script>
+        // ============================================================
+        // ÉTAT GLOBAL
+        // ============================================================
+        var state = {
+            step: 'idle',
+            q1: [],
+            q2: [],
+            q3: [],
+            q4: [],
+            qAction: [],
+            currentQuestionIndex: 0,
+            currentType: null,
+            questions: [],
+            userDemand: '',
+            userDemandOptimise: '',
+            niveau: 'B',
+            niveauLabel: 'Moyennement développé',
+            secteur: 'publicite',
+            taille: 'moyenne',
+            planDemande: false,
+            matrixGenerated: false,
+            dernierConseils: null,
+            conformite: 0,
+            archetype: '',
+            profilPublicite: '',
+            matricePublicite: '',
+            realiteTerrain: '',
+            syntheseFinale: '',
+            skillsUpGrade: '',
+            planAction: '',
+            conseils: null,
+            scores: null,
+            swot: null,
+            smart: null
+        };
+
+        var chatWindow = document.getElementById('chatWindow');
+        var dynamicZone = document.getElementById('dynamicZone');
+        var mainBtn = document.getElementById('mainActionBtn');
+        var resetBtn = document.getElementById('resetBtn');
+
+        function appendMessage(html, isUser) {
+            isUser = isUser || false;
+            var msg = document.createElement('div');
+            if (isUser) {
+                msg.innerHTML = '<div class="user-msg">' + html + '</div>';
+            } else {
+                msg.innerHTML = '<div class="agent-msg">' + html + '</div>';
+            }
+            chatWindow.appendChild(msg);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function clearDynamic() {
+            dynamicZone.innerHTML = '';
+        }
+
+        function setMainButton(text, icon, action) {
+            icon = icon || 'fa-play';
+            mainBtn.innerHTML = '<i class="fas ' + icon + '"></i> ' + text;
+            mainBtn.onclick = action || null;
+        }
+
+        // ============================================================
+        // QUESTIONNAIRES FIXES (Q1 - Profil Publicité)
+        // ============================================================
+        var q1Data = [{
+            q: 'Quel est votre niveau actuel en publicité ?',
+            options: ['Débutant total', 'Débutant', 'Intermédiaire', 'Avancé']
+        }, {
+            q: 'Quel est votre objectif principal ?',
+            options: ['Promouvoir une marque', 'Vendre un produit', 'Communiquer une offre', 'Autre']
+        }, {
+            q: 'Quel est votre secteur d\'activité ?',
+            options: ['Commerce', 'Services', 'Industrie', 'Culture']
+        }, {
+            q: 'Avez-vous un budget publicitaire ?',
+            options: ['Non', 'Oui, petit', 'Oui, conséquent', 'Oui, important']
+        }];
+
+        // ============================================================
+        // QUESTIONNAIRES FIXES (Q2 - Cognitif Publicité)
+        // ============================================================
+        var q2Data = [{
+            q: 'Comment qualifiez-vous votre confiance en communication ?',
+            options: ['Très faible', 'Faible', 'Correcte', 'Bonne']
+        }, {
+            q: 'Quelle est votre principale difficulté ?',
+            options: ['Création de message', 'Choix des médias', 'Budget', 'Mesure des résultats']
+        }, {
+            q: 'Combien de temps pouvez-vous consacrer par jour ?',
+            options: ['Moins de 30 min', '30-60 min', '1-2 heures', 'Plus de 2 heures']
+        }, {
+            q: 'Avez-vous déjà réalisé une campagne publicitaire ?',
+            options: ['Non', 'Oui, une fois', 'Oui, régulièrement', 'Oui, professionnellement']
+        }];
+
+        // ============================================================
+        // GÉNÉRATION Q3 - COMPÉTENCES PUBLICITÉ (DYNAMIQUE)
+        // ============================================================
+        function generateQ3Publicite(q1, q2) {
+            var questions = [];
+
+            var baseQuestions = [{
+                q: 'Connaissez-vous les différents types de médias ?',
+                options: ['Non', 'Partiellement', 'Oui', 'Oui, parfaitement']
+            }, {
+                q: 'Avez-vous déjà rédigé un message publicitaire ?',
+                options: ['Non', 'Oui, une fois', 'Oui, régulièrement', 'Oui, professionnellement']
+            }, {
+                q: 'Maîtrisez-vous les bases du copywriting ?',
+                options: ['Non', 'Partiellement', 'Oui', 'Oui, parfaitement']
+            }, {
+                q: 'Avez-vous déjà analysé des résultats de campagne ?',
+                options: ['Non', 'Oui, une fois', 'Oui, régulièrement', 'Oui, professionnellement']
+            }];
+
+            // Adaptation selon Q1 (niveau)
+            if (q1 && (q1[0] === 'a' || q1[0] === 'b')) {
+                questions.push({
+                    q: 'Connaissez-vous les formats publicitaires de base (print, digital, TV) ?',
+                    options: ['Non', 'Partiellement', 'Oui', 'Oui, parfaitement']
+                });
+                questions.push({
+                    q: 'Savez-vous ce qu\'est un message publicitaire ?',
+                    options: ['Non', 'Partiellement', 'Oui', 'Oui, je crée des messages']
+                });
+            } else {
+                questions.push({
+                    q: 'Maîtrisez-vous les techniques de copywriting avancées ?',
+                    options: ['Non', 'Partiellement', 'Oui', 'Oui, je suis expert']
+                });
+                questions.push({
+                    q: 'Avez-vous déjà utilisé des outils de planification média ?',
+                    options: ['Non', 'Oui, un peu', 'Oui, régulièrement', 'Oui, professionnellement']
+                });
+            }
+
+            while (questions.length < 4) {
+                var g = baseQuestions[questions.length % baseQuestions.length];
+                var exists = false;
+                for (var i = 0; i < questions.length; i++) {
+                    if (questions[i].q === g.q) { exists = true; break; }
+                }
+                if (!exists) {
+                    questions.push(g);
+                } else {
+                    questions.push({
+                        q: 'Comment évaluez-vous votre capacité à créer un message percutant ?',
+                        options: ['À créer', 'À développer', 'Bonne', 'Excellente']
+                    });
+                }
+            }
+            return questions.slice(0, 4);
+        }
+
+        // ============================================================
+        // GÉNÉRATION Q4 - SITUATIONNEL PUBLICITÉ (DYNAMIQUE)
+        // ============================================================
+        function generateQ4Publicite(q1, q2) {
+            var questions = [];
+            var baseQuestions = [{
+                q: 'Quelle est votre cible principale ?',
+                options: ['B2C', 'B2B', 'Mixte', 'Autre']
+            }, {
+                q: 'Quels canaux utilisez-vous actuellement ?',
+                options: ['Réseaux sociaux', 'Site web / Blog', 'Presse / Print', 'Radio / TV']
+            }, {
+                q: 'Avez-vous une identité visuelle définie ?',
+                options: ['Non', 'En cours', 'Oui', 'Oui, très complète']
+            }, {
+                q: 'Quelle est votre principale contrainte ?',
+                options: ['Budget', 'Temps', 'Compétences', 'Créativité']
+            }];
+
+            if (q2 && (q2[1] === 'a')) {
+                questions.push({
+                    q: 'Quel type de message avez-vous le plus de mal à créer ?',
+                    options: ['Accroche', 'Storytelling', 'Appel à l\'action', 'Contenu visuel']
+                });
+            }
+            if (q2 && (q2[1] === 'b')) {
+                questions.push({
+                    q: 'Comment choisissez-vous vos médias actuellement ?',
+                    options: ['Par habitude', 'Par recommandation', 'Par analyse', 'Par test']
+                });
+            }
+            if (q2 && (q2[1] === 'c')) {
+                questions.push({
+                    q: 'Comment gérez-vous votre budget publicitaire ?',
+                    options: ['Sans plan', 'De manière intuitive', 'De manière structurée', 'De manière stratégique']
+                });
+            }
+
+            while (questions.length < 4) {
+                var g = baseQuestions[questions.length % baseQuestions.length];
+                var exists = false;
+                for (var i = 0; i < questions.length; i++) {
+                    if (questions[i].q === g.q) { exists = true; break; }
+                }
+                if (!exists) {
+                    questions.push(g);
+                } else {
+                    questions.push({
+                        q: 'Comment décririez-vous votre stratégie de communication actuelle ?',
+                        options: ['Inexistante', 'En construction', 'Structured', 'Avancée']
+                    });
+                }
+            }
+            return questions.slice(0, 4);
+        }
+
+        // ============================================================
+        // SYSTÈME DE QUESTIONNAIRE AMÉLIORÉ
+        // ============================================================
+        function startQuestionnaire(questions, type, label) {
+            state.questions = questions;
+            state.currentType = type;
+            state.currentQuestionIndex = 0;
+            var arrKey = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' } [
+            type];
+            state[arrKey] = [];
+
+            appendMessage('📋 <strong>' + label + '</strong> (' + questions.length + ' questions)');
+            renderQuestionImproved(0);
+        }
+
+        function renderQuestionImproved(index) {
+            var questions = state.questions;
+            if (index >= questions.length) {
+                finalizeQuestionnaire();
+                return;
+            }
+
+            var q = questions[index];
+            var type = state.currentType;
+            var total = questions.length;
+            var letters = ['a', 'b', 'c', 'd'];
+
+            var html = '<div class="question-block">';
+            html += '<span class="question-number">Question ' + (index + 1) + '/' + total + '</span>';
+            html += '<span class="question-label">' + q.q + '</span>';
+            html += '<div class="options-grid">';
+
+            for (var i = 0; i < q.options.length; i++) {
+                var letter = letters[i];
+                html += '<div class="option-btn" data-index="' + index + '" data-value="' + letter + '">';
+                html += '<span class="opt-letter">' + letter.toUpperCase() + '</span>';
+                html += q.options[i];
+                html += '</div>';
+            }
+
+            html += '</div>';
+            html += '<div id="questionFeedback"></div>';
+            html += '</div>';
+
+            clearDynamic();
+            dynamicZone.innerHTML = html;
+
+            var options = dynamicZone.querySelectorAll('.option-btn');
+            for (var j = 0; j < options.length; j++) {
+                (function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        var allOpts = dynamicZone.querySelectorAll('.option-btn');
+                        for (var k = 0; k < allOpts.length; k++) {
+                            allOpts[k].classList.remove('active');
+                        }
+
+                        this.classList.add('active');
+
+                        var value = this.dataset.value;
+                        var idx = parseInt(this.dataset.index);
+
+                        var map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4',
+                            action: 'qAction' };
+                        var arrKey = map[state.currentType];
+                        state[arrKey][idx] = value;
+
+                        var fb = document.getElementById('questionFeedback');
+                        fb.innerHTML = '<div class="response-feedback"><i class="fas fa-check"></i> Réponse ' +
+                            value.toUpperCase() + ' enregistrée</div>';
+
+                        var serie = state[arrKey].join('');
+                        if (serie.length > 0) {
+                            var serieDiv = document.createElement('div');
+                            serieDiv.className = 'serie-display';
+                            serieDiv.innerHTML = '📝 Série : ' + serie;
+                            var oldSerie = dynamicZone.querySelector('.serie-display');
+                            if (oldSerie) oldSerie.remove();
+                            dynamicZone.appendChild(serieDiv);
+                        }
+
+                        setTimeout(function() {
+                            renderQuestionImproved(idx + 1);
+                        }, 400);
+                    });
+                })(options[j]);
+            }
+
+            setMainButton('Répondez en cliquant', 'fa-hand-pointer', null);
+
+            var map2 = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' };
+            var arrKey2 = map2[type];
+            var currentSerie = state[arrKey2] || [];
+            if (currentSerie.length > 0 && currentSerie.length < questions.length) {
+                var serieDisplay = document.createElement('div');
+                serieDisplay.className = 'serie-display';
+                serieDisplay.innerHTML = '📝 Série en cours : ' + currentSerie.join('');
+                dynamicZone.appendChild(serieDisplay);
+            }
+        }
+
+        function finalizeQuestionnaire() {
+            var type = state.currentType;
+            var map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' };
+            var arrKey = map[type];
+            var answers = state[arrKey];
+            var total = state.questions.length;
+
+            var allAnswered = true;
+            for (var i = 0; i < total; i++) {
+                if (!answers[i]) { allAnswered = false; break; }
+            }
+
+            if (!allAnswered || answers.length < total) {
+                appendMessage('⚠️ Veuillez répondre à toutes les questions.', false);
+                var firstMissing = 0;
+                for (var j = 0; j < total; j++) {
+                    if (!answers[j]) { firstMissing = j; break; }
+                }
+                renderQuestionImproved(firstMissing);
+                return;
+            }
+
+            var serie = answers.join('');
+            appendMessage('✅ Réponses enregistrées : <strong>' + serie + '</strong>');
+
+            validateQuestions(type);
+        }
+
+        // ============================================================
+        // VALIDATION
+        // ============================================================
+        function validateQuestions(type) {
+            var map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' };
+            var arrKey = map[type];
+            var answers = state[arrKey];
+            var total = state.questions.length;
+
+            if (!answers || answers.length < total || answers.some(function(a) { return !a; })) {
+                appendMessage('⚠️ Erreur : réponses incomplètes.', false);
+                return;
+            }
+
+            if (type === 'profil') {
+                state.secteur = 'publicite';
+                var nivMap = { 'a': 'A', 'b': 'B', 'c': 'C', 'd': 'D' };
+                state.niveau = nivMap[state.q1[0]] || 'B';
+                var labelMap = { 'A': 'Très concis', 'B': 'Moyennement développé', 'C': 'Très précis',
+                    'D': 'Ultra détaillé' };
+                state.niveauLabel = labelMap[state.niveau] || 'Moyennement développé';
+
+                appendMessage('✅ Agent en Calibrage.');
+                state.step = 'q1done';
+
+                var profil = generateProfilPublicite(state.q1);
+                state.profilPublicite = profil;
+                appendMessage('<div class="msg-block"><strong>📋 Profil Publicité</strong><br>' + profil + '</div>');
+                appendMessage('📋 Le prochain questionnaire me renseignera sur votre état d\'esprit en communication.');
+
+                setTimeout(function() {
+                    startQuestionnaire(q2Data, 'cognitif', 'Questionnaire Cognitif Publicité');
+                }, 600);
+
+            } else if (type === 'cognitif') {
+                state.step = 'q2done';
+
+                var matrice = generateMatricePublicite(state.q1, state.q2);
+                state.matricePublicite = matrice;
+                appendMessage('<div class="msg-block"><strong>📊 Matrice Publicité</strong><br>' + matrice + '</div>');
+                appendMessage('📋 Le prochain questionnaire me renseignera sur vos compétences en publicité.');
+
+                setTimeout(function() {
+                    var q3 = generateQ3Publicite(state.q1, state.q2);
+                    state.q3 = [];
+                    startQuestionnaire(q3, 'competences', 'Questionnaire Compétences Publicité');
+                }, 600);
+
+            } else if (type === 'competences') {
+                state.step = 'q3done';
+
+                var archetype = generateArchetypePublicite(state.q1, state.q2, state.q3);
+                state.archetype = archetype;
+                appendMessage('<div class="msg-block"><strong>🏛️ Archétype Publicitaire</strong><br>' + archetype +
+                    '</div>');
+
+                appendMessage(
+                    '<div class="msg-block"><strong>📊 Récapitulatif des réponses</strong><br><strong>Profil :</strong> ' +
+                    state.q1.join('') + '<br><strong>Cognitif :</strong> ' + state.q2.join('') +
+                    '<br><strong>Compétences :</strong> ' + state.q3.join('') + '</div>');
+
+                appendMessage('✏️ <strong>Formulez votre besoin en publicité avec vos mots.</strong>');
+                appendMessage('💡 Soyez précis : objectifs, cible, budget, contraintes...');
+
+                clearDynamic();
+                dynamicZone.innerHTML =
+                    '<div style="background:#fdf2f0;padding:16px;border-radius:24px;margin:8px 0;"><label style="font-weight:500;display:block;margin-bottom:8px;color:#2c1a18;">Votre besoin :</label><textarea id="userDemandInput" rows="3" style="width:100%;padding:12px;border-radius:20px;border:1px solid #ccc;background:#fafafa;font-size:0.95rem;resize:vertical;" placeholder="Ex: Je veux apprendre à créer des campagnes publicitaires efficaces pour mon entreprise..."></textarea><button id="submitDemand" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre mon besoin</button></div>';
+                document.getElementById('submitDemand').addEventListener('click', function() {
+                    var demand = document.getElementById('userDemandInput').value.trim();
+                    if (demand.length < 5) {
+                        appendMessage('⚠️ Veuillez décrire votre besoin plus précisément.', false);
+                        return;
+                    }
+                    state.userDemand = demand;
+                    appendMessage('📝 <strong>Votre besoin :</strong> "' + demand + '"');
+
+                    appendMessage('✅ Merci ! Je génère le questionnaire situationnel.');
+
+                    setTimeout(function() {
+                        var q4 = generateQ4Publicite(state.q1, state.q2);
+                        state.q4 = [];
+                        startQuestionnaire(q4, 'situationnel', 'Questionnaire Situationnel Publicité');
+                    }, 600);
+                });
+
+            } else if (type === 'situationnel') {
+                state.step = 'q4done';
+
+                var realite = generateRealiteTerrainPublicite(state.q1, state.q2, state.q3, state.q4);
+                state.realiteTerrain = realite;
+                appendMessage('<div class="msg-block"><strong>🌍 Réalité Terrain Publicité</strong><br>' + realite +
+                    '</div>');
+
+                appendMessage('❓ <strong>Souhaitez-vous un plan d\'apprentissage personnalisé de 60 jours ?</strong>');
+                clearDynamic();
+                dynamicZone.innerHTML =
+                    '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="planOui" class="btn-primary" style="flex:1;"><i class="fas fa-check"></i> Oui, plan 60 jours</button><button id="planNon" class="btn-secondary" style="flex:1;"><i class="fas fa-times"></i> Non</button></div>';
+                document.getElementById('planOui').addEventListener('click', function() {
+                    appendMessage('✅ Plan d\'apprentissage de 60 jours demandé.');
+                    generatePlanApprentissage();
+                });
+                document.getElementById('planNon').addEventListener('click', function() {
+                    appendMessage('⏭️ Plan d\'apprentissage ignoré.');
+                    proposePDF();
+                });
+
+            } else if (type === 'action') {
+                generatePlanApprentissage();
+            }
+        }
+
+        // ============================================================
+        // GÉNÉRATION DES LIVRABLES PUBLICITÉ
+        // ============================================================
+        function generateProfilPublicite(q1) {
+            var niveau = q1[0] || 'b';
+            var objectif = q1[1] || 'b';
+            var secteur = q1[2] || 'b';
+            var budget = q1[3] || 'b';
+
+            var niveauText = { 'a': 'débutant total', 'b': 'débutant', 'c': 'intermédiaire', 'd': 'avancé' } [
+            niveau] || 'en développement';
+            var objectifText = { 'a': 'promouvoir une marque', 'b': 'vendre un produit', 'c': 'communiquer une offre',
+                'd': 'un autre objectif'
+            } [objectif] || 'un objectif de communication';
+            var secteurText = { 'a': 'du commerce', 'b': 'des services', 'c': 'de l\'industrie',
+                'd': 'du secteur culturel'
+            } [secteur] || 'du secteur qui vous concerne';
+            var budgetText = { 'a': 'sans budget', 'b': 'avec un petit budget', 'c': 'avec un budget conséquent',
+                    'd': 'avec un budget important'
+                } [budget] || 'avec un budget à définir';
+
+            return 'Vous êtes ' + niveauText + ' en publicité, avec pour objectif ' + objectifText +
+                '. Vous évoluez dans le secteur ' + secteurText +
+                ', ' + budgetText +
+                '. Cette configuration vous offre une base pour développer vos compétences publicitaires.';
+        }
+
+        function generateMatricePublicite(q1, q2) {
+            var confiance = q2[0] || 'b';
+            var difficulte = q2[1] || 'b';
+            var temps = q2[2] || 'b';
+            var campagne = q2[3] || 'b';
+
+            var confianceText = { 'a': 'une confiance très faible à renforcer', 'b': 'une confiance faible à développer',
+                    'c': 'une confiance correcte', 'd': 'une bonne confiance'
+                } [confiance] || 'une confiance en évolution';
+            var difficulteText = { 'a': 'la création de message', 'b': 'le choix des médias',
+                    'c': 'la gestion du budget', 'd': 'la mesure des résultats'
+                } [difficulte] || 'des défis variés';
+            var tempsText = { 'a': 'moins de 30 min par jour', 'b': '30 à 60 min par jour', 'c': '1 à 2 heures par jour',
+                'd': 'plus de 2 heures par jour'
+            } [temps] || 'un temps limité';
+            var campagneText = { 'a': 'sans expérience de campagne', 'b': 'avec une expérience ponctuelle',
+                    'c': 'avec une expérience régulière', 'd': 'avec une expérience professionnelle'
+                } [campagne] || 'avec une expérience en développement';
+
+            return 'Diagnostic primaire : Vous avez ' + confianceText +
+                '. Votre principale difficulté est ' + difficulteText +
+                '. Vous disposez de ' + tempsText +
+                ', ' + campagneText +
+                '. Cette configuration suggère un besoin de structuration et de montée en compétences.';
+        }
+
+        function generateArchetypePublicite(q1, q2, q3) {
+            var niveau = q1[0] || 'b';
+            var objectif = q1[1] || 'b';
+            var confiance = q2[0] || 'b';
+            var campagne = q2[3] || 'b';
+
+            var archetype = '';
+            if (niveau === 'a' && confiance === 'a') archetype = 'Le Publicitaire en Herbe';
+            else if (niveau === 'd' && confiance === 'd') archetype = 'Le Publicitaire Stratège Confirmé';
+            else if (campagne === 'd' && confiance === 'd') archetype = 'Le Publicitaire Expérimenté';
+            else if (niveau === 'a') archetype = 'Le Publicitaire en Apprentissage';
+            else if (confiance === 'a') archetype = 'Le Publicitaire en Doute';
+            else if (campagne === 'd') archetype = 'Le Publicitaire Bien Formé';
+            else archetype = 'Le Publicitaire en Construction';
+
+            return 'Votre archétype publicitaire est **' + archetype +
+                '**. Cette position vous offre une opportunité unique de développer vos compétences.';
+        }
+
+        function generateRealiteTerrainPublicite(q1, q2, q3, q4) {
+            var attributs = [];
+            if (q4 && q4.length > 0) {
+                for (var i = 0; i < q4.length; i++) {
+                    var r = q4[i];
+                    var label = { 'a': 'Défis à relever', 'b': 'Progression possible', 'c': 'Atouts confirmés',
+                        'd': 'Excellence'
+                    } [r] || 'Éléments à considérer';
+                    attributs.push(label);
+                }
+            }
+            if (attributs.length === 0) attributs = ['Apprentissage en cours', 'Potentiel de développement',
+                'Stratégie à construire'
+            ];
+
+            return 'Les attributs tangibles de votre parcours publicitaire révèlent : ' + attributs.join(', ') +
+                '. Ces éléments constituent la réalité terrain sur laquelle s\'appuiera votre plan d\'apprentissage.';
+        }
+
+        // ============================================================
+        // PLAN D'APPRENTISSAGE 60 JOURS
+        // ============================================================
+        function generatePlanApprentissage() {
+            var q1 = state.q1 || ['b', 'b', 'b', 'b'];
+            var q2 = state.q2 || ['b', 'b', 'b', 'b'];
+            var niveau = q1[0] || 'b';
+            var difficulte = q2[1] || 'b';
+
+            var estDebutant = (niveau === 'a' || niveau === 'b');
+
+            var semaines = [
+                { semaine: 1, theme: 'Fondamentaux de la publicité',
+                    jours: [
+                        'Découvrez l\'histoire et les objectifs de la publicité',
+                        'Comprenez les différents types de publicité (print, digital, TV, radio)',
+                        'Identifiez les acteurs du monde publicitaire (annonceurs, agences, médias)',
+                        'Analysez 3 publicités célèbres et identifiez leurs mécanismes',
+                        'Créez votre premier brief créatif',
+                        'Définissez votre cible (persona)',
+                        'Rédigez un résumé de ce que vous avez appris'
+                    ]
+                },
+                { semaine: 2, theme: 'Stratégie de communication',
+                    jours: [
+                        'Définissez vos objectifs SMART pour les 60 jours',
+                        'Établissez votre positionnement et votre ton de communication',
+                        'Créez votre première stratégie de communication',
+                        'Apprenez à segmenter votre audience',
+                        'Définissez votre proposition de valeur',
+                        'Créez un plan média simplifié',
+                        'Rédigez un résumé de votre stratégie'
+                    ]
+                },
+                { semaine: 3, theme: 'Création de message',
+                    jours: [
+                        'Apprenez les bases du copywriting (accroche, storytelling, AIDA)',
+                        'Rédigez 3 accroches pour votre marque/produit',
+                        'Créez un message publicitaire complet (texte + visuel)',
+                        'Apprenez à utiliser les techniques de persuasion (Cialdini)',
+                        'Rédigez un call-to-action percutant',
+                        'Analysez 5 slogans célèbres',
+                        'Rédigez votre propre slogan'
+                    ]
+                },
+                { semaine: 4, theme: 'Formats publicitaires',
+                    jours: [
+                        'Découvrez les formats print (affiches, flyers, presse)',
+                        'Créez un visuel print avec Canva',
+                        'Découvrez les formats digitaux (display, social ads)',
+                        'Créez un visuel pour les réseaux sociaux',
+                        'Découvrez les formats TV et radio',
+                        'Rédigez un script radio de 30 secondes',
+                        'Résumez les spécificités de chaque format'
+                    ]
+                },
+                { semaine: 5, theme: 'Médias & Budget',
+                    jours: [
+                        'Découvrez les différents médias et leur spécificités',
+                        'Apprenez à planifier un budget publicitaire',
+                        'Créez un plan de répartition budgétaire',
+                        'Découvrez les outils de planification média',
+                        'Analysez une stratégie média existante',
+                        'Calculez le ROI d\'une campagne fictive',
+                        'Résumez les clés de la planification média'
+                    ]
+                },
+                { semaine: 6, theme: 'Mesure & Analyse',
+                    jours: [
+                        'Découvrez les indicateurs clés (KPI) publicitaires',
+                        'Apprenez à utiliser Google Analytics / Meta Insights',
+                        'Analysez les résultats d\'une campagne existante',
+                        'Créez un tableau de bord simple',
+                        'Apprenez les bases des tests A/B',
+                        'Rédigez un rapport de campagne fictif',
+                        'Résumez les bonnes pratiques de mesure'
+                    ]
+                },
+                { semaine: 7, theme: 'Légal & Éthique',
+                    jours: [
+                        'Découvrez les obligations légales en publicité',
+                        'Comprenez les règles de la publicité comparative',
+                        'Apprenez les règles de protection des données (RGPD)',
+                        'Identifiez les pratiques publicitaires trompeuses',
+                        'Rédigez une charte éthique pour votre communication',
+                        'Analysez une publicité controversée',
+                        'Résumez les bonnes pratiques éthiques'
+                    ]
+                },
+                { semaine: 8, theme: 'Projet final',
+                    jours: [
+                        'Définissez votre projet final (campagne, dossier, portfolio)',
+                        'Créez une stratégie de communication complète',
+                        'Créez 3 messages publicitaires pour votre projet',
+                        'Planifiez votre budget et vos médias',
+                        'Rédigez votre rapport final',
+                        'Préparez votre portfolio publicitaire',
+                        'Présentez votre projet (à vous-même ou à un mentor)'
+                    ]
+                }
+            ];
+
+            if (estDebutant) {
+                for (var i = 0; i < semaines.length; i++) {
+                    for (var j = 0; j < semaines[i].jours.length; j++) {
+                        semaines[i].jours[j] = '🟢 ' + semaines[i].jours[j];
+                    }
+                }
+            } else {
+                for (var i = 0; i < semaines.length; i++) {
+                    for (var j = 0; j < semaines[i].jours.length; j++) {
+                        semaines[i].jours[j] = '🔵 ' + semaines[i].jours[j] + ' (défi)';
+                    }
+                }
+            }
+
+            // Adaptation selon la difficulté principale
+            if (difficulte === 'a') {
+                // Ajout d'exercices de copywriting supplémentaires
+                semaines[2].jours.push('📝 Exercice : Réécrivez 3 publicités existantes avec votre style');
+            }
+            if (difficulte === 'b') {
+                semaines[4].jours.push('📝 Exercice : Créez un plan média alternatif pour une campagne existante');
+            }
+            if (difficulte === 'c') {
+                semaines[5].jours.push('📝 Exercice : Calculez le ROI d\'une campagne réelle');
+            }
+
+            appendMessage('📋 <strong>PLAN D\'APPRENTISSAGE PUBLICITÉ — 60 JOURS</strong>');
+            appendMessage('<em>💡 ' + (estDebutant ? 'Version pédagogique adaptée aux débutants.' :
+                'Version avancée avec des défis supplémentaires.') + '</em>');
+
+            var planHtml = '<div style="margin:10px 0;">';
+            for (var w = 0; w < semaines.length; w++) {
+                var s = semaines[w];
+                var numSemaine = w + 1;
+                planHtml += '<div class="msg-block" style="border-left-color:#c0392b;margin:8px 0;">';
+                planHtml += '<strong>📌 Semaine ' + numSemaine + ' - ' + s.theme + '</strong><br>';
+                var jourDeb = (numSemaine - 1) * 7 + 1;
+                var jourFin = numSemaine * 7;
+                planHtml += '<em>Jour ' + jourDeb + ' à ' + jourFin + '</em><br>';
+                planHtml += '<ul style="margin:6px 0 0 20px;padding:0;list-style:none;">';
+                for (var d = 0; d < s.jours.length; d++) {
+                    planHtml += '<li style="margin:3px 0;font-size:0.9rem;">• ' + s.jours[d] + '</li>';
+                }
+                planHtml += '</ul></div>';
+            }
+            planHtml += '</div>';
+
+            appendMessage(planHtml);
+
+            appendMessage('✅ <strong>Plan d\'apprentissage de 60 jours généré.</strong>');
+
+            proposePDF();
+        }
+
+        // ============================================================
+        // PROPOSITION PDF
+        // ============================================================
+        function proposePDF() {
+            appendMessage('📄 <strong>Souhaitez-vous un PDF complet reprenant l\'essentiel de la consultation ?</strong>');
+            clearDynamic();
+            dynamicZone.innerHTML =
+                '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="pdfOk" class="btn-pdf" style="flex:1;"><i class="fas fa-file-pdf"></i> Oui</button><button id="pdfNon" class="btn-secondary" style="flex:1;"><i class="fas fa-times"></i> Non</button></div>';
+            document.getElementById('pdfOk').addEventListener('click', function() {
+                appendMessage('📄 Génération du PDF...');
+                exportPDFManager();
+            });
+            document.getElementById('pdfNon').addEventListener('click', function() {
+                appendMessage('⏭️ Export PDF ignoré.');
+                cloreConsultation();
+            });
+        }
+
+        function exportPDFManager() {
+            var content = '<div style="font-family:Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;background:white;">' +
+                '<div style="text-align:center;border-bottom:2px solid #c0392b;padding-bottom:20px;margin-bottom:30px;">' +
+                '<h1 style="color:#c0392b;font-size:28px;">CAS · Publicité</h1>' +
+                '<p style="color:#7a4a3a;font-size:16px;">Rapport complet de consultation</p>' +
+                '<p style="color:#8a5a4a;font-size:14px;">' + new Date().toLocaleDateString('fr-FR') + '</p>' +
+                '<p style="color:#8a5a4a;font-size:12px;">Niveau : ' + state.niveauLabel + '</p></div>' +
+
+                '<div style="background:#fdf2f0;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#c0392b;font-size:18px;">📋 Profil Publicité</h2>' +
+                '<p>' + state.profilPublicite + '</p></div>' +
+
+                '<div style="background:#fdf2f0;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#c0392b;font-size:18px;">📊 Matrice Publicité</h2>' +
+                '<p>' + state.matricePublicite + '</p></div>' +
+
+                '<div style="background:#fdf2f0;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#c0392b;font-size:18px;">🏛️ Archétype Publicitaire</h2>' +
+                '<p>' + state.archetype + '</p></div>' +
+
+                '<div style="background:#fdf2f0;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#c0392b;font-size:18px;">🌍 Réalité Terrain</h2>' +
+                '<p>' + state.realiteTerrain + '</p></div>';
+
+            if (state.planAction) {
+                content += '<div style="background:#fdf2f0;padding:20px;border-radius:12px;margin-bottom:20px;border-left:4px solid #c0392b;">' +
+                    '<h2 style="color:#c0392b;font-size:18px;">📋 Plan 60 jours</h2>' +
+                    '<div>' + state.planAction + '</div></div>';
+            }
+
+            content += '<div style="background:#fdf2f0;padding:20px;border-radius:12px;margin-top:30px;border:1px solid #c0392b;">' +
+                '<h2 style="color:#c0392b;font-size:16px;">💡 Prochaine étape</h2>' +
+                '<p>Découvrez notre offre <strong>MCE Coaching</strong> avec suivi personnalisé.</p></div>' +
+
+                '<div style="text-align:center;border-top:1px solid #ddd;padding-top:20px;margin-top:30px;color:#8a5a4a;font-size:12px;">' +
+                '<p>CAS · Publicité — ' + new Date().toLocaleDateString('fr-FR') + '</p>' +
+                '<p style="font-weight:600;color:#c0392b;">Publicité maîtrisée. CAS Publicité opérationnel.</p></div></div>';
+
+            var container = document.createElement('div');
+            container.innerHTML = content;
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            container.style.top = '0';
+            container.style.width = '800px';
+            document.body.appendChild(container);
+
+            html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }).then(function(canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                var pdfWidth = pdf.internal.pageSize.getWidth();
+                var pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('CAS_Publicite_' + new Date().toISOString().slice(0, 10) + '.pdf');
+                document.body.removeChild(container);
+                appendMessage('✅ PDF exporté avec succès !');
+                cloreConsultation();
+            }).catch(function(err) {
+                console.error('Erreur export PDF:', err);
+                appendMessage('⚠️ Erreur lors de l\'export PDF.', false);
+                cloreConsultation();
+            });
+        }
+
+        // ============================================================
+        // CLÔTURE
+        // ============================================================
+        function cloreConsultation() {
+            appendMessage('🏁 <strong>CAS Publicité — Fin de consultation</strong>');
+            appendMessage(
+                '<div class="msg-block" style="border-left-color:#c0392b;text-align:center;"><strong>✅ Résumé envoyé à Conformité</strong><br><em>Publicité maîtrisée. CAS Publicité opérationnel.</em></div>'
+                );
+            setMainButton('Terminé', 'fa-check', function() {});
+            appendMessage('<strong>📌 Publicité maîtrisée. CAS Publicité opérationnel.</strong>');
+        }
+
+        // ============================================================
+        // HANDLE GO
+        // ============================================================
+        function handleGo() {
+            if (state.step === 'idle' || state.step === 'go') {
+                appendMessage('🚀 <strong>Coaching publicitaire premium</strong>');
+                state.step = 'go';
+                state.q1 = [];
+                state.q2 = [];
+                state.q3 = [];
+                state.q4 = [];
+                state.qAction = [];
+                state.conseils = null;
+                state.swot = null;
+                state.smart = null;
+
+                appendMessage('📋 <strong>Choisissez votre niveau de développement :</strong>');
+                clearDynamic();
+                dynamicZone.innerHTML =
+                    '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="nivA" class="btn-primary" style="flex:1;background:#8a5a4a;"><i class="fas fa-compress"></i> A) Très concis</button><button id="nivB" class="btn-primary" style="flex:1;background:#d05a4a;"><i class="fas fa-align-left"></i> B) Moyennement développé</button><button id="nivC" class="btn-primary" style="flex:1;background:#b0392b;"><i class="fas fa-align-justify"></i> C) Très précis</button></div>';
+                document.getElementById('nivA').addEventListener('click', function() { setNiveau('A',
+                    'Très concis'); });
+                document.getElementById('nivB').addEventListener('click', function() { setNiveau('B',
+                    'Moyennement développé'); });
+                document.getElementById('nivC').addEventListener('click', function() { setNiveau('C',
+                    'Très précis'); });
+            } else {
+                appendMessage('⚠️ Session déjà en cours.', false);
+            }
+        }
+
+        function setNiveau(niveau, label) {
+            state.niveau = niveau;
+            state.niveauLabel = label;
+            appendMessage('✅ Niveau : <strong>' + label + '</strong>');
+            startQuestionnaire(q1Data, 'profil', 'Questionnaire Profil Publicité');
+        }
+
+        function resetAgent() {
+            state = {
+                step: 'idle',
+                q1: [],
+                q2: [],
+                q3: [],
+                q4: [],
+                qAction: [],
+                currentQuestionIndex: 0,
+                currentType: null,
+                questions: [],
+                userDemand: '',
+                userDemandOptimise: '',
+                niveau: 'B',
+                niveauLabel: 'Moyennement développé',
+                secteur: 'publicite',
+                taille: 'moyenne',
+                planDemande: false,
+                matrixGenerated: false,
+                dernierConseils: null,
+                conformite: 0,
+                archetype: '',
+                profilPublicite: '',
+                matricePublicite: '',
+                realiteTerrain: '',
+                syntheseFinale: '',
+                skillsUpGrade: '',
+                planAction: '',
+                conseils: null,
+                scores: null,
+                swot: null,
+                smart: null
+            };
+            chatWindow.innerHTML = '';
+            clearDynamic();
+            appendMessage('CAS Publicité...Ready!');
+            appendMessage('Bienvenue. Tapez <strong>"Go"</strong> pour démarrer.');
+            appendMessage('💡 <em>Stratégie · Création · Impact</em>');
+            setMainButton('Go', 'fa-play', handleGo);
+        }
+
+        resetBtn.addEventListener('click', resetAgent);
+        setMainButton('Go', 'fa-play', handleGo);
+        console.log('✅ CAS Publicité v3.0 complet chargé');
+    </script>
+</body>
+</html>

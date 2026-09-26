@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CAS - Cognitive Assistant System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #0f0f1a, #3a2a50);
+      color: #fff;
+    }
+    header {
+      padding: 30px;
+      text-align: center;
+      background: #1a1a2e;
+      font-size: 1.8em;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #b19cd9; /* violet parme */
+      line-height: 1.4em;
+    }
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .hero h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero p {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      line-height: 1.6em;
+    }
+    .btn {
+      background: #b19cd9;
+      color: #111;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+    footer a {
+      color: #b19cd9;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  MCE – Consulting Augmenté <br>
+  CAS – Cognitive Assistant System
+</header>
+
+<section class="hero">
+  <h1>Votre consultant personnel stratégique IA</h1>
+  <p>Un comité directeur complet <br>
+  Pour vous aider à comprendre et à avancer.</p>
+  <button class="btn" onclick="window.location.href='/inscription.html'">Accéder via Inscription Générale MCE</button>
+</section>
+
+<!-- Agents visibles uniquement après login -->
+<section id="agents" class="hidden">
+  <!-- contenu agents -->
+</section>
+
+<!-- Offres visibles uniquement après login -->
+<section id="pricing" class="hidden">
+  <!-- contenu offres -->
+</section>
+
+<!-- Historique des séances -->
+<section id="history" class="hidden">
+  <h2>Historique de vos séances</h2>
+  <ul id="sessionHistory">
+    <!-- rempli dynamiquement après login -->
+  </ul>
+</section>
+
+<footer>
+  <a href="/index.html">← Retour au site MCE.tn</a> |
+  <a href="/concept.html">Concept</a> |
+  <a href="/ambitions.html">Ambitions</a> |
+  <a href="/contacts.html">Contacts</a>
+</footer>
+
+</body>
+</html>

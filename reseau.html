@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MCE RÉSEAUX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --white: #f6fbff;
+            --white-pure: #ffffff;
+            --white-card: #ffffff;
+            --black: #0a1a2e;
+            --black-muted: #1a2d44;
+            --gray: #607080;
+            --gray-light: #e6eff5;
+            --cyan: #0891b2;
+            --cyan-light: #06b6d4;
+            --cyan-glow: rgba(8, 145, 178, 0.12);
+            --cyan-subtle: rgba(8, 145, 178, 0.06);
+            --sky: #22d3ee;
+            --lagoon: #67e8f9;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-full: 9999px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --shadow: 0 4px 24px rgba(8, 145, 178, 0.06);
+            --shadow-hover: 0 8px 40px rgba(8, 145, 178, 0.12);
+            --header-height: 60px;
+            --fs-micro: 0.55rem;
+            --fs-tiny: 0.65rem;
+            --fs-small: 0.75rem;
+            --fs-base: 0.9rem;
+            --fs-md: 1.05rem;
+            --fs-lg: 1.3rem;
+            --fs-xl: 1.7rem;
+            --fs-2xl: 2.4rem;
+            --fs-3xl: 3.6rem;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font);
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            padding-top: var(--header-height);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        #brand-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(8, 145, 178, 0.06);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--header-height);
+            transition: border-color var(--transition);
+        }
+        #brand-header.scrolled { border-bottom-color: rgba(8, 145, 178, 0.12); }
+        #brand-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+            letter-spacing: 0.3px;
+            color: var(--black);
+        }
+        #brand-header .brand .cyan { color: var(--cyan); }
+        #brand-header .brand .marker { color: var(--cyan); font-size: 0.6rem; opacity: 0.4; }
+        #brand-header .phase-text {
+            font-size: clamp(0.55rem, 1.2vw, 0.7rem);
+            font-weight: 500;
+            color: var(--gray);
+            letter-spacing: 0.3px;
+        }
+        #brand-header .phase-text.active { color: var(--cyan); }
+        #app {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 80vh;
+            padding: 0 var(--space-md) var(--space-xl);
+        }
+        .screen { display: none; animation: fadeIn 0.4s ease forwards; }
+        .screen.active { display: block; }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(12px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-12px); }
+        }
+        .screen-exit { animation: fadeOut 0.25s ease forwards; }
+        @keyframes slideDown {
+            0% { opacity: 0; transform: translateY(-16px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .slide-down { animation: slideDown 0.35s ease forwards; }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--cyan);
+            color: var(--white-pure);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-md);
+            padding: 18px 48px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            max-width: 320px;
+            letter-spacing: 0.3px;
+            min-height: 60px;
+            touch-action: manipulation;
+            user-select: none;
+            box-shadow: 0 4px 20px rgba(8, 145, 178, 0.2);
+        }
+        .btn-primary:hover, .btn-primary:focus-visible {
+            background: var(--cyan-light);
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(8, 145, 178, 0.3);
+        }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--cyan);
+            border: 1.5px solid var(--cyan);
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: var(--fs-base);
+            padding: 16px 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            max-width: 320px;
+            min-height: 54px;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .btn-secondary:hover, .btn-secondary:focus-visible {
+            background: var(--cyan-subtle);
+            box-shadow: 0 4px 20px rgba(8, 145, 178, 0.08);
+        }
+        .btn-secondary:active { transform: scale(0.97); }
+        .btn-small-ghost {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-family: var(--font);
+            font-size: var(--fs-tiny);
+            cursor: pointer;
+            padding: var(--space-sm) var(--space-md);
+            transition: var(--transition);
+            touch-action: manipulation;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(8, 145, 178, 0.15);
+        }
+        .btn-small-ghost:hover {
+            color: var(--cyan);
+            text-decoration-color: var(--cyan);
+        }
+        .welcome {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .welcome .badge {
+            display: inline-block;
+            color: var(--cyan);
+            font-size: var(--fs-tiny);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            padding: 6px 0;
+            margin-bottom: var(--space-lg);
+            font-weight: 600;
+        }
+        .welcome h1 {
+            font-size: clamp(2.4rem, 9vw, 3.6rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: var(--space-sm);
+            color: var(--black);
+        }
+        .welcome h1 .cyan { color: var(--cyan); }
+        .welcome .tagline {
+            font-size: clamp(0.95rem, 2.8vw, 1.2rem);
+            color: var(--gray);
+            font-weight: 300;
+            max-width: 480px;
+            margin: 0 auto var(--space-sm);
+            line-height: 1.5;
+        }
+        .welcome .sub {
+            font-size: var(--fs-small);
+            color: var(--gray);
+            margin: var(--space-sm) 0 var(--space-xl);
+            max-width: 380px;
+        }
+        .codex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+        }
+        .codex-card {
+            background: var(--white-pure);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md) var(--space-sm);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+            user-select: none;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .codex-card:hover {
+            border-color: var(--cyan);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+        .codex-card:active { transform: scale(0.97); }
+        .codex-card .name {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--black);
+            letter-spacing: 0.3px;
+        }
+        .codex-card .icon {
+            font-size: var(--fs-lg);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+        .section-title {
+            font-size: var(--fs-lg);
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.01em;
+        }
+        .section-title .cyan { color: var(--cyan); }
+        .section-sub {
+            font-size: var(--fs-base);
+            color: var(--gray);
+            margin-bottom: var(--space-lg);
+        }
+        .situation-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+        }
+        .situation-card {
+            background: var(--white-pure);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .situation-card:hover {
+            border-color: var(--cyan);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+        .situation-card:active { transform: scale(0.98); }
+        .situation-card .num {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--cyan);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .situation-card .preview {
+            font-size: var(--fs-base);
+            color: var(--black-muted);
+            margin-top: var(--space-xs);
+            line-height: 1.4;
+        }
+        .situation-full { padding: var(--space-sm) 0; }
+        .situation-full .story {
+            background: var(--cyan-subtle);
+            border-left: 3px solid var(--cyan);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md) var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+        .situation-full .story p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--black-muted);
+        }
+        .situation-full .question {
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: var(--space-md);
+        }
+        .decisions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        .decision-card {
+            background: var(--white-pure);
+            border: 1.5px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .decision-card:hover {
+            border-color: var(--cyan);
+            box-shadow: var(--shadow-hover);
+        }
+        .decision-card:active { transform: scale(0.98); }
+        .decision-card .letter {
+            font-size: var(--fs-tiny);
+            font-weight: 700;
+            color: var(--cyan);
+            letter-spacing: 1px;
+            margin-bottom: var(--space-xs);
+        }
+        .decision-card .text {
+            font-size: var(--fs-base);
+            color: var(--black-muted);
+            line-height: 1.4;
+        }
+        .result-box { padding: var(--space-lg) 0; }
+        .result-box .verdict {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        .result-box .verdict.success { color: #16a34a; }
+        .result-box .verdict.fail { color: #dc2626; }
+        .result-box .verdict.mid { color: #d97706; }
+        .result-box .consequence {
+            background: var(--white-pure);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: var(--space-md) var(--space-lg);
+            margin-bottom: var(--space-md);
+        }
+        .result-box .consequence .label {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-xs);
+        }
+        .result-box .consequence p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--black-muted);
+        }
+        .result-box .good-answer {
+            background: var(--cyan-subtle);
+            border-left: 3px solid var(--cyan);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md) var(--space-lg);
+            margin-top: var(--space-md);
+        }
+        .result-box .good-answer .label {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-xs);
+        }
+        .result-box .good-answer p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--black-muted);
+        }
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-top: var(--space-lg);
+        }
+        .result-actions .btn-primary,
+        .result-actions .btn-secondary { max-width: 100%; }
+        .progress-bar {
+            display: flex;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-lg);
+            justify-content: center;
+        }
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gray-light);
+            transition: var(--transition);
+        }
+        .progress-dot.active { background: var(--cyan); transform: scale(1.2); }
+        .progress-dot.done { background: var(--cyan); }
+        .progress-dot.error { background: #dc2626; }
+        .progress-dot.mid { background: #d97706; }
+        .event-badge {
+            display: inline-block;
+            background: var(--cyan-subtle);
+            color: var(--cyan);
+            font-size: var(--fs-micro);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            margin-bottom: var(--space-sm);
+        }
+        .reaction-card {
+            background: var(--white-pure);
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+            user-select: none;
+            text-align: center;
+        }
+        .reaction-card:hover {
+            border-color: var(--cyan);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+        .reaction-card:active { transform: scale(0.98); }
+        .reaction-card .reaction-text {
+            font-size: var(--fs-md);
+            font-weight: 600;
+            color: var(--black);
+            line-height: 1.4;
+        }
+        .reaction-card .reaction-sub {
+            font-size: var(--fs-small);
+            color: var(--gray);
+            margin-top: var(--space-xs);
+        }
+        .reaction-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        .recap-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .recap-item:last-child { border-bottom: none; }
+        .recap-icon { font-size: var(--fs-md); flex-shrink: 0; margin-top: 2px; }
+        .recap-text { font-size: var(--fs-small); color: var(--black-muted); line-height: 1.4; }
+        .recap-text strong { color: var(--black); }
+        .score-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--cyan-subtle);
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            font-size: var(--fs-lg);
+            color: var(--cyan);
+            margin-bottom: var(--space-lg);
+        }
+        @media (max-width: 420px) {
+            body { padding-top: 52px; }
+            :root { --header-height: 52px; --space-xl: 24px; --space-2xl: 32px; }
+            #brand-header { padding: 0 14px; }
+            #brand-header .brand { font-size: 0.65rem; gap: 6px; }
+            #app { padding: 0 var(--space-sm) var(--space-lg); }
+            .welcome { padding: var(--space-xl) var(--space-sm) var(--space-lg); min-height: 60vh; }
+            .welcome h1 { font-size: 2rem; }
+            .codex-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: var(--space-xs); }
+            .codex-card { padding: var(--space-sm); min-height: 80px; }
+            .codex-card .name { font-size: var(--fs-micro); }
+            .situation-card { padding: var(--space-sm) var(--space-md); }
+            .decision-card { padding: var(--space-sm) var(--space-md); }
+            .decision-card .text { font-size: var(--fs-small); }
+            .situation-full .story p { font-size: var(--fs-small); }
+            .result-box .verdict { font-size: var(--fs-lg); }
+            .btn-primary { font-size: var(--fs-base); padding: 14px 28px; min-height: 52px; }
+            .reaction-card { padding: var(--space-md); }
+            .reaction-card .reaction-text { font-size: var(--fs-base); }
+        }
+        @media (min-width: 768px) {
+            .codex-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: var(--space-md); }
+            .codex-card { padding: var(--space-lg) var(--space-md); min-height: 110px; }
+            .codex-card .name { font-size: var(--fs-base); }
+            .situation-grid { gap: var(--space-md); }
+            .situation-card { padding: var(--space-lg) var(--space-xl); }
+            .decision-card { padding: var(--space-lg) var(--space-xl); }
+            .decision-card .text { font-size: var(--fs-md); }
+            .btn-primary { font-size: var(--fs-lg); padding: 20px 52px; min-height: 68px; }
+            .reaction-card { padding: var(--space-xl); }
+        }
+        @media (max-width: 360px) {
+            .codex-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+            .codex-card .name { font-size: 0.5rem; }
+            .welcome h1 { font-size: 1.7rem; }
+            .situation-full .question { font-size: var(--fs-md); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        .codex-card:focus-visible,
+        .situation-card:focus-visible,
+        .decision-card:focus-visible,
+        .btn-primary:focus-visible,
+        .btn-secondary:focus-visible,
+        .reaction-card:focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 2px;
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body>
+
+    <header id="brand-header">
+        <div class="brand">
+            <span class="cyan">✦</span>
+            <span>MCE <span class="cyan">RÉSEAUX</span></span>
+            <span class="marker">|</span>
+            <span class="phase-text" id="header-phase-text">LAB</span>
+        </div>
+    </header>
+
+    <div id="app">
+
+        <div id="screen-welcome" class="screen active welcome">
+            <div class="badge">MCE RÉSEAUX</div>
+            <h1>MCE<br /><span class="cyan">RÉSEAUX</span></h1>
+            <p class="tagline">
+                Testez votre jugement face aux<br />
+                décisions réelles du marketing digital.
+            </p>
+            <p class="sub">5 Codex — 4 situations — 3 événements — 3 décisions — 3 conséquences</p>
+            <button class="btn-primary" id="btn-start">DÉCOUVRIR LES CODEX</button>
+        </div>
+
+        <div id="screen-codex-list" class="screen">
+            <div style="padding: var(--space-md) 0;">
+                <div class="section-title">Choisissez votre <span class="cyan">Codex</span></div>
+                <div class="section-sub">Sélectionnez une dimension du digital pour confronter votre jugement.</div>
+            </div>
+            <div class="codex-grid" id="codex-grid-container"></div>
+            <div style="text-align:center; padding: var(--space-lg) 0;">
+                <button class="btn-small-ghost" id="btn-back-home">← Retour à l'accueil</button>
+            </div>
+        </div>
+
+        <div id="screen-situations" class="screen">
+            <div style="padding: var(--space-md) 0;">
+                <div class="section-title" id="situation-codex-title">CODEX <span class="cyan">CRÉATION DE CONTENU</span></div>
+                <div class="section-sub">Choisissez votre situation :</div>
+            </div>
+            <div class="situation-grid" id="situation-grid-container"></div>
+            <div style="text-align:center; padding: var(--space-lg) 0;">
+                <button class="btn-small-ghost" id="btn-back-codex">← Retour aux Codex</button>
+            </div>
+        </div>
+
+        <div id="screen-event" class="screen">
+            <div class="situation-full">
+                <div style="display:flex; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-sm);">
+                    <span style="font-size:var(--fs-tiny); font-weight:600; color:var(--cyan); letter-spacing:1px; text-transform:uppercase;" id="event-codex-label">CRÉATION DE CONTENU</span>
+                    <span style="font-size:var(--fs-tiny); color:var(--gray);">—</span>
+                    <span style="font-size:var(--fs-tiny); font-weight:500; color:var(--gray);" id="event-situation-label">SITUATION 1</span>
+                </div>
+                <div class="progress-bar" id="event-progress"></div>
+                <div class="event-badge" id="event-badge">ÉVÉNEMENT 1 / 3</div>
+                <div class="story" id="event-story"><p>Chargement...</p></div>
+                <div class="question" id="event-question">Comment réagissez-vous ?</div>
+                <div class="reaction-grid" id="reactions-container"></div>
+            </div>
+            <div style="text-align:center; padding: var(--space-sm) 0 var(--space-lg);">
+                <button class="btn-small-ghost" id="btn-back-situations-event">← Retour aux situations</button>
+            </div>
+        </div>
+
+        <div id="screen-decision" class="screen">
+            <div class="situation-full">
+                <div style="display:flex; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-sm);">
+                    <span style="font-size:var(--fs-tiny); font-weight:600; color:var(--cyan); letter-spacing:1px; text-transform:uppercase;" id="decision-codex-label">CRÉATION DE CONTENU</span>
+                    <span style="font-size:var(--fs-tiny); color:var(--gray);">—</span>
+                    <span style="font-size:var(--fs-tiny); font-weight:500; color:var(--gray);" id="decision-situation-label">SITUATION 1</span>
+                </div>
+                <div class="progress-bar" id="decision-progress"></div>
+                <div class="event-badge" id="decision-event-badge">ÉVÉNEMENT 1 / 3</div>
+                <div class="story" id="decision-story"><p>Chargement...</p></div>
+                <div class="question" id="decision-question">Quelle décision prenez-vous ?</div>
+                <div class="decisions-grid" id="decisions-container"></div>
+            </div>
+            <div style="text-align:center; padding: var(--space-sm) 0 var(--space-lg);">
+                <button class="btn-small-ghost" id="btn-back-situations">← Retour aux situations</button>
+            </div>
+        </div>
+
+        <div id="screen-result" class="screen">
+            <div class="result-box" id="result-container"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // DONNÉES — 5 CODEX × 4 SITUATIONS × 3 ÉVÉNEMENTS
+        // Chaque événement : 2 réactions → 1 décision → 3 conséquences
+        // ================================================================
+
+        const CODEX_DATA = {
+            "CRÉATION DE CONTENU": {
+                situations: [
+                    {
+                        histoire: "Vous gérez les réseaux sociaux d'une marque depuis 6 mois. Vos publications n'engagent personne. Les likes sont en chute libre. Le patron menace de couper le budget digital si les résultats ne s'améliorent pas ce mois-ci.",
+                        evenements: [
+                            {
+                                histoire: "Premier constat : vos 10 dernières publications ont généré en moyenne 12 likes et 0 commentaire. L'algorithme ne vous montre plus à votre audience. Vous devez réagir vite.",
+                                reactions: [
+                                    { texte: "Publier plus souvent, quitte à baisser la qualité", sub: "La quantité va forcer l'algorithme à vous montrer", estCorrecte: false },
+                                    { texte: "Analyser ce qui fonctionne chez les concurrents et dans votre niche", sub: "Comprendre avant d'agir", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Continuer les mêmes contenus génériques en espérant que l'algorithme finisse par vous récompenser.", estCorrecte: false, consequence: "L'engagement continue de baisser. Le patron coupe le budget. Vous perdez la confiance de votre direction." },
+                                    { texte: "Analyser les contenus performants, tester 3 nouveaux formats et publier 5 fois par semaine pendant un mois.", estCorrecte: true, consequence: "L'engagement double en 30 jours. Le patron valide le budget. Vous devenez la référence interne." },
+                                    { texte: "Acheter des abonnés et des likes pour gonfler artificiellement les chiffres.", estCorrecte: false, consequence: "Les faux abonnés ne convertissent pas. Le compte est pénalisé. Votre crédibilité est détruite." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre premier test de contenu vient de générer 3 fois plus d'engagement que d'habitude. Un format spécifique (carrousel éducatif) performe. Mais vous ne savez pas pourquoi.",
+                                reactions: [
+                                    { texte: "Capitaliser immédiatement sur ce format sans chercher à comprendre", sub: "Ne pas perdre de temps, produire plus", estCorrecte: false },
+                                    { texte: "Prendre 30 minutes pour analyser les données et identifier le facteur clé", sub: "Comprendre pour reproduire", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Produire 10 carrousels identiques cette semaine pour surfer sur la vague.", estCorrecte: false, consequence: "L'audience se lasse du format répétitif. L'engagement chute de 60% en 2 semaines. Vous avez tué votre meilleur format." },
+                                    { texte: "Identifier le facteur de succès (structure, ton, valeur éducative) et l'appliquer à 3 autres formats.", estCorrecte: true, consequence: "Vous découvrez que c'est la structure 'problème-solution' qui fonctionne. Vous l'appliquez à d'autres formats. L'engagement global augmente de 45%." },
+                                    { texte: "Ne rien changer et continuer votre planning initial sans intégrer ce succès.", estCorrecte: false, consequence: "Vous passez à côté de l'opportunité. L'engagement retombe au niveau précédent. Le patron doute de votre capacité à capitaliser." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : un concurrent vient de publier un contenu viral (2M de vues). Votre patron vous demande de 'faire la même chose' pour demain. Vous avez 24 heures.",
+                                reactions: [
+                                    { texte: "Copier exactement le contenu du concurrent pour aller vite", sub: "Le patron sera satisfait rapidement", estCorrecte: false },
+                                    { texte: "Analyser l'idée derrière le viral et l'adapter à votre identité", sub: "S'inspirer sans copier", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Copier exactement le contenu du concurrent, mot pour mot, visuel pour visuel, et le publier demain matin.", estCorrecte: false, consequence: "Vous êtes accusé de plagiat. Votre marque est ridiculisée publiquement. Le compte perd 30% de ses abonnés." },
+                                    { texte: "Analyser ce qui a rendu ce contenu viral, puis adapter l'idée à votre identité de marque avec votre propre angle.", estCorrecte: true, consequence: "Votre contenu génère 500 000 vues. Vous surfez sur la tendance sans perdre votre identité. Nouveaux abonnés +15%." },
+                                    { texte: "Ignorer la demande du patron et continuer votre planning éditorial normal sans explication.", estCorrecte: false, consequence: "Le patron se sent ignoré. Il remet en question votre rôle. Tension dans la relation de travail." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre contenu fonctionne bien. Les statistiques sont correctes. Mais vous sentez que vous stagnez. Vous publiez la même chose depuis 3 mois et vous commencez à vous ennuyer vous-même.",
+                        evenements: [
+                            {
+                                histoire: "Premier signal : vos statistiques sont stables mais votre taux d'engagement baisse de 5% chaque mois. L'audience s'habitue. Vous devez casser la routine.",
+                                reactions: [
+                                    { texte: "Ne rien changer, 'on ne change pas une équipe qui gagne'", sub: "Les chiffres sont encore bons", estCorrecte: false },
+                                    { texte: "Tester un nouveau format par semaine pour voir ce qui résonne", sub: "L'expérimentation progressive est la clé", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Ne rien changer. Continuer avec les mêmes formats qui fonctionnent.", estCorrecte: false, consequence: "L'audience se lasse. L'engagement baisse progressivement. Vous perdez 40% de portée en 2 mois." },
+                                    { texte: "Expérimenter progressivement : tester un nouveau format par semaine et mesurer l'impact sur l'engagement.", estCorrecte: true, consequence: "Vous découvrez 2 nouveaux formats performants. L'audience se renouvelle. L'engagement augmente de 25%." },
+                                    { texte: "Tout changer du jour au lendemain : nouvelle identité visuelle, nouveau ton, nouveaux formats, 3 publications par jour.", estCorrecte: false, consequence: "L'audience est perdue. Vous perdez vos repères. La confiance chute. Vous devez tout reconstruire." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : vous avez testé 3 nouveaux formats. Un seul a fonctionné (le format interview). Les deux autres ont sous-performé. Que faites-vous de ces résultats ?",
+                                reactions: [
+                                    { texte: "Abandonner les formats qui n'ont pas marché et se concentrer sur l'interview", sub: "Focus sur ce qui marche", estCorrecte: true },
+                                    { texte: "Forcer les formats qui n'ont pas marché en les répétant", sub: "Ils finiront par fonctionner", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Arrêter tous les tests et revenir aux formats originaux qui fonctionnaient.", estCorrecte: false, consequence: "Vous perdez l'élan de l'innovation. L'audience retourne à la stagnation. Vous avez gaspillé 3 semaines de tests." },
+                                    { texte: "Concentrer 70% de la production sur le format interview, garder 20% pour affiner un des formats qui a sous-performé, et 10% pour tester autre chose.", estCorrecte: true, consequence: "Le format interview devient votre signature. L'engagement augmente de 35%. Vous êtes identifié comme une référence sur ce format." },
+                                    { texte: "Produire les 3 formats à parts égales sans tenir compte des résultats.", estCorrecte: false, consequence: "Vous diluez vos efforts. Aucun format ne se démarque. L'engagement stagne. Vous épuisez votre équipe." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : votre patron vous demande de former un nouveau membre de l'équipe à votre méthode. Vous devez documenter votre processus en 48h.",
+                                reactions: [
+                                    { texte: "Prendre le temps de structurer un vrai guide de contenu avec les principes appris", sub: "Un bon process se transmet", estCorrecte: true },
+                                    { texte: "Improviser une session de formation sans support écrit", sub: "Pas le temps de documenter", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Envoyer le nouveau membre regarder des tutos YouTube et se débrouiller.", estCorrecte: false, consequence: "Le nouveau membre produit du contenu hors-sujet. Il commet les mêmes erreurs que vous il y a 6 mois. Vous perdez 2 mois de productivité." },
+                                    { texte: "Créer un guide structuré : principes, formats, exemples, erreurs à éviter, avec des exercices pratiques.", estCorrecte: true, consequence: "Le nouveau membre est opérationnel en 2 semaines. Il applique directement les bonnes pratiques. L'équipe gagne 3 mois d'apprentissage." },
+                                    { texte: "Donner quelques conseils oraux rapides et le laisser apprendre sur le tas.", estCorrecte: false, consequence: "L'apprentissage est chaotique. Des erreurs coûteuses sont commises. Vous devez rattraper le travail. Perte de temps et d'énergie." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Un concurrent vient de publier un contenu viral qui a fait 2 millions de vues. Votre patron vous demande de « faire la même chose » pour demain. Vous avez 24 heures.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous analysez le contenu viral. Vous découvrez qu'il utilise une tendance audio populaire et un format très spécifique. Mais le sujet est à la limite du hors-sujet pour votre marque.",
+                                reactions: [
+                                    { texte: "Adapter la tendance à un sujet pertinent pour votre audience", sub: "L'important est de surfer sur la vague", estCorrecte: true },
+                                    { texte: "Reprendre exactement le même sujet même s'il n'est pas aligné", sub: "Le patron veut du résultat, pas des excuses", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Copier exactement le contenu du concurrent, mot pour mot, visuel pour visuel, et le publier demain matin.", estCorrecte: false, consequence: "Vous êtes accusé de plagiat. Votre marque est ridiculisée publiquement. Le compte perd 30% de ses abonnés." },
+                                    { texte: "Analyser ce qui a rendu ce contenu viral, puis adapter l'idée à votre identité de marque avec votre propre angle.", estCorrecte: true, consequence: "Votre contenu génère 500 000 vues. Vous surfez sur la tendance sans perdre votre identité. Nouveaux abonnés +15%." },
+                                    { texte: "Ignorer la demande du patron et continuer votre planning éditorial normal sans explication.", estCorrecte: false, consequence: "Le patron se sent ignoré. Il remet en question votre rôle. Tension dans la relation de travail." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre contenu adapté a généré 500 000 vues. Mais les commentaires sont mitigés : certains adorent, d'autres trouvent que vous avez 'vendu votre âme' pour un buzz.",
+                                reactions: [
+                                    { texte: "Répondre aux commentaires négatifs en expliquant votre démarche", sub: "Le dialogue est essentiel", estCorrecte: true },
+                                    { texte: "Supprimer les commentaires négatifs et bloquer les détracteurs", sub: "Protéger l'image de la marque", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Supprimer tous les commentaires négatifs et bloquer les comptes critiques.", estCorrecte: false, consequence: "La communauté se retourne contre vous. Des captures d'écran circulent. Vous passez pour un censeur. Crise de communication." },
+                                    { texte: "Répondre publiquement avec transparence : expliquer votre processus créatif, reconnaître les critiques constructives, et remercier pour les retours.", estCorrecte: true, consequence: "La transparence désarme les critiques. Votre communauté apprécie l'honnêteté. L'engagement augmente encore. Crédibilité renforcée." },
+                                    { texte: "Ignorer complètement les commentaires et ne pas interagir.", estCorrecte: false, consequence: "Les critiques s'amplifient sans réponse. La communauté se sent ignorée. L'image de marque se dégrade silencieusement." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : le patron est ravi des 500 000 vues. Il vous demande maintenant de produire 'un contenu viral par semaine'. Vous savez que c'est irréaliste.",
+                                reactions: [
+                                    { texte: "Accepter et promettre l'impossible pour ne pas contrarier le patron", sub: "Je gérerai la pression plus tard", estCorrecte: false },
+                                    { texte: "Expliquer les réalités de la viralité et proposer un plan réaliste", sub: "Mieux vaut un engagement tenu qu'une promesse brisée", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Accepter de produire un viral par semaine et mettre l'équipe sous pression.", estCorrecte: false, consequence: "L'équipe s'épuise. La qualité chute. Vous produisez des contenus médiocres qui nuisent à la marque. Turnover dans l'équipe." },
+                                    { texte: "Expliquer que la viralité ne se décrète pas, mais proposer un plan de 2 contenus à fort potentiel par mois avec des objectifs mesurables.", estCorrecte: true, consequence: "Le patron comprend. Vous livrez 2 contenus performants par mois. La qualité est maintenue. La relation de confiance se renforce." },
+                                    { texte: "Promettre le viral hebdomadaire puis sous-traiter à des freelances non briefés.", estCorrecte: false, consequence: "Les freelances produisent du contenu générique. Aucun ne devient viral. Le budget est gaspillé. Votre crédibilité en pâtit." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre entreprise vient de lancer un nouveau produit. Vous devez créer une campagne de contenu de A à Z. Vous avez 3 mois et un budget limité. La pression est maximale.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez définir l'angle de la campagne. Deux options s'offrent à vous : un angle éducatif (démonstrations, tutoriels) ou un angle émotionnel (témoignages, histoires).",
+                                reactions: [
+                                    { texte: "Choisir un seul angle et s'y tenir pour être cohérent", sub: "La cohérence avant tout", estCorrecte: false },
+                                    { texte: "Tester les deux angles en parallèle sur 2 semaines pour voir lequel résonne", sub: "Les données avant les intuitions", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Choisir l'angle émotionnel parce que 'l'émotion fait vendre' sans le tester.", estCorrecte: false, consequence: "L'angle émotionnel ne correspond pas à votre produit technique. L'audience ne se reconnaît pas. Taux d'engagement faible. 3 semaines perdues." },
+                                    { texte: "Tester les deux angles en parallèle sur 2 semaines, mesurer les performances, puis concentrer 80% des ressources sur l'angle gagnant.", estCorrecte: true, consequence: "L'angle éducatif performe 3x mieux. Vous concentrez les ressources. La campagne décolle. Objectifs dépassés de 40%." },
+                                    { texte: "Mélanger les deux angles dans chaque contenu pour 'toucher tout le monde'.", estCorrecte: false, consequence: "Les contenus sont confus. Ni les rationnels ni les émotionnels ne s'y retrouvent. Message brouillé. Aucun engagement." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : à mi-campagne, vous constatez que le taux de conversion est bon (4%) mais le volume de trafic est trop faible. Vous devez augmenter la visibilité.",
+                                reactions: [
+                                    { texte: "Augmenter le budget publicitaire pour acheter plus de trafic", sub: "L'argent résout tout", estCorrecte: false },
+                                    { texte: "Activer des leviers gratuits : collaborations, partages, SEO, communautés", sub: "La créativité plutôt que le budget", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Doubler le budget publicitaire sans optimiser le ciblage.", estCorrecte: false, consequence: "Le trafic augmente mais la qualité baisse. Le taux de conversion chute à 1,5%. Le coût d'acquisition explose. Budget gaspillé." },
+                                    { texte: "Lancer 3 collaborations avec des créateurs de votre niche, optimiser le SEO des contenus, et activer votre communauté existante.", estCorrecte: true, consequence: "Le trafic organique augmente de 200%. Le taux de conversion reste à 4%. Coût d'acquisition divisé par 3. Campagne rentable." },
+                                    { texte: "Acheter des placements chez des influenceurs non qualifiés pour faire du volume.", estCorrecte: false, consequence: "Les influenceurs ne sont pas alignés avec votre marque. Le trafic est non qualifié. 0,3% de conversion. Argent perdu." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : la campagne se termine. Vous devez présenter les résultats au comité de direction. Les chiffres sont bons mais pas exceptionnels. Comment présentez-vous ?",
+                                reactions: [
+                                    { texte: "Présenter les résultats avec transparence et proposer des axes d'amélioration", sub: "L'honnêteté paie toujours", estCorrecte: true },
+                                    { texte: "Enjoliver les chiffres pour impressionner le comité", sub: "Ils ne vérifieront pas", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Présenter des chiffres embellis en espérant que personne ne vérifie.", estCorrecte: false, consequence: "Un membre du comité vérifie les données. Vous êtes pris en flagrant délit. Votre crédibilité est détruite. Vous perdez la confiance de la direction." },
+                                    { texte: "Présenter les résultats réels, expliquer les apprentissages, et proposer un plan d'optimisation pour la prochaine campagne.", estCorrecte: true, consequence: "Le comité apprécie la transparence. Vous obtenez un budget doublé pour la prochaine campagne. Votre crédibilité est renforcée." },
+                                    { texte: "Blâmer l'équipe ou les circonstances pour les résultats mitigés.", estCorrecte: false, consequence: "L'équipe se sent trahie. La confiance est brisée. Vous perdez le soutien de vos collaborateurs. Ambiance délétère." }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "LEADS": {
+                situations: [
+                    {
+                        histoire: "Votre site web génère du trafic mais très peu de leads. Les visiteurs repartent sans laisser leurs coordonnées. Votre pipeline commercial est presque vide. Vous devez agir vite.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous analysez les statistiques. 80% des visiteurs ne restent que 10 secondes. Le temps de chargement est de 6 secondes. Vous devez réagir.",
+                                reactions: [
+                                    { texte: "Optimiser immédiatement le temps de chargement", sub: "C'est la priorité technique", estCorrecte: true },
+                                    { texte: "Ajouter plus de contenu pour retenir les visiteurs", sub: "Le contenu va les captiver", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Ajouter un pop-up agressif qui s'affiche dès la première seconde avec un formulaire de 8 champs obligatoires.", estCorrecte: false, consequence: "Le taux de rebond explose. Les visiteurs fuient. Vous perdez 60% de votre trafic en 2 semaines." },
+                                    { texte: "Optimiser le temps de chargement (compression images, hébergement, cache) et simplifier le formulaire à 3 champs.", estCorrecte: true, consequence: "Le temps de chargement passe à 2 secondes. Le taux de conversion augmente de 0,5% à 4%. Vous générez 80 leads qualifiés par mois." },
+                                    { texte: "Acheter une base de données de 10 000 emails de prospects ciblés et lancer une campagne de cold emailing massive.", estCorrecte: false, consequence: "Votre domaine est blacklisté pour spam. Votre réputation email est détruite. Amendes RGPD potentielles." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : vous générez maintenant 100 leads par mois. Mais seulement 3% se transforment en clients. Les commerciaux se plaignent de la qualité. Votre coût d'acquisition est trop élevé.",
+                                reactions: [
+                                    { texte: "Augmenter le volume de leads pour compenser le faible taux", sub: "Plus de leads = plus de ventes", estCorrecte: false },
+                                    { texte: "Améliorer la qualification des leads avant de les transmettre", sub: "La qualité avant la quantité", estCorrecte: true }
+                                ],
+                                decisions: [
+                                    { texte: "Générer encore plus de leads pour compenser le faible taux de conversion. Doubler le budget publicitaire.", estCorrecte: false, consequence: "Le coût d'acquisition double sans améliorer la conversion. La rentabilité s'effondre. Le patron coupe le budget." },
+                                    { texte: "Mettre en place un scoring des leads : analyser les critères des clients qui convertissent, créer un score, et n'envoyer aux commerciaux que les leads chauds.", estCorrecte: true, consequence: "Le taux de conversion passe de 3% à 12%. Les commerciaux sont satisfaits. Le ROI marketing quadruple." },
+                                    { texte: "Demander aux commerciaux de faire plus d'efforts et de 'mieux qualifier' les leads qui arrivent, sans outil ni process.", estCorrecte: false, consequence: "Les commerciaux sont frustrés. Les tensions montent. La collaboration marketing-vente se dégrade." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : votre entreprise lance un nouveau produit. Vous devez générer 500 leads qualifiés en 3 mois avec 20 000 € de budget. La pression est forte.",
+                                reactions: [
+                                    { texte: "Diversifier les canaux et tester progressivement", sub: "Ne pas mettre tous ses œufs dans le même panier", estCorrecte: true },
+                                    { texte: "Tout miser sur un seul canal pour maximiser l'impact", sub: "La concentration est plus efficace", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Investir la totalité du budget dans une seule campagne Google Ads en espérant que le ciblage par mots-clés suffira.", estCorrecte: false, consequence: "La campagne épuise le budget en 6 semaines. Les leads sont peu qualifiés. Objectif non atteint (180 leads sur 500)." },
+                                    { texte: "Diversifier : 40% en contenu/SEO, 30% en publicité ciblée LinkedIn, 20% en webinaires, 10% en partenariats. Tester chaque canal pendant 2 semaines avant d'investir plus.", estCorrecte: true, consequence: "Les 3 canaux fonctionnent. 620 leads générés en 3 mois. L'objectif est dépassé de 24%. Budget respecté." },
+                                    { texte: "Confier la totalité du budget à une agence externe sans brief précis, en leur demandant simplement 'de ramener des leads'.", estCorrecte: false, consequence: "L'agence livre 400 leads non qualifiés. Le coût par lead est de 50€. Aucun ne convertit. Budget gaspillé." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : après 6 mois, votre pipeline est plein. Mais vous constatez que 40% des leads ne répondent jamais aux commerciaux. Le taux de no-show est trop élevé.",
+                                reactions: [
+                                    { texte: "Mettre en place un système de prise de rendez-vous automatisé", sub: "Faciliter la conversion", estCorrecte: true },
+                                    { texte: "Appeler manuellement chaque lead pour confirmer les rendez-vous", sub: "L'humain est irremplaçable", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Continuer le processus actuel en espérant que les leads finiront par répondre.", estCorrecte: false, consequence: "Le taux de no-show reste à 40%. Les commerciaux perdent leur temps. Le moral de l'équipe baisse." },
+                                    { texte: "Mettre en place un système de scoring comportemental (email ouvert, page visitée) pour identifier les leads vraiment chauds et les prioriser.", estCorrecte: true, consequence: "Le taux de no-show passe de 40% à 12%. Les commerciaux se concentrent sur les leads chauds. Le taux de conversion augmente de 60%." },
+                                    { texte: "Demander aux commerciaux d'appeler chaque lead 5 fois de suite pour les forcer à répondre.", estCorrecte: false, consequence: "Les leads se sentent harcelés. Ils se désabonnent. Votre réputation se dégrade. Taux de conversion chute." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Vous avez un tunnel de vente qui perd 90% de ses visiteurs à la première étape. La landing page fait fuir. Vous n'avez aucune conversion après 3 mois de test.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous découvrez que la page met 8 secondes à charger sur mobile. 70% de votre trafic est mobile. Vous devez réagir.",
+                                reactions: [
+                                    { texte: "Optimiser la page pour mobile en priorité", sub: "C'est là que sont vos visiteurs", estCorrecte: true },
+                                    { texte: "Ajouter plus d'éléments pour rassurer les visiteurs", sub: "Plus d'informations = plus de confiance", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Ajouter encore plus d'éléments sur la landing page : vidéos, témoignages, garanties, FAQ… Tout ce qui pourrait rassurer le visiteur.", estCorrecte: false, consequence: "La page devient illisible et lente. Le taux de conversion reste à 0,2%. Vous êtes encore plus loin du but." },
+                                    { texte: "Faire un audit complet du tunnel : analyser chaque étape, identifier le point de friction exact (temps de chargement, clarté de l'offre, formulaire), et le corriger une par une.", estCorrecte: true, consequence: "Le taux de conversion passe de 0,2% à 3,5%. Le tunnel devient rentable. Vous générez vos premiers clients." },
+                                    { texte: "Changer complètement de tunnel : abandonner celui-ci et créer un nouveau tunnel plus moderne, plus long, avec 7 étapes.", estCorrecte: false, consequence: "Le nouveau tunnel est plus complexe. Le taux de conversion reste faible. Vous perdez 2 mois de travail." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre tunnel fonctionne bien. Vous convertissez 4% des visiteurs. C'est correct, mais vous pourriez faire mieux. Vous voulez passer à 8% en 3 mois.",
+                                reactions: [
+                                    { texte: "Optimiser chaque étape par des tests A/B ciblés", sub: "L'amélioration continue paie", estCorrecte: true },
+                                    { texte: "Doubler le trafic pour doubler les conversions", sub: "Plus de volume = plus de ventes", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Doubler le trafic pour doubler les conversions. Investir massivement en publicité sans toucher au tunnel actuel.", estCorrecte: false, consequence: "Le trafic double mais le taux de conversion reste à 4%. Le coût d'acquisition augmente. La rentabilité baisse." },
+                                    { texte: "Optimiser chaque étape du tunnel : tester 3 versions de la headline, simplifier le formulaire (5 champs → 3), ajouter une vidéo de démonstration.", estCorrecte: true, consequence: "Après 3 mois de tests itératifs, le taux de conversion atteint 8%. Objectif dépassé. ROI multiplié par 2." },
+                                    { texte: "Ajouter un chatbot IA qui interpelle les visiteurs dès leur arrivée pour 'les aider' à naviguer.", estCorrecte: false, consequence: "Le chatbot est intrusif. Les visiteurs le ferment immédiatement. 25% de rebond supplémentaire. Taux de conversion baisse à 2,8%." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous lancez un nouveau produit haut de gamme (3 000 € HT). Vous devez construire un tunnel adapté aux clients premium. Ils ne sont pas dans une logique d'achat impulsif.",
+                                reactions: [
+                                    { texte: "Créer un parcours personnalisé avec suivi humain", sub: "Le premium demande du relationnel", estCorrecte: true },
+                                    { texte: "Faire un tunnel court et rapide pour ne pas perdre le client", sub: "La simplicité avant tout", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Créer un tunnel ultra-court : landing page + paiement immédiat.", estCorrecte: false, consequence: "Le client premium ne convertit pas. Il a besoin de réassurance. Taux de conversion : 0,3%. Zéro vente." },
+                                    { texte: "Construire un tunnel en 4 étapes : webinaire de présentation → appel découverte → proposition personnalisée → closing. Avec un suivi humain à chaque étape.", estCorrecte: true, consequence: "15 appels découverte par mois. 5 propositions envoyées. 2 ventes à 3 000 € par mois. Tunnel rentable et scalable." },
+                                    { texte: "Miser tout sur une vidéo YouTube de 45 minutes avec un lien de paiement en description.", estCorrecte: false, consequence: "La vidéo est vue 200 fois. 0 conversion. Le format est trop passif pour un achat premium." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre tunnel premium fonctionne. Mais vous perdez 60% des prospects entre l'appel découverte et la proposition. Le taux de closing est trop faible.",
+                                reactions: [
+                                    { texte: "Analyser les enregistrements d'appels pour comprendre le point de friction", sub: "Les données avant les intuitions", estCorrecte: true },
+                                    { texte: "Réduire le prix de l'offre pour faciliter la décision", sub: "Le prix est le problème", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Réduire le prix de l'offre de 20% pour faciliter la conversion.", estCorrecte: false, consequence: "Le prix n'était pas le problème. La valeur perçue baisse. Les marges s'effondrent. Les clients négocient encore plus." },
+                                    { texte: "Analyser les appels découverte, identifier que les prospects ne comprennent pas la valeur, et retravailler le script de découverte.", estCorrecte: true, consequence: "Le taux de closing passe de 40% à 75%. Les ventes augmentent de 80%. La valeur perçue est renforcée." },
+                                    { texte: "Envoyer une proposition automatique par email après l'appel sans suivi personnalisé.", estCorrecte: false, consequence: "Le taux de closing chute à 20%. Les prospects se sentent abandonnés. Le tunnel perd son efficacité." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Vous perdez 40% de vos clients chaque année. Le churn est massif. Les clients ne se plaignent même plus — ils partent silencieusement. Votre CA stagne alors que vous dépensez plus en acquisition.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous découvrez que 70% des clients qui partent ne reçoivent aucun suivi après leur achat. Ils se sentent abandonnés. Vous devez réagir.",
+                                reactions: [
+                                    { texte: "Mettre en place un suivi personnalisé des clients", sub: "La relation est la clé", estCorrecte: true },
+                                    { texte: "Envoyer un email automatique mensuel", sub: "L'automatisation suffit", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Augmenter le budget d'acquisition pour compenser les pertes. Continuer le même modèle en espérant que ça marche.", estCorrecte: false, consequence: "Le coût d'acquisition explose. La rentabilité s'effondre. Le churn reste à 40%. Vous perdez de l'argent chaque mois." },
+                                    { texte: "Appeler personnellement les 20 plus gros clients pour comprendre pourquoi ils partent, identifier les points de friction, et mettre en place 3 actions correctives concrètes.", estCorrecte: true, consequence: "Vous découvrez que 70% partent pour un manque de suivi. Actions correctives mises en place. Churn passe de 40% à 18% en 6 mois." },
+                                    { texte: "Envoyer un email automatique de 'réengagement' à tous les clients perdus avec un code promo de -30%.", estCorrecte: false, consequence: "Les clients perdus ne reviennent pas. Ceux qui reviennent partent après le promo. Churn reste élevé. Marges réduites." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : vos clients fidèles (churn 8%) n'achètent qu'une fois. Ils ne reviennent pas pour d'autres produits. Vous laissez passer 70% du potentiel de valeur client.",
+                                reactions: [
+                                    { texte: "Segmenter les clients et proposer le bon produit au bon moment", sub: "Le cross-selling intelligent", estCorrecte: true },
+                                    { texte: "Attendre que les clients reviennent d'eux-mêmes", sub: "Un client satisfait revient toujours", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Attendre que les clients reviennent d'eux-mêmes. 'Un client satisfait revient toujours.' Ne pas les solliciter.", estCorrecte: false, consequence: "Les clients vous oublient en 6 mois. Le taux de réachat reste à 12%. Vous perdez 70% du potentiel." },
+                                    { texte: "Lancer un programme de cross-selling structuré : segmenter les clients par profil, proposer le bon produit au bon moment, avec un suivi personnalisé.", estCorrecte: true, consequence: "Le taux de réachat passe de 12% à 38%. Le CA par client augmente de 85%. Programme rentable en 3 mois." },
+                                    { texte: "Envoyer une newsletter mensuelle à tous les clients avec tous vos produits, en espérant qu'ils trouveront leur bonheur.", estCorrecte: false, consequence: "La newsletter est ignorée (taux d'ouverture 8%). Les clients se désabonnent. Aucun impact sur le réachat." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : un concurrent agressif propose à vos meilleurs clients une offre très attractive (-40% sur leur premier achat). Vous risquez de perdre vos 10 clients les plus fidèles (60% de votre CA).",
+                                reactions: [
+                                    { texte: "Renforcer la relation et proposer des services exclusifs", sub: "La valeur ajoutée plutôt que la remise", estCorrecte: true },
+                                    { texte: "S'aligner sur l'offre du concurrent avec la même remise", sub: "Il faut riposter immédiatement", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "S'aligner sur l'offre du concurrent : proposer la même remise de -40% à ces clients pour les retenir.", estCorrecte: false, consequence: "Vos marges s'effondrent. Les clients prennent la remise mais partent quand même chez le concurrent. Vous perdez de l'argent et les clients." },
+                                    { texte: "Renforcer la relation avec ces clients : rendez-vous personnels, offre sur-mesure, engagement à long terme, services exclusifs non proposés par le concurrent.", estCorrecte: true, consequence: "7 clients sur 10 restent fidèles. 3 partent mais reviennent 6 mois plus tard. Votre modèle premium est validé. CA stable." },
+                                    { texte: "Ignorer la menace en pensant que vos clients sont trop fidèles pour partir. Ne rien changer.", estCorrecte: false, consequence: "6 clients sur 10 partent en 2 mois. Vous perdez 36% de votre CA. Situation critique. Plans sociaux." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : vous avez stabilisé le churn. Mais vous constatez que les clients fidèles achètent moins souvent qu'avant. Le panier moyen baisse de 15%. Vous devez agir.",
+                                reactions: [
+                                    { texte: "Créer un programme de fidélité avec des avantages progressifs", sub: "Récompenser la fidélité", estCorrecte: true },
+                                    { texte: "Augmenter les prix pour compenser la baisse du panier", sub: "Le CA doit rester stable", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Augmenter les prix de 10% pour compenser la baisse du panier moyen.", estCorrecte: false, consequence: "Les clients se sentent pénalisés. Le churn augmente de 5%. Le CA baisse encore. Spirale négative." },
+                                    { texte: "Lancer un programme de fidélité avec des avantages progressifs (livraison offerte, accès anticipé, cadeaux) et des offres personnalisées selon l'historique d'achat.", estCorrecte: true, consequence: "Le panier moyen remonte de 20%. La fréquence d'achat augmente de 35%. Les clients se sentent valorisés. Le CA augmente de 28%." },
+                                    { texte: "Proposer des remises systématiques de 20% pour stimuler les achats.", estCorrecte: false, consequence: "Les clients s'habituent aux remises et n'achètent plus au prix plein. Les marges s'effondrent. La valeur perçue baisse." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre entreprise a une base de 10 000 clients inactifs depuis plus de 6 mois. Ils ont acheté une fois mais ne sont jamais revenus. Vous devez les réactiver.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir votre approche pour réactiver ces clients. Deux options : une campagne massive ou une approche segmentée.",
+                                reactions: [
+                                    { texte: "Segmenter les inactifs par motif de non-retour et adapter le message", sub: "Un message personnalisé convertit mieux", estCorrecte: true },
+                                    { texte: "Envoyer la même offre à tout le monde pour aller vite", sub: "Le volume prime", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Envoyer un email identique à tous les 10 000 inactifs avec une remise de -30%.", estCorrecte: false, consequence: "Le taux d'ouverture est de 5%. Seuls 2% cliquent. Aucune conversion. Votre domaine est signalé comme spam." },
+                                    { texte: "Segmenter les inactifs (déçu, oublié, prix, besoin non résolu) et créer 4 campagnes personnalisées avec des messages et offres adaptés.", estCorrecte: true, consequence: "Le taux d'ouverture passe à 28%. 12% des inactifs réactivés. 1 200 clients reviennent. CA additionnel significatif." },
+                                    { texte: "Appeler manuellement les 10 000 clients un par un pour les réactiver.", estCorrecte: false, consequence: "Impossible logistiquement. L'équipe s'épuise. Seuls 500 clients sont contactés en 2 mois. Résultats médiocres. Démotivation." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : parmi les réactivés, 40% rachètent une fois puis redeviennent inactifs. Vous devez casser ce cycle.",
+                                reactions: [
+                                    { texte: "Mettre en place un parcours d'onboarding pour les réactivés", sub: "Accompagner les premiers pas", estCorrecte: true },
+                                    { texte: "Laisser faire le temps, ils finiront par revenir", sub: "Ils ont déjà racheté, c'est bon signe", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Ne rien faire de spécial. Ils ont déjà racheté une fois, c'est suffisant.", estCorrecte: false, consequence: "40% des réactivés redeviennent inactifs en 3 mois. Vous perdez à nouveau ces clients. Le cycle infernal continue." },
+                                    { texte: "Créer un parcours d'onboarding de 30 jours : email de bienvenue, guide d'utilisation, conseils personnalisés, et suivi proactif.", estCorrecte: true, consequence: "Le taux de réachat passe de 60% à 85%. Les clients se sentent accompagnés. Le churn des réactivés baisse de 40%." },
+                                    { texte: "Envoyer une série de 5 emails promotionnels automatiques sans contenu éducatif.", estCorrecte: false, consequence: "Les clients se désabonnent. Le taux de réachat stagne à 55%. Vous perdez le contact avec eux." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous avez réactivé 1 200 clients. Mais vous constatez que le coût de réactivation (30€ par client) est plus élevé que le coût d'acquisition d'un nouveau client (25€).",
+                                reactions: [
+                                    { texte: "Optimiser le processus de réactivation pour réduire les coûts", sub: "Améliorer l'efficacité", estCorrecte: true },
+                                    { texte: "Arrêter la réactivation, ce n'est pas rentable", sub: "Trop cher pour ce que c'est", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Arrêter la campagne de réactivation. Ce n'est pas rentable.", estCorrecte: false, consequence: "Vous perdez 1 200 clients qui auraient pu être sauvés. Le CA baisse. Vous devez acquérir de nouveaux clients à un coût plus élevé." },
+                                    { texte: "Analyser les coûts : identifier que 60% du coût vient des appels manuels. Automatiser une partie du processus tout en gardant le suivi personnalisé pour les gros clients.", estCorrecte: true, consequence: "Le coût de réactivation passe de 30€ à 12€. Le ROI de la campagne triple. Vous pouvez réactiver plus de clients avec le même budget." },
+                                    { texte: "Réduire la qualité du suivi pour baisser les coûts rapidement.", estCorrecte: false, consequence: "Les clients se sentent moins accompagnés. Le taux de réachat chute. Vous perdez la confiance des réactivés. Effet contre-productif." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : après 6 mois, 40% des clients réactivés sont redevenus des clients fidèles. Vous voulez capitaliser sur ce succès pour les 8 800 clients restants.",
+                                reactions: [
+                                    { texte: "Dupliquer la stratégie qui a fonctionné sur les segments restants", sub: "Ce qui marche mérite d'être répété", estCorrecte: true },
+                                    { texte: "Tout recommencer à zéro avec une nouvelle approche", sub: "Il faut innover constamment", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Tout recommencer à zéro avec une nouvelle stratégie non testée.", estCorrecte: false, consequence: "La nouvelle approche échoue. Vous perdez 3 mois de travail. Les clients restants ne sont pas réactivés. Démoralisation." },
+                                    { texte: "Appliquer la même stratégie de segmentation et d'onboarding aux 8 800 clients restants, en l'ajustant selon les retours.", estCorrecte: true, consequence: "60% des clients restants réactivés (5 280 clients). Le CA de l'entreprise double en 6 mois. Vous devenez la référence interne en rétention." },
+                                    { texte: "Concentrer les efforts uniquement sur les 200 clients les plus gros parmi les restants.", estCorrecte: false, consequence: "Vous ignorez 8 600 clients potentiels. Le potentiel de croissance est sous-exploité. Résultats en deçà des attentes." }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "TUNNEL": {
+                situations: [
+                    {
+                        histoire: "Vous avez un tunnel de vente qui perd 90% de ses visiteurs à la première étape. La landing page fait fuir. Vous n'avez aucune conversion après 3 mois de test.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous découvrez que 70% de votre trafic est mobile mais votre page n'est pas optimisée pour mobile. Les visiteurs fuient.",
+                                reactions: [
+                                    { texte: "Optimiser la page pour mobile en priorité", sub: "C'est là que sont vos visiteurs", estCorrecte: true },
+                                    { texte: "Ajouter plus d'éléments pour rassurer les visiteurs", sub: "Plus d'informations = plus de confiance", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Ajouter encore plus d'éléments sur la landing page : vidéos, témoignages, garanties, FAQ…", estCorrecte: false, consequence: "La page devient illisible et lente. Le taux de conversion reste à 0,2%. Vous êtes encore plus loin du but." },
+                                    { texte: "Faire un audit complet du tunnel : analyser chaque étape, identifier le point de friction exact et le corriger une par une.", estCorrecte: true, consequence: "Le taux de conversion passe de 0,2% à 3,5%. Le tunnel devient rentable. Vous générez vos premiers clients." },
+                                    { texte: "Changer complètement de tunnel : abandonner celui-ci et créer un nouveau tunnel plus moderne, plus long, avec 7 étapes.", estCorrecte: false, consequence: "Le nouveau tunnel est plus complexe. Le taux de conversion reste faible. Vous perdez 2 mois de travail." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre tunnel fonctionne bien. Vous convertissez 4% des visiteurs. C'est correct, mais vous pourriez faire mieux. Vous voulez passer à 8% en 3 mois.",
+                                reactions: [
+                                    { texte: "Optimiser chaque étape par des tests A/B ciblés", sub: "L'amélioration continue paie", estCorrecte: true },
+                                    { texte: "Doubler le trafic pour doubler les conversions", sub: "Plus de volume = plus de ventes", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Doubler le trafic pour doubler les conversions. Investir massivement en publicité sans toucher au tunnel actuel.", estCorrecte: false, consequence: "Le trafic double mais le taux de conversion reste à 4%. Le coût d'acquisition augmente. La rentabilité baisse." },
+                                    { texte: "Optimiser chaque étape du tunnel : tester 3 versions de la headline, simplifier le formulaire, ajouter une vidéo de démonstration.", estCorrecte: true, consequence: "Après 3 mois de tests itératifs, le taux de conversion atteint 8%. Objectif dépassé. ROI multiplié par 2." },
+                                    { texte: "Ajouter un chatbot IA qui interpelle les visiteurs dès leur arrivée pour 'les aider' à naviguer.", estCorrecte: false, consequence: "Le chatbot est intrusif. Les visiteurs le ferment immédiatement. 25% de rebond supplémentaire. Taux de conversion baisse à 2,8%." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous lancez un nouveau produit haut de gamme (3 000 € HT). Vous devez construire un tunnel adapté aux clients premium. Ils ne sont pas dans une logique d'achat impulsif.",
+                                reactions: [
+                                    { texte: "Créer un parcours personnalisé avec suivi humain", sub: "Le premium demande du relationnel", estCorrecte: true },
+                                    { texte: "Faire un tunnel court et rapide pour ne pas perdre le client", sub: "La simplicité avant tout", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Créer un tunnel ultra-court : landing page + paiement immédiat.", estCorrecte: false, consequence: "Le client premium ne convertit pas. Il a besoin de réassurance. Taux de conversion : 0,3%. Zéro vente." },
+                                    { texte: "Construire un tunnel en 4 étapes : webinaire de présentation → appel découverte → proposition personnalisée → closing. Avec un suivi humain à chaque étape.", estCorrecte: true, consequence: "15 appels découverte par mois. 5 propositions envoyées. 2 ventes à 3 000 € par mois. Tunnel rentable et scalable." },
+                                    { texte: "Miser tout sur une vidéo YouTube de 45 minutes avec un lien de paiement en description.", estCorrecte: false, consequence: "La vidéo est vue 200 fois. 0 conversion. Le format est trop passif pour un achat premium." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre tunnel premium fonctionne. Mais vous perdez 60% des prospects entre l'appel découverte et la proposition. Le taux de closing est trop faible.",
+                                reactions: [
+                                    { texte: "Analyser les enregistrements d'appels pour comprendre le point de friction", sub: "Les données avant les intuitions", estCorrecte: true },
+                                    { texte: "Réduire le prix de l'offre pour faciliter la décision", sub: "Le prix est le problème", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Réduire le prix de l'offre de 20% pour faciliter la conversion.", estCorrecte: false, consequence: "Le prix n'était pas le problème. La valeur perçue baisse. Les marges s'effondrent. Les clients négocient encore plus." },
+                                    { texte: "Analyser les appels découverte, identifier que les prospects ne comprennent pas la valeur, et retravailler le script de découverte.", estCorrecte: true, consequence: "Le taux de closing passe de 40% à 75%. Les ventes augmentent de 80%. La valeur perçue est renforcée." },
+                                    { texte: "Envoyer une proposition automatique par email après l'appel sans suivi personnalisé.", estCorrecte: false, consequence: "Le taux de closing chute à 20%. Les prospects se sentent abandonnés. Le tunnel perd son efficacité." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre tunnel de vente est rentable mais vous voulez le scaler. Vous devez augmenter le volume sans dégrader la qualité. Le défi est de taille.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir entre augmenter le budget publicitaire ou diversifier les sources de trafic. Le budget est limité.",
+                                reactions: [
+                                    { texte: "Diversifier les sources de trafic (SEO, contenu, partenariats)", sub: "Ne pas dépendre d'une seule source", estCorrecte: true },
+                                    { texte: "Concentrer le budget sur le canal le plus performant", sub: "La concentration est plus efficace", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Investir 100% du budget sur le canal le plus performant pour maximiser le volume.", estCorrecte: false, consequence: "Le coût par lead augmente rapidement. La saturation du canal fait chuter les performances. Le tunnel devient moins rentable." },
+                                    { texte: "Diversifier : 50% sur le canal performant, 30% en SEO/contenu, 20% en partenariats. Tester chaque source pendant 1 mois.", estCorrecte: true, consequence: "Le SEO et les partenariats génèrent 40% du trafic à coût réduit. Le tunnel est scalable et moins dépendant d'un seul canal." },
+                                    { texte: "Emprunter de l'argent pour tripler le budget publicitaire.", estCorrecte: false, consequence: "L'endettement met l'entreprise en danger. Les performances ne suivent pas. Vous devez rembourser sans les revenus escomptés." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre tunnel convertit bien mais le taux de remboursement est de 15%. Les clients achètent puis demandent un remboursement. Vous perdez de l'argent.",
+                                reactions: [
+                                    { texte: "Analyser les motifs de remboursement et améliorer l'offre", sub: "Comprendre avant d'agir", estCorrecte: true },
+                                    { texte: "Durcir les conditions de remboursement pour dissuader", sub: "Protéger les marges", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Durcir les conditions de remboursement pour décourager les demandes.", estCorrecte: false, consequence: "Les clients se sentent piégés. Les avis négatifs explosent. La réputation se dégrade. Les ventes chutent de 40%." },
+                                    { texte: "Analyser les motifs de remboursement, identifier que le produit ne correspond pas à la promesse, et ajuster l'offre et la communication.", estCorrecte: true, consequence: "Le taux de remboursement passe de 15% à 5%. Les clients sont mieux informés. La satisfaction augmente. Les ventes augmentent de 25%." },
+                                    { texte: "Offrir un bonus aux clients qui ne demandent pas de remboursement.", estCorrecte: false, consequence: "Les clients se sentent manipulés. Ceux qui demandent un remboursement se sentent lésés. L'image de marque se dégrade." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous voulez automatiser une partie du tunnel pour gagner du temps. Mais vous ne voulez pas perdre la personnalisation qui fait votre force.",
+                                reactions: [
+                                    { texte: "Automatiser les tâches répétitives et garder l'humain pour les moments clés", sub: "Le meilleur des deux mondes", estCorrecte: true },
+                                    { texte: "Tout automatiser pour maximiser l'efficacité", sub: "L'automatisation à 100%", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Tout automatiser : emails, relances, propositions, closing. Réduire l'équipe au minimum.", estCorrecte: false, consequence: "Les clients se sentent déshumanisés. Le taux de closing chute de 30%. Les gros clients partent. Le chiffre d'affaires baisse." },
+                                    { texte: "Automatiser les tâches répétitives (emails de suivi, rappels) et garder l'humain pour les appels découverte, les propositions et le closing.", estCorrecte: true, consequence: "Le temps de l'équipe est libéré pour les tâches à forte valeur. Le taux de closing augmente de 15%. La satisfaction client reste élevée." },
+                                    { texte: "Ne rien automatiser et continuer manuellement pour garder le contrôle total.", estCorrecte: false, consequence: "L'équipe est surchargée. Les délais de réponse s'allongent. Des prospects sont perdus. La croissance est freinée." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre tunnel est maintenant scalable. Vous devez former une nouvelle équipe pour gérer le volume. Comment procédez-vous ?",
+                                reactions: [
+                                    { texte: "Créer un guide complet et former progressivement", sub: "La transmission structurée", estCorrecte: true },
+                                    { texte: "Laisser les nouveaux apprendre sur le tas", sub: "L'expérience est le meilleur professeur", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Laisser les nouveaux membres apprendre seuls en observant les anciens.", estCorrecte: false, consequence: "La formation est chaotique. Les nouveaux commettent des erreurs coûteuses. La qualité de service baisse. Les clients se plaignent." },
+                                    { texte: "Créer un guide complet du tunnel, des scripts, des bonnes pratiques, et mettre en place un système de mentorat pour les nouveaux.", estCorrecte: true, consequence: "Les nouveaux sont opérationnels en 2 semaines. La qualité est maintenue. L'équipe peut gérer 3x plus de volume sans dégrader le service." },
+                                    { texte: "Embaucher uniquement des profils seniors très expérimentés pour éviter la formation.", estCorrecte: false, consequence: "Le coût salarial explose. Les seniors ne restent pas sur des tâches répétitives. Turnover élevé. Budget dépassé." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Vous devez créer un tunnel de vente pour un produit innovant qui n'a pas encore de marché. Les clients potentiels ne connaissent pas encore la solution. Le défi est d'éduquer avant de vendre.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir la première étape du tunnel. Les prospects ne connaissent pas le problème que votre produit résout. Comment commencez-vous ?",
+                                reactions: [
+                                    { texte: "Créer un contenu éducatif qui explique le problème avant de présenter la solution", sub: "Éduquer avant de vendre", estCorrecte: true },
+                                    { texte: "Présenter directement le produit avec ses fonctionnalités", sub: "Le produit est génial, ils vont comprendre", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Créer une landing page qui présente directement le produit et ses fonctionnalités.", estCorrecte: false, consequence: "Les prospects ne comprennent pas l'utilité du produit. Taux de conversion : 0,5%. Le trafic est gaspillé." },
+                                    { texte: "Créer un contenu éducatif (guide, webinaire, article) qui explique le problème, ses conséquences, et comment le résoudre. Le produit est présenté comme la solution.", estCorrecte: true, consequence: "Les prospects comprennent l'enjeu. Le taux de conversion passe à 5%. Vous créez un marché pour votre produit." },
+                                    { texte: "Lancer une campagne publicitaire massive pour faire connaître le produit sans éduquer.", estCorrecte: false, consequence: "Le budget est gaspillé. Les prospects ne comprennent pas la valeur. Aucune conversion. Le produit est perçu comme inutile." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : vos premiers prospects sont intéressés mais hésitants. Ils trouvent le produit 'intéressant mais pas urgent'. Vous devez créer un sentiment d'urgence.",
+                                reactions: [
+                                    { texte: "Créer une offre limitée dans le temps avec une vraie valeur ajoutée", sub: "L'urgence doit être justifiée", estCorrecte: true },
+                                    { texte: "Créer une fausse urgence avec un compte à rebours factice", sub: "L'urgence artificielle fonctionne", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Créer une fausse urgence : 'Offre valable 24h seulement' alors que ce n'est pas vrai.", estCorrecte: false, consequence: "Les prospects découvrent la supercherie. La confiance est brisée. Les avis négatifs se multiplient. Les ventes chutent." },
+                                    { texte: "Créer une vraie offre limitée : accès à un bonus exclusif pour les 50 premiers, ou tarif préférentiel pour les early adopters.", estCorrecte: true, consequence: "Les prospects se sentent privilégiés. Le taux de conversion augmente de 40%. Les early adopters deviennent des ambassadeurs." },
+                                    { texte: "Attendre que les prospects se décident d'eux-mêmes sans créer d'urgence.", estCorrecte: false, consequence: "Les prospects reportent leur décision indéfiniment. Le taux de conversion stagne. Le produit ne décolle pas." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vos premiers clients sont satisfaits mais ils ont du mal à expliquer le produit à leur entourage. Le bouche-à-oreille ne fonctionne pas.",
+                                reactions: [
+                                    { texte: "Créer des outils simples pour aider les clients à recommander", sub: "Faciliter la recommandation", estCorrecte: true },
+                                    { texte: "Demander aux clients de faire plus d'efforts pour recommander", sub: "Ils doivent être proactifs", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Demander aux clients de recommander le produit autour d'eux sans leur donner d'outils.", estCorrecte: false, consequence: "Les clients sont mal à l'aise. Ils ne savent pas comment présenter le produit. Aucune recommandation. Le bouche-à-oreille reste nul." },
+                                    { texte: "Créer un kit de recommandation : présentation simple, avantages clés, lien de parrainage, et récompense pour chaque filleul.", estCorrecte: true, consequence: "Les clients recommandent facilement. 30% des nouveaux clients viennent du bouche-à-oreille. Le coût d'acquisition baisse de 50%." },
+                                    { texte: "Lancer un programme d'affiliation avec des commissions élevées.", estCorrecte: false, consequence: "Les affiliés recommandent le produit sans le connaître. Les mauvaises recommandations nuisent à la crédibilité. Taux de conversion faible." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : le produit commence à décoller. Mais vous constatez que les clients abandonnent après 3 mois. Le churn est de 25%. Vous devez agir.",
+                                reactions: [
+                                    { texte: "Mettre en place un suivi proactif et un support réactif", sub: "Accompagner les clients", estCorrecte: true },
+                                    { texte: "Réduire les coûts de support pour compenser", sub: "Le support coûte cher", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Réduire les coûts de support pour compenser le churn.", estCorrecte: false, consequence: "Les clients se sentent abandonnés. Le churn augmente de 10%. La réputation se dégrade. Les ventes baissent." },
+                                    { texte: "Mettre en place un suivi proactif : contacter les clients à J+7, J+30, J+60 pour s'assurer qu'ils utilisent bien le produit et résoudre les problèmes.", estCorrecte: true, consequence: "Le churn passe de 25% à 8%. Les clients se sentent soutenus. Le taux de satisfaction augmente. Les recommandations explosent." },
+                                    { texte: "Créer un forum d'entraide entre clients sans intervention de l'équipe.", estCorrecte: false, consequence: "Le forum est désert. Les clients ne trouvent pas de réponses. Le churn reste élevé. Les problèmes ne sont pas résolus." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre tunnel de vente génère des ventes mais les marges sont trop faibles. Vous devez optimiser la rentabilité sans sacrifier le volume.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous analysez vos coûts. Le coût d'acquisition client est de 80€ pour un panier moyen de 100€. Vous devez améliorer ce ratio.",
+                                reactions: [
+                                    { texte: "Augmenter le panier moyen par des offres complémentaires", sub: "Vendre plus à chaque client", estCorrecte: true },
+                                    { texte: "Réduire le coût d'acquisition en coupant le budget publicitaire", sub: "Moins de dépenses", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Réduire le budget publicitaire de 50% pour améliorer la marge.", estCorrecte: false, consequence: "Le volume de ventes chute de 60%. Le chiffre d'affaires baisse. Les coûts fixes restent. La rentabilité se dégrade encore." },
+                                    { texte: "Créer des offres complémentaires (upsell, cross-sell) pour augmenter le panier moyen de 100€ à 150€.", estCorrecte: true, consequence: "Le panier moyen augmente de 50%. Le coût d'acquisition reste à 80€. La marge passe de 20€ à 70€ par client. Rentabilité multipliée par 3." },
+                                    { texte: "Augmenter les prix de 20% pour améliorer la marge.", estCorrecte: false, consequence: "Les clients sensibles au prix partent. Le volume baisse de 30%. Le chiffre d'affaires diminue. La rentabilité ne s'améliore pas." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre panier moyen a augmenté. Mais 20% des clients demandent un remboursement. Vous perdez de l'argent sur ces clients.",
+                                reactions: [
+                                    { texte: "Analyser les motifs de remboursement et corriger le problème", sub: "Comprendre la cause racine", estCorrecte: true },
+                                    { texte: "Refuser les remboursements pour protéger les marges", sub: "Les clients doivent assumer", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Refuser systématiquement les remboursements pour protéger les marges.", estCorrecte: false, consequence: "Les clients se sentent volés. Les avis négatifs explosent. La réputation est détruite. Les ventes chutent de 50%." },
+                                    { texte: "Analyser les motifs de remboursement, identifier que le produit ne correspond pas à la description, et corriger la communication.", estCorrecte: true, consequence: "Le taux de remboursement passe de 20% à 5%. Les clients sont mieux informés. La satisfaction augmente. Les ventes augmentent de 30%." },
+                                    { texte: "Offrir un avoir au lieu d'un remboursement pour garder le client.", estCorrecte: false, consequence: "Les clients se sentent forcés. Certains acceptent mais ne rachètent pas. D'autres contestent. L'image de marque se dégrade." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous voulez augmenter les marges en réduisant les coûts de production. Mais vous ne voulez pas sacrifier la qualité.",
+                                reactions: [
+                                    { texte: "Optimiser les processus sans toucher à la qualité", sub: "L'efficacité, pas la réduction", estCorrecte: true },
+                                    { texte: "Réduire les coûts en utilisant des matériaux moins chers", sub: "Le client ne verra pas la différence", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Réduire les coûts en utilisant des matériaux moins chers.", estCorrecte: false, consequence: "La qualité baisse. Les clients s'en aperçoivent. Les retours augmentent. La réputation se dégrade. Les ventes chutent." },
+                                    { texte: "Optimiser les processus de production, négocier avec les fournisseurs, réduire les gaspillages, sans toucher à la qualité.", estCorrecte: true, consequence: "Les coûts de production baissent de 15%. La qualité est maintenue. La marge augmente de 20%. Les clients sont satisfaits." },
+                                    { texte: "Augmenter les prix pour compenser les coûts sans optimiser.", estCorrecte: false, consequence: "Les clients trouvent le produit trop cher. Le volume baisse. Les marges n'augmentent pas. La compétitivité diminue." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre tunnel est maintenant rentable. Vous devez décider quoi faire des bénéfices. Réinvestir ou distribuer ?",
+                                reactions: [
+                                    { texte: "Réinvestir dans l'optimisation et l'acquisition", sub: "La croissance avant les dividendes", estCorrecte: true },
+                                    { texte: "Distribuer les bénéfices aux actionnaires", sub: "Ils ont investi, ils méritent un retour", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Distribuer 80% des bénéfices aux actionnaires.", estCorrecte: false, consequence: "L'entreprise n'a pas les moyens d'investir. La concurrence prend l'avantage. La croissance stagne. Les parts de marché baissent." },
+                                    { texte: "Réinvestir 70% dans l'optimisation du tunnel, l'acquisition et l'innovation. Distribuer 30% aux actionnaires.", estCorrecte: true, consequence: "Le tunnel devient encore plus performant. L'entreprise gagne des parts de marché. Les actionnaires sont satisfaits. Croissance durable." },
+                                    { texte: "Placer les bénéfices en bourse en attendant une meilleure opportunité.", estCorrecte: false, consequence: "L'argent est immobilisé. L'entreprise ne se développe pas. Les concurrents avancent. Vous perdez l'opportunité de croître." }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "FIDÉLISATION": {
+                situations: [
+                    {
+                        histoire: "Vous perdez 40% de vos clients chaque année. Le churn est massif. Les clients ne se plaignent même plus — ils partent silencieusement. Votre CA stagne alors que vous dépensez plus en acquisition.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous découvrez que 70% des clients qui partent ne reçoivent aucun suivi après leur achat. Ils se sentent abandonnés.",
+                                reactions: [
+                                    { texte: "Mettre en place un suivi personnalisé des clients", sub: "La relation est la clé", estCorrecte: true },
+                                    { texte: "Envoyer un email automatique mensuel", sub: "L'automatisation suffit", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Augmenter le budget d'acquisition pour compenser les pertes. Continuer le même modèle en espérant que ça marche.", estCorrecte: false, consequence: "Le coût d'acquisition explose. La rentabilité s'effondre. Le churn reste à 40%. Vous perdez de l'argent chaque mois." },
+                                    { texte: "Appeler personnellement les 20 plus gros clients pour comprendre pourquoi ils partent, identifier les points de friction, et mettre en place 3 actions correctives concrètes.", estCorrecte: true, consequence: "Vous découvrez que 70% partent pour un manque de suivi. Actions correctives mises en place. Churn passe de 40% à 18% en 6 mois." },
+                                    { texte: "Envoyer un email automatique de 'réengagement' à tous les clients perdus avec un code promo de -30%.", estCorrecte: false, consequence: "Les clients perdus ne reviennent pas. Ceux qui reviennent partent après le promo. Churn reste élevé. Marges réduites." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : vos clients fidèles (churn 8%) n'achètent qu'une fois. Ils ne reviennent pas pour d'autres produits. Vous laissez passer 70% du potentiel de valeur client.",
+                                reactions: [
+                                    { texte: "Segmenter les clients et proposer le bon produit au bon moment", sub: "Le cross-selling intelligent", estCorrecte: true },
+                                    { texte: "Attendre que les clients reviennent d'eux-mêmes", sub: "Un client satisfait revient toujours", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Attendre que les clients reviennent d'eux-mêmes. 'Un client satisfait revient toujours.' Ne pas les solliciter.", estCorrecte: false, consequence: "Les clients vous oublient en 6 mois. Le taux de réachat reste à 12%. Vous perdez 70% du potentiel." },
+                                    { texte: "Lancer un programme de cross-selling structuré : segmenter les clients par profil, proposer le bon produit au bon moment, avec un suivi personnalisé.", estCorrecte: true, consequence: "Le taux de réachat passe de 12% à 38%. Le CA par client augmente de 85%. Programme rentable en 3 mois." },
+                                    { texte: "Envoyer une newsletter mensuelle à tous les clients avec tous vos produits, en espérant qu'ils trouveront leur bonheur.", estCorrecte: false, consequence: "La newsletter est ignorée (taux d'ouverture 8%). Les clients se désabonnent. Aucun impact sur le réachat." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : un concurrent agressif propose à vos meilleurs clients une offre très attractive (-40% sur leur premier achat). Vous risquez de perdre vos 10 clients les plus fidèles (60% de votre CA).",
+                                reactions: [
+                                    { texte: "Renforcer la relation et proposer des services exclusifs", sub: "La valeur ajoutée plutôt que la remise", estCorrecte: true },
+                                    { texte: "S'aligner sur l'offre du concurrent avec la même remise", sub: "Il faut riposter immédiatement", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "S'aligner sur l'offre du concurrent : proposer la même remise de -40% à ces clients pour les retenir.", estCorrecte: false, consequence: "Vos marges s'effondrent. Les clients prennent la remise mais partent quand même chez le concurrent. Vous perdez de l'argent et les clients." },
+                                    { texte: "Renforcer la relation avec ces clients : rendez-vous personnels, offre sur-mesure, engagement à long terme, services exclusifs non proposés par le concurrent.", estCorrecte: true, consequence: "7 clients sur 10 restent fidèles. 3 partent mais reviennent 6 mois plus tard. Votre modèle premium est validé. CA stable." },
+                                    { texte: "Ignorer la menace en pensant que vos clients sont trop fidèles pour partir. Ne rien changer.", estCorrecte: false, consequence: "6 clients sur 10 partent en 2 mois. Vous perdez 36% de votre CA. Situation critique. Plans sociaux." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : vous avez stabilisé le churn. Mais vous constatez que les clients fidèles achètent moins souvent qu'avant. Le panier moyen baisse de 15%. Vous devez agir.",
+                                reactions: [
+                                    { texte: "Créer un programme de fidélité avec des avantages progressifs", sub: "Récompenser la fidélité", estCorrecte: true },
+                                    { texte: "Augmenter les prix pour compenser la baisse du panier", sub: "Le CA doit rester stable", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Augmenter les prix de 10% pour compenser la baisse du panier moyen.", estCorrecte: false, consequence: "Les clients se sentent pénalisés. Le churn augmente de 5%. Le CA baisse encore. Spirale négative." },
+                                    { texte: "Lancer un programme de fidélité avec des avantages progressifs (livraison offerte, accès anticipé, cadeaux) et des offres personnalisées selon l'historique d'achat.", estCorrecte: true, consequence: "Le panier moyen remonte de 20%. La fréquence d'achat augmente de 35%. Les clients se sentent valorisés. Le CA augmente de 28%." },
+                                    { texte: "Proposer des remises systématiques de 20% pour stimuler les achats.", estCorrecte: false, consequence: "Les clients s'habituent aux remises et n'achètent plus au prix plein. Les marges s'effondrent. La valeur perçue baisse." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre entreprise a une base de 10 000 clients inactifs depuis plus de 6 mois. Ils ont acheté une fois mais ne sont jamais revenus. Vous devez les réactiver.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir votre approche pour réactiver ces clients. Deux options : une campagne massive ou une approche segmentée.",
+                                reactions: [
+                                    { texte: "Segmenter les inactifs par motif de non-retour et adapter le message", sub: "Un message personnalisé convertit mieux", estCorrecte: true },
+                                    { texte: "Envoyer la même offre à tout le monde pour aller vite", sub: "Le volume prime", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Envoyer un email identique à tous les 10 000 inactifs avec une remise de -30%.", estCorrecte: false, consequence: "Le taux d'ouverture est de 5%. Seuls 2% cliquent. Aucune conversion. Votre domaine est signalé comme spam." },
+                                    { texte: "Segmenter les inactifs (déçu, oublié, prix, besoin non résolu) et créer 4 campagnes personnalisées avec des messages et offres adaptés.", estCorrecte: true, consequence: "Le taux d'ouverture passe à 28%. 12% des inactifs réactivés. 1 200 clients reviennent. CA additionnel significatif." },
+                                    { texte: "Appeler manuellement les 10 000 clients un par un pour les réactiver.", estCorrecte: false, consequence: "Impossible logistiquement. L'équipe s'épuise. Seuls 500 clients sont contactés en 2 mois. Résultats médiocres. Démotivation." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : parmi les réactivés, 40% rachètent une fois puis redeviennent inactifs. Vous devez casser ce cycle.",
+                                reactions: [
+                                    { texte: "Mettre en place un parcours d'onboarding pour les réactivés", sub: "Accompagner les premiers pas", estCorrecte: true },
+                                    { texte: "Laisser faire le temps, ils finiront par revenir", sub: "Ils ont déjà racheté, c'est bon signe", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Ne rien faire de spécial. Ils ont déjà racheté une fois, c'est suffisant.", estCorrecte: false, consequence: "40% des réactivés redeviennent inactifs en 3 mois. Vous perdez à nouveau ces clients. Le cycle infernal continue." },
+                                    { texte: "Créer un parcours d'onboarding de 30 jours : email de bienvenue, guide d'utilisation, conseils personnalisés, et suivi proactif.", estCorrecte: true, consequence: "Le taux de réachat passe de 60% à 85%. Les clients se sentent accompagnés. Le churn des réactivés baisse de 40%." },
+                                    { texte: "Envoyer une série de 5 emails promotionnels automatiques sans contenu éducatif.", estCorrecte: false, consequence: "Les clients se désabonnent. Le taux de réachat stagne à 55%. Vous perdez le contact avec eux." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous avez réactivé 1 200 clients. Mais vous constatez que le coût de réactivation (30€ par client) est plus élevé que le coût d'acquisition d'un nouveau client (25€).",
+                                reactions: [
+                                    { texte: "Optimiser le processus de réactivation pour réduire les coûts", sub: "Améliorer l'efficacité", estCorrecte: true },
+                                    { texte: "Arrêter la réactivation, ce n'est pas rentable", sub: "Trop cher pour ce que c'est", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Arrêter la campagne de réactivation. Ce n'est pas rentable.", estCorrecte: false, consequence: "Vous perdez 1 200 clients qui auraient pu être sauvés. Le CA baisse. Vous devez acquérir de nouveaux clients à un coût plus élevé." },
+                                    { texte: "Analyser les coûts : identifier que 60% du coût vient des appels manuels. Automatiser une partie du processus tout en gardant le suivi personnalisé pour les gros clients.", estCorrecte: true, consequence: "Le coût de réactivation passe de 30€ à 12€. Le ROI de la campagne triple. Vous pouvez réactiver plus de clients avec le même budget." },
+                                    { texte: "Réduire la qualité du suivi pour baisser les coûts rapidement.", estCorrecte: false, consequence: "Les clients se sentent moins accompagnés. Le taux de réachat chute. Vous perdez la confiance des réactivés. Effet contre-productif." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : après 6 mois, 40% des clients réactivés sont redevenus des clients fidèles. Vous voulez capitaliser sur ce succès pour les 8 800 clients restants.",
+                                reactions: [
+                                    { texte: "Dupliquer la stratégie qui a fonctionné sur les segments restants", sub: "Ce qui marche mérite d'être répété", estCorrecte: true },
+                                    { texte: "Tout recommencer à zéro avec une nouvelle approche", sub: "Il faut innover constamment", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Tout recommencer à zéro avec une nouvelle stratégie non testée.", estCorrecte: false, consequence: "La nouvelle approche échoue. Vous perdez 3 mois de travail. Les clients restants ne sont pas réactivés. Démoralisation." },
+                                    { texte: "Appliquer la même stratégie de segmentation et d'onboarding aux 8 800 clients restants, en l'ajustant selon les retours.", estCorrecte: true, consequence: "60% des clients restants réactivés (5 280 clients). Le CA de l'entreprise double en 6 mois. Vous devenez la référence interne en rétention." },
+                                    { texte: "Concentrer les efforts uniquement sur les 200 clients les plus gros parmi les restants.", estCorrecte: false, consequence: "Vous ignorez 8 600 clients potentiels. Le potentiel de croissance est sous-exploité. Résultats en deçà des attentes." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Vos clients sont fidèles mais ils ne parlent pas de vous. Le bouche-à-oreille est inexistant. Vous voulez transformer vos clients en ambassadeurs.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir comment encourager vos clients à parler de vous. Deux options : récompense financière ou reconnaissance.",
+                                reactions: [
+                                    { texte: "Créer un programme de parrainage avec récompenses pour le parrain et le filleul", sub: "La récompense motive l'action", estCorrecte: true },
+                                    { texte: "Demander aux clients de parler de vous sans contrepartie", sub: "Ils devraient le faire naturellement", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Demander aux clients de parler de vous sans aucune contrepartie.", estCorrecte: false, consequence: "Très peu de clients le font. Le bouche-à-oreille reste faible. Vous n'exploitez pas le potentiel de vos clients satisfaits." },
+                                    { texte: "Créer un programme de parrainage : le parrain reçoit un mois gratuit, le filleul une remise de 20%. Simple et incitatif.", estCorrecte: true, consequence: "30% des clients participent. 200 nouveaux clients par mois via le bouche-à-oreille. Coût d'acquisition divisé par 2." },
+                                    { texte: "Offrir une grosse récompense financière (100€) pour chaque client recommandé.", estCorrecte: false, consequence: "Le coût est trop élevé. Les clients recommandent pour l'argent, pas par conviction. Les filleuls ne restent pas. ROI négatif." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre programme de parrainage fonctionne mais 40% des filleuls ne restent pas au-delà de 3 mois. Le bouche-à-oreille attire des clients non qualifiés.",
+                                reactions: [
+                                    { texte: "Mieux qualifier les filleuls en amont", sub: "Tous les clients ne se valent pas", estCorrecte: true },
+                                    { texte: "Augmenter la récompense pour attirer plus de monde", sub: "Plus de volume = plus de clients", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Augmenter la récompense de parrainage pour attirer encore plus de monde.", estCorrecte: false, consequence: "Le volume augmente mais la qualité baisse encore. Le churn des filleuls monte à 60%. Le programme devient non rentable." },
+                                    { texte: "Créer un système de qualification : le parrain est récompensé uniquement si le filleul reste client 3 mois. Et le filleul reçoit un onboarding renforcé.", estCorrecte: true, consequence: "Le churn des filleuls passe de 40% à 15%. Les parrains recommandent des clients sérieux. Le programme devient très rentable." },
+                                    { texte: "Arrêter le programme de parrainage, il n'est pas rentable.", estCorrecte: false, consequence: "Vous perdez le canal d'acquisition le moins cher. Vous devez réinvestir massivement en publicité. Coût d'acquisition explose." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous voulez créer une communauté autour de votre marque. Mais vous ne savez pas par où commencer.",
+                                reactions: [
+                                    { texte: "Créer un espace d'échange où les clients peuvent s'entraider", sub: "La communauté se crée autour d'une valeur partagée", estCorrecte: true },
+                                    { texte: "Créer un groupe fermé réservé aux clients premium", sub: "L'exclusivité crée la valeur", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Créer un groupe Facebook fermé réservé aux clients premium.", estCorrecte: false, consequence: "Le groupe est désert. Les clients ne voient pas l'intérêt. L'initiative échoue. Vous perdez du temps et de l'énergie." },
+                                    { texte: "Créer un espace d'échange ouvert à tous les clients : forum, groupe d'entraide, événements mensuels. Avec une animation régulière.", estCorrecte: true, consequence: "La communauté se crée. Les clients s'entraident. Le taux de rétention augmente de 25%. Les clients deviennent des ambassadeurs actifs." },
+                                    { texte: "Recruter un community manager pour animer la communauté à temps plein.", estCorrecte: false, consequence: "Le community manager n'a pas de communauté à animer. Il crée du contenu sans interaction. Le budget est gaspillé. Aucun impact." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre communauté est active. Vous voulez mesurer l'impact réel des ambassadeurs sur votre chiffre d'affaires. Comment procédez-vous ?",
+                                reactions: [
+                                    { texte: "Mettre en place un système de suivi et d'attribution précis", sub: "Ce qui se mesure s'améliore", estCorrecte: true },
+                                    { texte: "Estimer l'impact globalement sans données précises", sub: "L'important est que ça marche", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Estimer l'impact globalement sans données précises.", estCorrecte: false, consequence: "Vous ne pouvez pas prouver le ROI des ambassadeurs. Le budget est menacé. Vous ne savez pas quels ambassadeurs sont les plus performants." },
+                                    { texte: "Mettre en place un système d'attribution : codes promo personnalisés, liens de suivi, enquête 'comment nous avez-vous connus'.", estCorrecte: true, consequence: "Vous identifiez que 35% du CA vient des ambassadeurs. Vous pouvez les remercier, les récompenser et recruter plus d'ambassadeurs. ROI prouvé." },
+                                    { texte: "Demander aux clients de déclarer eux-mêmes s'ils sont ambassadeurs.", estCorrecte: false, consequence: "Les données sont incomplètes et peu fiables. Vous ne pouvez pas prendre de décisions éclairées. L'impact réel reste flou." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre entreprise veut lancer un programme de fidélité. Mais vous ne savez pas quel type de programme serait le plus efficace pour vos clients.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir entre un programme à points classique ou un programme à niveaux (statuts).",
+                                reactions: [
+                                    { texte: "Tester les deux auprès de segments de clients différents", sub: "Les données avant les intuitions", estCorrecte: true },
+                                    { texte: "Choisir le programme à points, plus simple à mettre en place", sub: "La simplicité avant tout", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Lancer un programme à points classique sans tester.", estCorrecte: false, consequence: "Le programme est perçu comme banal. Les clients ne voient pas la valeur. Taux de participation : 15%. Aucun impact sur la fidélité." },
+                                    { texte: "Tester les deux programmes sur 2 segments de clients pendant 1 mois et comparer les résultats.", estCorrecte: true, consequence: "Le programme à niveaux génère 40% de participation. Les clients veulent progresser. Le panier moyen augmente de 20%. Déploiement validé." },
+                                    { texte: "Créer un programme hybride complexe avec points, niveaux et badges.", estCorrecte: false, consequence: "Le programme est trop complexe. Les clients ne comprennent pas. La participation est de 10%. Le programme est un échec." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre programme à niveaux est lancé. Mais les clients ne progressent pas assez vite. Ils se découragent.",
+                                reactions: [
+                                    { texte: "Réduire les seuils pour rendre la progression plus accessible", sub: "Les petits succès motivent", estCorrecte: true },
+                                    { texte: "Augmenter les récompenses pour motiver les clients", sub: "La carotte doit être plus grosse", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Augmenter les récompenses sans changer les seuils.", estCorrecte: false, consequence: "Les clients progressent lentement. Ils ne voient pas la récompense arriver. La motivation reste faible. Participation stable à 40%." },
+                                    { texte: "Réduire les seuils de progression pour que les clients atteignent plus rapidement le niveau suivant.", estCorrecte: true, consequence: "Les clients progressent plus vite. La satisfaction augmente. La participation passe à 65%. Le panier moyen augmente encore de 10%." },
+                                    { texte: "Ne rien changer. Les clients doivent mériter leur progression.", estCorrecte: false, consequence: "Les clients se découragent. 30% abandonnent le programme. Le taux de participation chute. Les clients retournent à leur comportement d'achat initial." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : votre programme de fidélité fonctionne. Mais vous constatez que les clients ne connaissent pas tous les avantages disponibles. Ils n'en profitent pas.",
+                                reactions: [
+                                    { texte: "Mettre en place une communication régulière sur les avantages", sub: "Ce qui n'est pas connu n'existe pas", estCorrecte: true },
+                                    { texte: "Laisser les clients découvrir eux-mêmes les avantages", sub: "Ils finiront par les trouver", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Laisser les clients découvrir les avantages par eux-mêmes.", estCorrecte: false, consequence: "Seuls 20% des clients utilisent les avantages. Le programme est sous-exploité. Les clients ne voient pas la valeur. La fidélité ne s'améliore pas." },
+                                    { texte: "Créer un email mensuel récapitulatif des avantages, des points gagnés, et des récompenses disponibles.", estCorrecte: true, consequence: "Les clients connaissent leurs avantages. Le taux d'utilisation passe de 20% à 70%. La satisfaction augmente. Le programme devient un vrai levier de fidélité." },
+                                    { texte: "Créer un espace client dédié où tout est répertorié.", estCorrecte: false, consequence: "L'espace est peu visité. Les clients ne font pas la démarche. Le taux d'utilisation reste faible. L'investissement n'est pas rentabilisé." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre programme est mature. Vous voulez mesurer son impact réel sur la fidélité et la rentabilité.",
+                                reactions: [
+                                    { texte: "Comparer les cohortes de clients avec et sans programme", sub: "Les données avant les impressions", estCorrecte: true },
+                                    { texte: "Demander aux clients s'ils sont satisfaits du programme", sub: "Le ressenti des clients est important", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Demander aux clients s'ils sont satisfaits du programme sans analyser les données de comportement.", estCorrecte: false, consequence: "Les clients se disent satisfaits mais vous ne mesurez pas l'impact réel. Vous ne savez pas si le programme génère plus de CA. Décisions à l'aveugle." },
+                                    { texte: "Comparer les cohortes : les clients inscrits au programme vs les non-inscrits. Analyser le taux de réachat, le panier moyen et la durée de vie.", estCorrecte: true, consequence: "Les inscrits ont un taux de réachat 2x supérieur. Panier moyen +30%. Durée de vie +6 mois. Le ROI du programme est prouvé : 8x l'investissement." },
+                                    { texte: "Calculer le coût du programme et arrêter s'il dépasse 5% du CA.", estCorrecte: false, consequence: "Décision arbitraire sans analyse d'impact. Vous arrêtez un programme rentable. Les clients fidèles se sentent abandonnés. Le churn augmente." }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "CONVERSION": {
+                situations: [
+                    {
+                        histoire: "Votre landing page convertit à 0,8%. Chaque visiteur coûte 2 € en publicité. Votre coût d'acquisition client est de 250 € alors que votre marge par client est de 150 €. Vous perdez de l'argent sur chaque vente.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous analysez la page et découvrez que 80% des visiteurs ne comprennent pas l'offre en 5 secondes. La promesse est floue.",
+                                reactions: [
+                                    { texte: "Clarifier la promesse en une phrase simple et percutante", sub: "La clarté avant tout", estCorrecte: true },
+                                    { texte: "Ajouter plus de détails pour expliquer l'offre", sub: "Plus d'informations = moins de confusion", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Continuer les mêmes campagnes en augmentant les prix pour compenser les pertes.", estCorrecte: false, consequence: "Le taux de conversion baisse encore. Les clients fuient. Vous êtes dans une spirale négative. L'entreprise est en danger." },
+                                    { texte: "Reprendre entièrement la landing page : clarifier la promesse en 5 secondes, ajouter une preuve sociale, simplifier le formulaire, et tester 3 variantes.", estCorrecte: true, consequence: "Taux de conversion passe de 0,8% à 4%. Coût d'acquisition divisé par 5 (50 €). Rentabilité retrouvée. Objectif dépassé." },
+                                    { texte: "Ajouter un chatbot qui force le visiteur à discuter avec l'IA avant de voir la page, pour 'qualifier' le trafic.", estCorrecte: false, consequence: "70% des visiteurs partent immédiatement. Le chatbot crée une friction insupportable. Taux de conversion 0,2%." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre page convertit mieux mais le taux de rebond reste élevé. Les visiteurs quittent la page sans scroller.",
+                                reactions: [
+                                    { texte: "Optimiser le haut de page pour capter l'attention immédiatement", sub: "Les premières secondes sont décisives", estCorrecte: true },
+                                    { texte: "Ajouter un bouton d'action plus visible", sub: "Le bouton résoudra le problème", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Ajouter un bouton d'action plus gros et plus visible sans changer le reste.", estCorrecte: false, consequence: "Le taux de clic augmente légèrement mais le taux de rebond reste élevé. Les visiteurs ne comprennent toujours pas l'offre. Conversion stable." },
+                                    { texte: "Optimiser le haut de page : headline claire, sous-titre bénéfice, visuel explicite, et CTA visible. Tester 3 versions de headline.", estCorrecte: true, consequence: "Le taux de rebond chute de 70% à 35%. Les visiteurs restent plus longtemps. Le taux de conversion passe à 6%. ROI multiplié par 2." },
+                                    { texte: "Ajouter une vidéo explicative automatique qui se lance au chargement.", estCorrecte: false, consequence: "La vidéo ralentit la page. Certains visiteurs sont agacés par le son. Le taux de rebond augmente. Conversion baisse à 3,5%." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous avez 3 pages de vente pour un même produit. Aucune ne dépasse les 2% de conversion. Vous devez identifier la meilleure et optimiser à fond.",
+                                reactions: [
+                                    { texte: "Utiliser un test A/B/C intelligent pour éliminer la plus faible", sub: "Les données décident", estCorrecte: true },
+                                    { texte: "Répartir le trafic équitablement entre les 3 pages", sub: "Ne pas désavantager une page", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Répartir le trafic équitablement entre les 3 pages (33% chacune).", estCorrecte: false, consequence: "Aucune page n'a assez de données pour être optimisée. Les tests sont lents. Aucune ne dépasse 2,5% en 3 mois." },
+                                    { texte: "Utiliser un test A/B/C intelligent : mesurer les performances, éliminer la page la plus faible en 2 semaines, puis concentrer 90% du trafic sur la meilleure page.", estCorrecte: true, consequence: "La meilleure page identifiée convertit à 3,8%. Concentrer le trafic la pousse à 6%. Gain de 200% en conversion." },
+                                    { texte: "Créer une 4ème page qui combine les meilleurs éléments des 3 autres.", estCorrecte: false, consequence: "La nouvelle page n'a pas été validée. Elle sous-performe. Vous perdez du trafic. Décision prématurée." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre tunnel convertit à 5% sur le trafic froid, 20% sur le trafic chaud. Vous voulez passer à 10% sur le froid et 30% sur le chaud en 6 mois.",
+                                reactions: [
+                                    { texte: "Créer des parcours différenciés selon la température du trafic", sub: "Un message adapté à chaque étape", estCorrecte: true },
+                                    { texte: "Doubler le budget publicitaire pour augmenter le volume", sub: "Plus de trafic = plus de conversions", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Doubler le budget publicitaire en espérant que plus de trafic = plus de conversions proportionnellement.", estCorrecte: false, consequence: "Le taux de conversion reste identique. Le coût d'acquisition augmente. ROI baisse. Budget gaspillé." },
+                                    { texte: "Créer un tunnel différencié : un parcours éducatif plus long pour le trafic froid, un parcours direct avec offre exclusive pour le trafic chaud.", estCorrecte: true, consequence: "Trafic froid passe à 9%, trafic chaud à 32%. Objectif atteint. ROI multiplié par 1,8. Tunnel scalable." },
+                                    { texte: "Ajouter une remise de -50% sur l'offre pour 'forcer' la conversion sur les deux types de trafic.", estCorrecte: false, consequence: "Les marges s'effondrent. Les clients achètent uniquement pour la promo. Vous perdez de l'argent et baissez la valeur perçue." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre taux de conversion est correct mais votre panier moyen est trop faible. Vous devez augmenter la valeur de chaque client sans augmenter le coût d'acquisition.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir comment augmenter le panier moyen. Deux options : upsell (produit supérieur) ou cross-sell (produit complémentaire).",
+                                reactions: [
+                                    { texte: "Tester l'upsell et le cross-sell pour voir ce qui fonctionne", sub: "Les données avant les intuitions", estCorrecte: true },
+                                    { texte: "Choisir l'upsell, plus rentable en théorie", sub: "La théorie est fiable", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Lancer l'upsell sans tester, en pensant que c'est la meilleure option.", estCorrecte: false, consequence: "L'upsell ne fonctionne pas sur votre audience. Le taux d'acceptation est de 5%. Aucun impact sur le panier moyen. 3 semaines perdues." },
+                                    { texte: "Tester l'upsell et le cross-sell sur 2 semaines. Mesurer les taux d'acceptation et l'impact sur le panier moyen.", estCorrecte: true, consequence: "Le cross-sell performe 3x mieux. Le panier moyen augmente de 25%. Vous déployez le cross-sell à grande échelle. ROI immédiat." },
+                                    { texte: "Proposer les deux en même temps pour maximiser les chances.", estCorrecte: false, consequence: "Les clients sont submergés d'offres. Ils n'achètent rien de plus. Le panier moyen stagne. L'expérience client se dégrade." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre cross-sell fonctionne mais 30% des clients retournent le produit complémentaire. Le taux de retour est trop élevé.",
+                                reactions: [
+                                    { texte: "Analyser les motifs de retour et ajuster les recommandations", sub: "Comprendre avant d'agir", estCorrecte: true },
+                                    { texte: "Arrêter le cross-sell, ce n'est pas rentable", sub: "Trop de retours, trop de coûts", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Arrêter le cross-sell. Les retours coûtent trop cher.", estCorrecte: false, consequence: "Vous perdez le levier d'augmentation du panier moyen. Le CA par client retombe. La rentabilité baisse." },
+                                    { texte: "Analyser les motifs de retour : identifier que les recommandations sont mal ciblées. Améliorer l'algorithme de recommandation.", estCorrecte: true, consequence: "Le taux de retour passe de 30% à 8%. Le panier moyen reste élevé. La satisfaction client augmente. Le cross-sell devient très rentable." },
+                                    { texte: "Rendre les retours plus difficiles pour dissuader les clients.", estCorrecte: false, consequence: "Les clients se sentent piégés. Les avis négatifs explosent. La réputation se dégrade. Les ventes chutent." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous voulez augmenter le panier moyen par une offre groupée (bundle). Mais vous ne savez pas quel prix fixer.",
+                                reactions: [
+                                    { texte: "Tester différents prix pour trouver le point d'équilibre", sub: "Le prix juste se trouve par le test", estCorrecte: true },
+                                    { texte: "Fixer le prix en fonction du coût + marge habituelle", sub: "La méthode classique", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Fixer le prix du bundle en appliquant la même marge que les produits séparés.", estCorrecte: false, consequence: "Le bundle est trop cher. Les clients n'y voient pas d'avantage. Taux d'achat : 3%. Aucun impact sur le panier moyen." },
+                                    { texte: "Tester 3 prix différents (avec 10%, 20%, 30% de remise) sur 2 semaines et mesurer le taux d'achat et la marge totale.", estCorrecte: true, consequence: "Le prix avec 20% de remise génère le meilleur équilibre volume/marge. Le panier moyen augmente de 35%. La marge totale augmente de 25%." },
+                                    { texte: "Offrir le bundle avec 50% de remise pour attirer un maximum de clients.", estCorrecte: false, consequence: "Le volume augmente mais la marge s'effondre. Vous vendez à perte. Le bundle n'est pas rentable. Les clients s'habituent aux grosses remises." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre panier moyen a augmenté. Mais vous constatez que les clients qui achètent le bundle ont un taux de réachat plus faible. Ils ne reviennent pas.",
+                                reactions: [
+                                    { texte: "Mettre en place un suivi post-achat pour les acheteurs de bundle", sub: "Accompagner après l'achat", estCorrecte: true },
+                                    { texte: "Arrêter le bundle, il attire des clients qui ne reviennent pas", sub: "Mauvais clients, pas la peine d'insister", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Arrêter le bundle. Il attire des clients non fidèles.", estCorrecte: false, consequence: "Vous perdez le levier d'augmentation du panier moyen. Les clients qui achetaient le bundle ne reviennent pas non plus. CA en baisse." },
+                                    { texte: "Mettre en place un suivi post-achat spécifique pour les acheteurs de bundle : email de conseils, offre de réachat personnalisée, invitation à un webinaire.", estCorrecte: true, consequence: "Le taux de réachat des acheteurs de bundle passe de 15% à 45%. Ils deviennent des clients fidèles. Le panier moyen reste élevé. CA en forte hausse." },
+                                    { texte: "Ne rien changer. Les clients reviendront s'ils le souhaitent.", estCorrecte: false, consequence: "Le taux de réachat reste faible. Vous perdez 85% des acheteurs de bundle. Le potentiel de CA est gaspillé." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre taux de conversion est bon mais vous avez un problème de qualité de leads. Les commerciaux se plaignent : les leads ne sont pas qualifiés et ne convertissent pas en clients.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir entre générer plus de leads ou améliorer la qualification. Le volume ou la qualité ?",
+                                reactions: [
+                                    { texte: "Améliorer la qualification des leads avant de les transmettre", sub: "La qualité avant la quantité", estCorrecte: true },
+                                    { texte: "Générer plus de leads pour compenser le faible taux de conversion", sub: "Plus de volume = plus de ventes", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Générer encore plus de leads pour compenser le faible taux de conversion.", estCorrecte: false, consequence: "Le coût d'acquisition double. Les commerciaux sont submergés de leads non qualifiés. Le taux de conversion baisse encore. Épuisement de l'équipe." },
+                                    { texte: "Mettre en place un scoring des leads : analyser les critères des clients qui convertissent, créer un score, et n'envoyer que les leads chauds aux commerciaux.", estCorrecte: true, consequence: "Le taux de conversion passe de 3% à 12%. Les commerciaux se concentrent sur les bons leads. Le ROI marketing quadruple." },
+                                    { texte: "Demander aux commerciaux de qualifier eux-mêmes les leads sans outil.", estCorrecte: false, consequence: "Les commerciaux perdent un temps précieux. Ils sont frustrés. Les tensions montent. La collaboration marketing-vente se dégrade." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : votre scoring fonctionne. Mais vous constatez que 20% des leads qualifiés ne répondent jamais aux commerciaux. Le taux de no-show est élevé.",
+                                reactions: [
+                                    { texte: "Mettre en place un système de prise de rendez-vous automatisé", sub: "Faciliter la conversion", estCorrecte: true },
+                                    { texte: "Appeler manuellement chaque lead pour confirmer les rendez-vous", sub: "L'humain est irremplaçable", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Continuer le processus actuel en espérant que les leads finiront par répondre.", estCorrecte: false, consequence: "Le taux de no-show reste à 20%. Les commerciaux perdent leur temps. Le moral de l'équipe baisse." },
+                                    { texte: "Mettre en place un système de scoring comportemental pour identifier les leads vraiment chauds et les prioriser.", estCorrecte: true, consequence: "Le taux de no-show passe de 20% à 6%. Les commerciaux se concentrent sur les leads chauds. Le taux de conversion augmente de 50%." },
+                                    { texte: "Demander aux commerciaux d'appeler chaque lead 5 fois de suite.", estCorrecte: false, consequence: "Les leads se sentent harcelés. Ils se désabonnent. Votre réputation se dégrade. Taux de conversion chute." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : vous voulez améliorer la collaboration marketing-vente. Mais les deux équipes travaillent en silo et ne se parlent pas.",
+                                reactions: [
+                                    { texte: "Créer des rituels de collaboration et des objectifs partagés", sub: "Travailler ensemble vers un but commun", estCorrecte: true },
+                                    { texte: "Laisser chaque équipe travailler de son côté", sub: "Chacun son métier", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Laisser chaque équipe travailler de son côté.", estCorrecte: false, consequence: "Les silos persistent. Le marketing génère des leads que les ventes n'utilisent pas. Les ventes reprochent au marketing la qualité. Aucune amélioration." },
+                                    { texte: "Créer des rituels : réunion hebdomadaire marketing-vente, objectifs partagés sur le taux de conversion final, feedback systématique des ventes au marketing.", estCorrecte: true, consequence: "La collaboration s'améliore. Le taux de conversion global augmente de 25%. Les deux équipes tirent dans le même sens. Ambiance positive." },
+                                    { texte: "Nommer un chef de projet qui force la collaboration sans impliquer les équipes.", estCorrecte: false, consequence: "Les équipes se sentent contraintes. La collaboration est artificielle. Les tensions persistent. Aucun résultat durable." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : votre processus est maintenant bien huilé. Mais vous voulez passer à l'échelle. Comment gérez-vous la croissance ?",
+                                reactions: [
+                                    { texte: "Documenter le processus et former de nouveaux commerciaux", sub: "La transmission structurée", estCorrecte: true },
+                                    { texte: "Embaucher plus de commerciaux sans process documenté", sub: "L'expérience s'acquiert sur le terrain", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Embaucher 5 commerciaux sans documentation ni formation structurée.", estCorrecte: false, consequence: "Les nouveaux sont perdus. Ils appliquent des méthodes différentes. La qualité de service baisse. Les clients se plaignent. Turnover élevé." },
+                                    { texte: "Documenter le processus de A à Z, créer un guide de formation, et mettre en place un système de mentorat pour les nouveaux.", estCorrecte: true, consequence: "Les nouveaux sont opérationnels en 1 mois. La qualité est maintenue à l'échelle. Le volume traité triple. La satisfaction client reste élevée." },
+                                    { texte: "Externaliser la qualification des leads à un centre d'appels.", estCorrecte: false, consequence: "La qualification est standardisée et impersonnelle. Les leads chauds sont mal traités. Le taux de conversion chute de 30%. Les clients se sentent mal accompagnés." }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        histoire: "Votre entreprise veut augmenter son taux de conversion global de 20% en 6 mois. Tous les canaux sont concernés. Vous devez coordonner les efforts.",
+                        evenements: [
+                            {
+                                histoire: "Premier événement : vous devez choisir par où commencer. Deux options : optimiser le tunnel existant ou créer de nouveaux canaux d'acquisition.",
+                                reactions: [
+                                    { texte: "Optimiser ce qui existe déjà avant de créer du nouveau", sub: "Ne pas négliger l'acquis", estCorrecte: true },
+                                    { texte: "Créer de nouveaux canaux pour aller chercher plus de trafic", sub: "L'herbe est plus verte ailleurs", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Créer 3 nouveaux canaux d'acquisition sans optimiser l'existant.", estCorrecte: false, consequence: "Les nouveaux canaux génèrent peu. Le tunnel existant reste inefficace. Le budget est dilué. Aucune amélioration du taux de conversion global." },
+                                    { texte: "Optimiser d'abord le tunnel existant : analyser chaque étape, identifier les points de friction, corriger. Puis créer de nouveaux canaux.", estCorrecte: true, consequence: "Le taux de conversion existant augmente de 25%. Le budget est optimisé. Les nouveaux canaux sont lancés sur des bases saines. Objectif atteint." },
+                                    { texte: "Tout changer en même temps : nouveau tunnel, nouveaux canaux, nouvelle stratégie.", estCorrecte: false, consequence: "Le changement est trop brutal. Les équipes sont perdues. Les résultats sont imprévisibles. Impossible d'isoler ce qui fonctionne." }
+                                ]
+                            },
+                            {
+                                histoire: "Deuxième événement : vous avez optimisé le tunnel existant. Le taux de conversion augmente. Mais vous voulez aller plus loin en personnalisant l'expérience par segment.",
+                                reactions: [
+                                    { texte: "Créer des parcours personnalisés pour chaque segment client", sub: "Un message adapté à chaque profil", estCorrecte: true },
+                                    { texte: "Créer un parcours unique pour tous, plus simple à gérer", sub: "La simplicité avant tout", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Créer un parcours unique pour tous les segments pour simplifier la gestion.", estCorrecte: false, consequence: "Le parcours ne correspond à aucun segment. Le taux de conversion stagne. Les clients ne se sentent pas compris. Aucune amélioration." },
+                                    { texte: "Créer 3 parcours personnalisés (débutant, intermédiaire, expert) avec des messages, offres et contenus adaptés à chaque profil.", estCorrecte: true, consequence: "Le taux de conversion passe de 5% à 8,5% (soit +70%). Les clients se sentent compris. La satisfaction augmente. Le ROI est multiplié par 2." },
+                                    { texte: "Personnaliser uniquement l'email de suivi sans toucher au parcours.", estCorrecte: false, consequence: "L'impact est limité. Le taux de conversion n'augmente que de 0,5%. L'effort est sous-exploité. Les clients restent dans un parcours inadapté." }
+                                ]
+                            },
+                            {
+                                histoire: "Troisième événement : votre taux de conversion augmente. Mais vous constatez que les clients convertis ont un faible taux de satisfaction. Ils achètent mais ne sont pas contents.",
+                                reactions: [
+                                    { texte: "Analyser les retours clients et améliorer l'expérience post-achat", sub: "La conversion ne suffit pas, il faut satisfaire", estCorrecte: true },
+                                    { texte: "Se concentrer uniquement sur la conversion, la satisfaction viendra après", sub: "L'important est de vendre", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Se concentrer uniquement sur le taux de conversion. La satisfaction n'est pas prioritaire.", estCorrecte: false, consequence: "Les clients achètent mais ne reviennent pas. Le churn augmente. Le bouche-à-oreille négatif se développe. Les ventes futures baissent." },
+                                    { texte: "Analyser les retours clients, identifier les points de friction post-achat, et améliorer l'onboarding et le suivi.", estCorrecte: true, consequence: "La satisfaction client augmente de 40%. Le taux de réachat double. Les clients recommandent la marque. Le taux de conversion et la satisfaction progressent ensemble." },
+                                    { texte: "Offrir un cadeau de bienvenue pour compenser la mauvaise expérience.", estCorrecte: false, consequence: "Le cadeau ne résout pas le problème de fond. Les clients restent insatisfaits. Le coût augmente sans améliorer la rétention." }
+                                ]
+                            },
+                            {
+                                histoire: "Quatrième événement : vous avez atteint votre objectif de +20% de conversion. Vous devez décider comment maintenir la dynamique et continuer à progresser.",
+                                reactions: [
+                                    { texte: "Mettre en place un système d'amélioration continue", sub: "La progression doit être permanente", estCorrecte: true },
+                                    { texte: "Se reposer sur les acquis, les résultats sont bons", sub: "On verra plus tard", estCorrecte: false }
+                                ],
+                                decisions: [
+                                    { texte: "Se reposer sur les acquis. Les résultats sont bons, on verra plus tard.", estCorrecte: false, consequence: "Les concurrents continuent d'innover. Votre taux de conversion stagne puis baisse. Vous perdez l'avance acquise. La dynamique est cassée." },
+                                    { texte: "Mettre en place un système d'amélioration continue : tests A/B permanents, veille concurrentielle, feedback client régulier, et objectifs trimestriels.", estCorrecte: true, consequence: "Le taux de conversion continue de progresser de 5 à 10% par trimestre. Vous creusez l'écart avec les concurrents. La croissance est durable." },
+                                    { texte: "Réduire les investissements en optimisation pour augmenter la rentabilité à court terme.", estCorrecte: false, consequence: "La rentabilité augmente à court terme mais la compétitivité baisse. Les concurrents prennent des parts de marché. La croissance s'arrête." }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // ================================================================
+        // ÉTAT DE L'APPLICATION
+        // ================================================================
+        const state = {
+            currentCodex: null,
+            currentSituationIndex: null,
+            currentEventIndex: 0,
+            currentReactionIndex: null,
+            currentDecisionIndex: null,
+            hasReacted: false,
+            hasDecided: false,
+            eventsResults: [],
+            phase: 'event',
+        };
+
+        const screens = {
+            welcome: document.getElementById('screen-welcome'),
+            codexList: document.getElementById('screen-codex-list'),
+            situations: document.getElementById('screen-situations'),
+            event: document.getElementById('screen-event'),
+            decision: document.getElementById('screen-decision'),
+            result: document.getElementById('screen-result'),
+        };
+
+        // ================================================================
+        // FONCTIONS
+        // ================================================================
+        function showScreen(name) {
+            Object.keys(screens).forEach(key => {
+                screens[key].classList.remove('active', 'screen-exit');
+            });
+            screens[name].classList.add('active');
+            updateHeader(name);
+        }
+
+        function updateHeader(screen) {
+            const phaseText = document.getElementById('header-phase-text');
+            const labels = {
+                welcome: 'LAB',
+                codexList: 'CODEX',
+                situations: 'SITUATIONS',
+                event: 'ÉVÉNEMENT',
+                decision: 'DÉCISION',
+                result: 'RÉSULTAT',
+            };
+            phaseText.textContent = labels[screen] || 'LAB';
+        }
+
+        function getCodexIcon(name) {
+            const icons = {
+                'CRÉATION DE CONTENU': '🎨',
+                'LEADS': '🎯',
+                'TUNNEL': '🔽',
+                'FIDÉLISATION': '❤️',
+                'CONVERSION': '⚡',
+            };
+            return icons[name] || '📌';
+        }
+
+        function getCurrentSituation() {
+            const codex = CODEX_DATA[state.currentCodex];
+            return codex.situations[state.currentSituationIndex];
+        }
+
+        function getCurrentEvent() {
+            const situation = getCurrentSituation();
+            return situation.evenements[state.currentEventIndex];
+        }
+
+        function renderProgress(containerId, currentEvent, totalEvents, results) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            for (let i = 0; i < totalEvents; i++) {
+                let cls = 'progress-dot';
+                if (i < results.length) {
+                    cls += results[i] === 'correct' ? ' done' : (results[i] === 'mid' ? ' mid' : ' error');
+                } else if (i === currentEvent) {
+                    cls += ' active';
+                }
+                html += `<div class="${cls}"></div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        // ================================================================
+        // ÉCRAN LISTE DES CODEX
+        // ================================================================
+        function renderCodexList() {
+            const container = document.getElementById('codex-grid-container');
+            let html = '';
+            const codexNames = Object.keys(CODEX_DATA);
+
+            codexNames.forEach(name => {
+                const icon = getCodexIcon(name);
+                html += `
+                            <div class="codex-card" data-codex="${name}" tabindex="0" role="button">
+                                <span class="icon">${icon}</span>
+                                <span class="name">${name}</span>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.codex-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const name = this.dataset.codex;
+                    selectCodex(name);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const name = this.dataset.codex;
+                        selectCodex(name);
+                    }
+                });
+            });
+        }
+
+        function selectCodex(name) {
+            state.currentCodex = name;
+            state.currentSituationIndex = null;
+            state.currentEventIndex = 0;
+            state.currentReactionIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasReacted = false;
+            state.hasDecided = false;
+            state.eventsResults = [];
+            state.phase = 'event';
+            renderSituations(name);
+            showScreen('situations');
+        }
+
+        // ================================================================
+        // ÉCRAN SITUATIONS
+        // ================================================================
+        function renderSituations(codexName) {
+            const data = CODEX_DATA[codexName];
+            const title = document.getElementById('situation-codex-title');
+            const container = document.getElementById('situation-grid-container');
+
+            title.innerHTML = `CODEX <span class="cyan">${codexName}</span>`;
+
+            let html = '';
+            data.situations.forEach((s, index) => {
+                const preview = s.histoire.substring(0, 60) + '...';
+                html += `
+                            <div class="situation-card" data-index="${index}" tabindex="0" role="button">
+                                <div class="num">SITUATION ${index + 1}</div>
+                                <div class="preview">${preview}</div>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.situation-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index, 10);
+                    selectSituation(index);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.dataset.index, 10);
+                        selectSituation(index);
+                    }
+                });
+            });
+        }
+
+        function selectSituation(index) {
+            state.currentSituationIndex = index;
+            state.currentEventIndex = 0;
+            state.currentReactionIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasReacted = false;
+            state.hasDecided = false;
+            state.eventsResults = [];
+            state.phase = 'event';
+            renderEvent();
+            showScreen('event');
+        }
+
+        // ================================================================
+        // ÉCRAN ÉVÉNEMENT (réactions)
+        // ================================================================
+        function renderEvent() {
+            const codexName = state.currentCodex;
+            const situationIndex = state.currentSituationIndex;
+            const eventIndex = state.currentEventIndex;
+            const situation = getCurrentSituation();
+            const event = getCurrentEvent();
+            const totalEvents = situation.evenements.length;
+
+            document.getElementById('event-codex-label').textContent = codexName;
+            document.getElementById('event-situation-label').textContent = `SITUATION ${situationIndex + 1}`;
+            document.getElementById('event-badge').textContent = `ÉVÉNEMENT ${eventIndex + 1} / ${totalEvents}`;
+            document.getElementById('event-story').innerHTML = `<p>${event.histoire}</p>`;
+            document.getElementById('event-question').textContent = 'Comment réagissez-vous ?';
+
+            renderProgress('event-progress', eventIndex, totalEvents, state.eventsResults);
+
+            const container = document.getElementById('reactions-container');
+            let html = '';
+
+            event.reactions.forEach((r, i) => {
+                const letter = i === 0 ? 'A' : 'B';
+                html += `
+                            <div class="reaction-card" data-index="${i}" tabindex="0" role="button">
+                                <div class="reaction-text">${r.texte}</div>
+                                <div class="reaction-sub">${r.sub}</div>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.reaction-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index, 10);
+                    selectReaction(index);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.dataset.index, 10);
+                        selectReaction(index);
+                    }
+                });
+            });
+        }
+
+        function selectReaction(index) {
+            if (state.hasReacted) return;
+            state.currentReactionIndex = index;
+            state.hasReacted = true;
+            state.phase = 'decision';
+            renderDecision();
+            showScreen('decision');
+        }
+
+        // ================================================================
+        // ÉCRAN DÉCISION
+        // ================================================================
+        function renderDecision() {
+            const codexName = state.currentCodex;
+            const situationIndex = state.currentSituationIndex;
+            const eventIndex = state.currentEventIndex;
+            const situation = getCurrentSituation();
+            const event = getCurrentEvent();
+            const totalEvents = situation.evenements.length;
+            const reaction = event.reactions[state.currentReactionIndex];
+
+            document.getElementById('decision-codex-label').textContent = codexName;
+            document.getElementById('decision-situation-label').textContent = `SITUATION ${situationIndex + 1}`;
+            document.getElementById('decision-event-badge').textContent = `ÉVÉNEMENT ${eventIndex + 1} / ${totalEvents}`;
+            document.getElementById('decision-story').innerHTML = `<p>${event.histoire}</p>`;
+
+            renderProgress('decision-progress', eventIndex, totalEvents, state.eventsResults);
+
+            if (!reaction.estCorrecte) {
+                document.getElementById('decision-question').textContent = '⚠️ Votre réaction n\'était pas optimale. Quelle décision prenez-vous maintenant ?';
+            } else {
+                document.getElementById('decision-question').textContent = '✅ Bonne réaction ! Quelle décision prenez-vous maintenant ?';
+            }
+
+            const container = document.getElementById('decisions-container');
+            const letters = ['1', '2', '3'];
+
+            let html = '';
+            event.decisions.forEach((d, i) => {
+                html += `
+                            <div class="decision-card" data-index="${i}" tabindex="0" role="button">
+                                <div class="letter">DÉCISION ${letters[i]}</div>
+                                <div class="text">${d.texte}</div>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.decision-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index, 10);
+                    selectDecision(index);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.dataset.index, 10);
+                        selectDecision(index);
+                    }
+                });
+            });
+        }
+
+        function selectDecision(index) {
+            if (state.hasDecided) return;
+            state.currentDecisionIndex = index;
+            state.hasDecided = true;
+
+            const event = getCurrentEvent();
+            const reaction = event.reactions[state.currentReactionIndex];
+            const decision = event.decisions[index];
+
+            let result = 'error';
+            if (reaction.estCorrecte && decision.estCorrecte) {
+                result = 'correct';
+            } else if (reaction.estCorrecte || decision.estCorrecte) {
+                result = 'mid';
+            }
+
+            state.eventsResults.push(result);
+
+            if (state.currentEventIndex + 1 < getCurrentSituation().evenements.length) {
+                state.currentEventIndex++;
+                state.currentReactionIndex = null;
+                state.currentDecisionIndex = null;
+                state.hasReacted = false;
+                state.hasDecided = false;
+                state.phase = 'event';
+                renderEvent();
+                showScreen('event');
+            } else {
+                renderResult();
+                showScreen('result');
+            }
+        }
+
+        // ================================================================
+        // ÉCRAN RÉSULTAT FINAL
+        // ================================================================
+        function renderResult() {
+            const codexName = state.currentCodex;
+            const situationIndex = state.currentSituationIndex;
+            const situation = getCurrentSituation();
+            const totalEvents = situation.evenements.length;
+            const container = document.getElementById('result-container');
+
+            let correctCount = state.eventsResults.filter(r => r === 'correct').length;
+            let midCount = state.eventsResults.filter(r => r === 'mid').length;
+            let errorCount = state.eventsResults.filter(r => r === 'error').length;
+            let score = Math.round((correctCount * 100 + midCount * 50) / totalEvents);
+
+            let html = '';
+
+            html += `
+                        <div style="display:flex; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-md);">
+                            <span style="font-size:var(--fs-tiny); font-weight:600; color:var(--cyan); letter-spacing:1px; text-transform:uppercase;">${codexName}</span>
+                            <span style="font-size:var(--fs-tiny); color:var(--gray);">—</span>
+                            <span style="font-size:var(--fs-tiny); font-weight:500; color:var(--gray);">SITUATION ${situationIndex + 1}</span>
+                        </div>
+                    `;
+
+            html += `<div class="score-badge">Score : ${score} / 100</div>`;
+
+            if (score >= 80) {
+                html += `<div class="verdict success">✅ EXCELLENT PARCOURS</div>`;
+            } else if (score >= 50) {
+                html += `<div class="verdict mid">⚠️ PARCOURS PARTIEL</div>`;
+            } else {
+                html += `<div class="verdict fail">❌ PARCOURS INSUFFISANT</div>`;
+            }
+
+            html += `
+                        <div style="font-size:var(--fs-base); color:var(--black-muted); margin-bottom:var(--space-lg);">
+                            Voici le détail de vos décisions et réactions :
+                        </div>
+                    `;
+
+            // Récapitulatif événement par événement
+            situation.evenements.forEach((event, i) => {
+                const result = state.eventsResults[i] || 'error';
+                const icon = result === 'correct' ? '✅' : (result === 'mid' ? '⚠️' : '❌');
+                const label = result === 'correct' ? 'Bon parcours' : (result === 'mid' ? 'Parcours partiel' : 'Erreur détectée');
+
+                html += `
+                            <div class="recap-item">
+                                <div class="recap-icon">${icon}</div>
+                                <div class="recap-text">
+                                    <strong>Événement ${i + 1}</strong> — ${label}<br>
+                                    <span style="font-size:var(--fs-tiny); color:var(--gray);">
+                                        Votre réaction : ${event.reactions[0] ? 'choix effectué' : ''}
+                                    </span>
+                                </div>
+                            </div>
+                        `;
+            });
+
+            // Diagnostic des erreurs
+            html += `
+                        <div style="margin-top:var(--space-lg);">
+                            <div class="consequence">
+                                <div class="label">📊 DIAGNOSTIC</div>
+                                <p>
+                                    Bonnes décisions/réactions : <strong style="color:#16a34a;">${correctCount}</strong><br>
+                                    Parcours partiels : <strong style="color:#d97706;">${midCount}</strong><br>
+                                    Erreurs détectées : <strong style="color:#dc2626;">${errorCount}</strong>
+                                </p>
+                                <p style="margin-top:var(--space-sm); font-size:var(--fs-small); color:var(--gray);">
+                                    ${score >= 80 ? 'Votre réactivité face aux réseaux est excellente. Continuez ainsi.' : 
+                                      score >= 50 ? 'Vous avez les bons réflexes mais certaines décisions nécessitent plus de rigueur. Analysez les erreurs pour progresser.' : 
+                                      'Votre réactivité doit être améliorée. Face aux réseaux, l\'inaction ou les mauvaises décisions coûtent cher. Revoyez vos réflexes.'}
+                                </p>
+                            </div>
+                        </div>
+                    `;
+
+            html += `
+                        <div class="result-actions">
+                            <button class="btn-secondary" id="btn-retry-full">🔄 REJOUER CETTE SITUATION</button>
+                            <button class="btn-secondary" id="btn-back-situations-result">← REVENIR AUX SITUATIONS</button>
+                            <button class="btn-small-ghost" id="btn-home-result">← ACCUEIL</button>
+                        </div>
+                    `;
+
+            container.innerHTML = html;
+
+            document.getElementById('btn-retry-full').addEventListener('click', function() {
+                state.currentEventIndex = 0;
+                state.currentReactionIndex = null;
+                state.currentDecisionIndex = null;
+                state.hasReacted = false;
+                state.hasDecided = false;
+                state.eventsResults = [];
+                state.phase = 'event';
+                renderEvent();
+                showScreen('event');
+            });
+
+            document.getElementById('btn-back-situations-result').addEventListener('click', function() {
+                state.currentEventIndex = 0;
+                state.currentReactionIndex = null;
+                state.currentDecisionIndex = null;
+                state.hasReacted = false;
+                state.hasDecided = false;
+                state.eventsResults = [];
+                state.phase = 'event';
+                renderSituations(state.currentCodex);
+                showScreen('situations');
+            });
+
+            document.getElementById('btn-home-result').addEventListener('click', function() {
+                state.currentCodex = null;
+                state.currentSituationIndex = null;
+                state.currentEventIndex = 0;
+                state.currentReactionIndex = null;
+                state.currentDecisionIndex = null;
+                state.hasReacted = false;
+                state.hasDecided = false;
+                state.eventsResults = [];
+                state.phase = 'event';
+                showScreen('welcome');
+            });
+        }
+
+        // ================================================================
+        // ÉVÉNEMENTS PRINCIPAUX
+        // ================================================================
+        document.getElementById('btn-start').addEventListener('click', function() {
+            renderCodexList();
+            showScreen('codexList');
+        });
+
+        document.getElementById('btn-back-home').addEventListener('click', function() {
+            state.currentCodex = null;
+            state.currentSituationIndex = null;
+            state.currentEventIndex = 0;
+            state.currentReactionIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasReacted = false;
+            state.hasDecided = false;
+            state.eventsResults = [];
+            state.phase = 'event';
+            showScreen('welcome');
+        });
+
+        document.getElementById('btn-back-codex').addEventListener('click', function() {
+            state.currentSituationIndex = null;
+            state.currentEventIndex = 0;
+            state.currentReactionIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasReacted = false;
+            state.hasDecided = false;
+            state.eventsResults = [];
+            state.phase = 'event';
+            renderCodexList();
+            showScreen('codexList');
+        });
+
+        document.getElementById('btn-back-situations-event').addEventListener('click', function() {
+            state.currentEventIndex = 0;
+            state.currentReactionIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasReacted = false;
+            state.hasDecided = false;
+            state.eventsResults = [];
+            state.phase = 'event';
+            renderSituations(state.currentCodex);
+            showScreen('situations');
+        });
+
+        document.getElementById('btn-back-situations').addEventListener('click', function() {
+            state.currentEventIndex = 0;
+            state.currentReactionIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasReacted = false;
+            state.hasDecided = false;
+            state.eventsResults = [];
+            state.phase = 'event';
+            renderSituations(state.currentCodex);
+            showScreen('situations');
+        });
+
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('brand-header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ================================================================
+        // INITIALISATION
+        // ================================================================
+        showScreen('welcome');
+        console.log('🚀 MCE RÉSEAUX chargé.');
+        console.log(`📊 ${Object.keys(CODEX_DATA).length} Codex chargés.`);
+        console.log(`🎯 ${Object.values(CODEX_DATA).reduce((acc, c) => acc + c.situations.length, 0)} situations disponibles.`);
+        console.log(`⚡ ${Object.values(CODEX_DATA).reduce((acc, c) => acc + c.situations.reduce((a, s) => a + s.evenements.length, 0), 0)} événements au total.`);
+    </script>
+
+</body>
+</html>

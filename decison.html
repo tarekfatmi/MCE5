@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MCE DECISION LAB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <style>
+        /* ============================================================
+                   DESIGN SYSTEM — BLANC + VIOLET
+                   ============================================================ */
+        :root {
+            --white: #f8f6ff;
+            --white-pure: #ffffff;
+            --white-card: #ffffff;
+            --black: #1a1a2e;
+            --black-muted: #2d2d44;
+            --gray: #6b6b80;
+            --gray-light: #e8e6f0;
+            --violet: #7c3aed;
+            --violet-light: #8b5cf6;
+            --violet-glow: rgba(124, 58, 237, 0.12);
+            --violet-subtle: rgba(124, 58, 237, 0.06);
+            --mauve: #a78bfa;
+            --parme: #c4b5fd;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-full: 9999px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --shadow: 0 4px 24px rgba(124, 58, 237, 0.06);
+            --shadow-hover: 0 8px 40px rgba(124, 58, 237, 0.12);
+            --header-height: 60px;
+
+            /* Typographie */
+            --fs-micro: 0.55rem;
+            --fs-tiny: 0.65rem;
+            --fs-small: 0.75rem;
+            --fs-base: 0.9rem;
+            --fs-md: 1.05rem;
+            --fs-lg: 1.3rem;
+            --fs-xl: 1.7rem;
+            --fs-2xl: 2.4rem;
+            --fs-3xl: 3.6rem;
+        }
+
+        /* ============================================================
+                   RESET & BASE
+                   ============================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--white);
+            color: var(--black);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-top: var(--header-height);
+        }
+
+        /* ============================================================
+                   BANDEAU PERMANENT
+                   ============================================================ */
+        #brand-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(124, 58, 237, 0.06);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--header-height);
+            transition: border-color var(--transition);
+        }
+
+        #brand-header.scrolled {
+            border-bottom-color: rgba(124, 58, 237, 0.12);
+        }
+
+        #brand-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+            letter-spacing: 0.3px;
+            color: var(--black);
+        }
+
+        #brand-header .brand .violet {
+            color: var(--violet);
+        }
+
+        #brand-header .brand .marker {
+            color: var(--violet);
+            font-size: 0.6rem;
+            opacity: 0.4;
+        }
+
+        #brand-header .phase-text {
+            font-size: clamp(0.55rem, 1.2vw, 0.7rem);
+            font-weight: 500;
+            color: var(--gray);
+            letter-spacing: 0.3px;
+        }
+
+        #brand-header .phase-text.active {
+            color: var(--violet);
+        }
+
+        /* ============================================================
+                   CONTAINER PRINCIPAL
+                   ============================================================ */
+        #app {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 80vh;
+            padding: 0 var(--space-md) var(--space-xl);
+        }
+
+        /* ============================================================
+                   SCREENS
+                   ============================================================ */
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+        }
+
+        .screen-exit {
+            animation: fadeOut 0.25s ease forwards;
+        }
+
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-16px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .slide-down {
+            animation: slideDown 0.35s ease forwards;
+        }
+
+        @keyframes pulseViolet {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* ============================================================
+                   BOUTONS
+                   ============================================================ */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--violet);
+            color: var(--white-pure);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-md);
+            padding: 18px 48px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            max-width: 320px;
+            letter-spacing: 0.3px;
+            min-height: 60px;
+            touch-action: manipulation;
+            user-select: none;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.2);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            background: var(--violet-light);
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary.hidden {
+            display: none !important;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--violet);
+            border: 1.5px solid var(--violet);
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: var(--fs-base);
+            padding: 16px 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            max-width: 320px;
+            min-height: 54px;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus-visible {
+            background: var(--violet-subtle);
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.08);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-small-ghost {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-family: var(--font);
+            font-size: var(--fs-tiny);
+            cursor: pointer;
+            padding: var(--space-sm) var(--space-md);
+            transition: var(--transition);
+            touch-action: manipulation;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(124, 58, 237, 0.15);
+        }
+
+        .btn-small-ghost:hover {
+            color: var(--violet);
+            text-decoration-color: var(--violet);
+        }
+
+        /* ============================================================
+                   ÉCRAN D'ACCUEIL
+                   ============================================================ */
+        .welcome {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome .badge {
+            display: inline-block;
+            color: var(--violet);
+            font-size: var(--fs-tiny);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            padding: 6px 0;
+            margin-bottom: var(--space-lg);
+            font-weight: 600;
+            background: transparent;
+        }
+
+        .welcome h1 {
+            font-size: clamp(2.4rem, 9vw, 3.6rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: var(--space-sm);
+            color: var(--black);
+        }
+
+        .welcome h1 .violet {
+            color: var(--violet);
+        }
+
+        .welcome .tagline {
+            font-size: clamp(0.95rem, 2.8vw, 1.2rem);
+            color: var(--gray);
+            font-weight: 300;
+            max-width: 480px;
+            margin: 0 auto var(--space-sm);
+            line-height: 1.5;
+        }
+
+        .welcome .sub {
+            font-size: var(--fs-small);
+            color: var(--gray);
+            margin: var(--space-sm) 0 var(--space-xl);
+            max-width: 380px;
+        }
+
+        /* ============================================================
+                   LISTE DES CODEX
+                   ============================================================ */
+        .codex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+        }
+
+        .codex-card {
+            background: var(--white-pure);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md) var(--space-sm);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+            user-select: none;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .codex-card:hover {
+            border-color: var(--violet);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .codex-card:active {
+            transform: scale(0.97);
+        }
+
+        .codex-card .name {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--black);
+            letter-spacing: 0.3px;
+        }
+
+        .codex-card .icon {
+            font-size: var(--fs-lg);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        .section-title {
+            font-size: var(--fs-lg);
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.01em;
+        }
+
+        .section-title .violet {
+            color: var(--violet);
+        }
+
+        .section-sub {
+            font-size: var(--fs-base);
+            color: var(--gray);
+            margin-bottom: var(--space-lg);
+        }
+
+        /* ============================================================
+                   SITUATIONS
+                   ============================================================ */
+        .situation-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            padding: var(--space-md) 0;
+        }
+
+        .situation-card {
+            background: var(--white-pure);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .situation-card:hover {
+            border-color: var(--violet);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .situation-card:active {
+            transform: scale(0.98);
+        }
+
+        .situation-card .num {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--violet);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .situation-card .preview {
+            font-size: var(--fs-base);
+            color: var(--black-muted);
+            margin-top: var(--space-xs);
+            line-height: 1.4;
+        }
+
+        /* ============================================================
+                   SITUATION + DÉCISION
+                   ============================================================ */
+        .situation-full {
+            padding: var(--space-sm) 0;
+        }
+
+        .situation-full .story {
+            background: var(--violet-subtle);
+            border-left: 3px solid var(--violet);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md) var(--space-lg);
+            margin-bottom: var(--space-lg);
+        }
+
+        .situation-full .story p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--black-muted);
+        }
+
+        .situation-full .question {
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: var(--space-md);
+        }
+
+        .decisions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .decision-card {
+            background: var(--white-pure);
+            border: 1.5px solid var(--gray-light);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .decision-card:hover {
+            border-color: var(--violet);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .decision-card:active {
+            transform: scale(0.98);
+        }
+
+        .decision-card .letter {
+            font-size: var(--fs-tiny);
+            font-weight: 700;
+            color: var(--violet);
+            letter-spacing: 1px;
+            margin-bottom: var(--space-xs);
+        }
+
+        .decision-card .text {
+            font-size: var(--fs-base);
+            color: var(--black-muted);
+            line-height: 1.4;
+        }
+
+        /* ============================================================
+                   RÉSULTAT
+                   ============================================================ */
+        .result-box {
+            padding: var(--space-lg) 0;
+        }
+
+        .result-box .verdict {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .result-box .verdict.success {
+            color: #16a34a;
+        }
+
+        .result-box .verdict.fail {
+            color: #dc2626;
+        }
+
+        .result-box .consequence {
+            background: var(--white-pure);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            margin-bottom: var(--space-md);
+        }
+
+        .result-box .consequence .label {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--violet);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-xs);
+        }
+
+        .result-box .consequence p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--black-muted);
+        }
+
+        .result-box .good-answer {
+            background: var(--violet-subtle);
+            border-left: 3px solid var(--violet);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md) var(--space-lg);
+            margin-top: var(--space-md);
+        }
+
+        .result-box .good-answer .label {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--violet);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-xs);
+        }
+
+        .result-box .good-answer p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--black-muted);
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-top: var(--space-lg);
+        }
+
+        .result-actions .btn-primary,
+        .result-actions .btn-secondary {
+            max-width: 100%;
+        }
+
+        /* ============================================================
+                   RESPONSIVE
+                   ============================================================ */
+        :root {
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding-top: 52px;
+            }
+            :root {
+                --header-height: 52px;
+                --space-xl: 24px;
+                --space-2xl: 32px;
+            }
+            #brand-header {
+                padding: 0 14px;
+            }
+            #brand-header .brand {
+                font-size: 0.65rem;
+                gap: 6px;
+            }
+            #app {
+                padding: 0 var(--space-sm) var(--space-lg);
+            }
+            .welcome {
+                padding: var(--space-xl) var(--space-sm) var(--space-lg);
+                min-height: 60vh;
+            }
+            .welcome h1 {
+                font-size: 2rem;
+            }
+            .codex-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+                gap: var(--space-xs);
+            }
+            .codex-card {
+                padding: var(--space-sm);
+                min-height: 60px;
+            }
+            .codex-card .name {
+                font-size: var(--fs-micro);
+            }
+            .situation-card {
+                padding: var(--space-sm) var(--space-md);
+            }
+            .decision-card {
+                padding: var(--space-sm) var(--space-md);
+            }
+            .decision-card .text {
+                font-size: var(--fs-small);
+            }
+            .situation-full .story p {
+                font-size: var(--fs-small);
+            }
+            .result-box .verdict {
+                font-size: var(--fs-lg);
+            }
+            .btn-primary {
+                font-size: var(--fs-base);
+                padding: 14px 28px;
+                min-height: 52px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .codex-grid {
+                grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+                gap: var(--space-md);
+            }
+            .codex-card {
+                padding: var(--space-lg) var(--space-md);
+                min-height: 90px;
+            }
+            .codex-card .name {
+                font-size: var(--fs-base);
+            }
+            .situation-grid {
+                gap: var(--space-md);
+            }
+            .situation-card {
+                padding: var(--space-lg) var(--space-xl);
+            }
+            .decision-card {
+                padding: var(--space-lg) var(--space-xl);
+            }
+            .decision-card .text {
+                font-size: var(--fs-md);
+            }
+            .btn-primary {
+                font-size: var(--fs-lg);
+                padding: 20px 52px;
+                min-height: 68px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .codex-grid {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            }
+            .codex-card .name {
+                font-size: 0.5rem;
+            }
+            .welcome h1 {
+                font-size: 1.7rem;
+            }
+            .situation-full .question {
+                font-size: var(--fs-md);
+            }
+        }
+
+        /* ============================================================
+                   ACCESSIBILITÉ
+                   ============================================================ */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .codex-card:focus-visible,
+        .situation-card:focus-visible,
+        .decision-card:focus-visible,
+        .btn-primary:focus-visible,
+        .btn-secondary:focus-visible {
+            outline: 2px solid var(--violet);
+            outline-offset: 2px;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    BANDEAU PERMANENT
+    ============================================================ -->
+    <header id="brand-header">
+        <div class="brand">
+            <span class="violet">✦</span>
+            <span>MCE <span class="violet">DECISION</span> LAB</span>
+            <span class="marker">|</span>
+            <span class="phase-text" id="header-phase-text">LAB</span>
+        </div>
+    </header>
+
+    <div id="app">
+
+        <!-- ============================================================
+        ÉCRAN D'ACCUEIL
+        ============================================================ -->
+        <div id="screen-welcome" class="screen active welcome">
+            <div class="badge">MCE DECISION LAB</div>
+            <h1>MCE<br /><span class="violet">DECISION LAB</span></h1>
+            <p class="tagline">
+                Testez votre leadership face à des<br />
+                situations entrepreneuriales réelles.
+            </p>
+            <p class="sub">30 Codex — 3 situations — 3 décisions — 1 apprentissage</p>
+            <button class="btn-primary" id="btn-start">DÉCOUVRIR LES CODEX</button>
+        </div>
+
+        <!-- ============================================================
+        ÉCRAN LISTE DES CODEX
+        ============================================================ -->
+        <div id="screen-codex-list" class="screen">
+            <div style="padding: var(--space-md) 0;">
+                <div class="section-title">Choisissez votre <span class="violet">Codex</span></div>
+                <div class="section-sub">Sélectionnez une dimension du business pour confronter votre jugement.</div>
+            </div>
+            <div class="codex-grid" id="codex-grid-container">
+                <!-- Généré par JS -->
+            </div>
+            <div style="text-align:center; padding: var(--space-lg) 0;">
+                <button class="btn-small-ghost" id="btn-back-home">← Retour à l'accueil</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        ÉCRAN SÉLECTION DE LA SITUATION
+        ============================================================ -->
+        <div id="screen-situations" class="screen">
+            <div style="padding: var(--space-md) 0;">
+                <div class="section-title" id="situation-codex-title">CODEX <span class="violet">PROSPECTION</span></div>
+                <div class="section-sub">Choisissez votre situation :</div>
+            </div>
+            <div class="situation-grid" id="situation-grid-container">
+                <!-- Généré par JS -->
+            </div>
+            <div style="text-align:center; padding: var(--space-lg) 0;">
+                <button class="btn-small-ghost" id="btn-back-codex">← Retour aux Codex</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        ÉCRAN SITUATION + DÉCISION
+        ============================================================ -->
+        <div id="screen-decision" class="screen">
+            <div class="situation-full">
+                <div style="display:flex; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-sm);">
+                    <span style="font-size:var(--fs-tiny); font-weight:600; color:var(--violet); letter-spacing:1px; text-transform:uppercase;" id="decision-codex-label">PROSPECTION</span>
+                    <span style="font-size:var(--fs-tiny); color:var(--gray);">—</span>
+                    <span style="font-size:var(--fs-tiny); font-weight:500; color:var(--gray);" id="decision-situation-label">SITUATION 1</span>
+                </div>
+
+                <div class="story" id="decision-story">
+                    <p>Chargement...</p>
+                </div>
+
+                <div class="question" id="decision-question">
+                    Si vous étiez ce dirigeant, que feriez-vous ?
+                </div>
+
+                <div class="decisions-grid" id="decisions-container">
+                    <!-- Généré par JS -->
+                </div>
+            </div>
+            <div style="text-align:center; padding: var(--space-sm) 0 var(--space-lg);">
+                <button class="btn-small-ghost" id="btn-back-situations">← Retour aux situations</button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        ÉCRAN RÉSULTAT
+        ============================================================ -->
+        <div id="screen-result" class="screen">
+            <div class="result-box" id="result-container">
+                <!-- Généré par JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // DONNÉES — 30 CODEX × 3 SITUATIONS × 3 DÉCISIONS
+        // ================================================================
+
+        const CODEX_DATA = {
+            "PROSPECTION": {
+                situations: [{
+                    histoire: "Votre entreprise n'a plus de prospects depuis 6 mois. Votre commercial star est parti. Le carnet de commandes est vide. La trésorerie fond comme neige au soleil. Vous êtes en panique totale et devez agir vite.",
+                    decisions: [
+                        { texte: "Attendre que la situation s'améliore d'elle-même. Continuer à envoyer des emails en masse sans cibler personne, en espérant qu'un miracle se produise.",
+                            estCorrecte: false, consequence: "La trésorerie continue de baisser. Les derniers clients partent. L'entreprise dépose le bilan 3 mois plus tard. Vous êtes ruiné." },
+                        { texte: "Embaucher 3 commerciaux en urgence, sans les former. Leur demander de contacter absolument tout le monde, sans cible, sans stratégie.",
+                            estCorrecte: false, consequence: "Les commerciaux partent au bout de 2 mois. La réputation de l'entreprise est détériorée. La situation est pire qu'avant." },
+                        { texte: "Faire appel à un consultant en prospection pour auditer votre situation. Investir dans un CRM et un fichier de prospects qualifiés. Former votre équipe à une méthode structurée.",
+                            estCorrecte: true, consequence: "En 3 mois, le pipeline se remplit. En 6 mois, l'entreprise retrouve une croissance durable. Vous avez sauvé votre entreprise." }
+                    ]
+                }, {
+                    histoire: "Votre entreprise est en pleine croissance. Les prospects arrivent naturellement par le bouche-à-oreille et le site web. Vous n'avez jamais eu besoin de prospecter activement. Mais vous savez que cette situation de confort peut durer.",
+                    decisions: [
+                        { texte: "Profiter de la situation sans rien changer. Être confiant. « Pourquoi changer quelque chose qui fonctionne ? »",
+                            estCorrecte: false, consequence: "Quand la croissance ralentira, vous n'aurez pas de système pour la relancer. Vous subirez la conjoncture au lieu de la maîtriser." },
+                        { texte: "Lancer une petite campagne de prospection pour tester le potentiel. Identifier 100 cibles, envoyer une séquence d'emails personnalisés, et mesurer les résultats.",
+                            estCorrecte: true, consequence: "La campagne génère 3 nouveaux clients. Vous comprenez qu'il y a un potentiel inexploité et commencez à structurer une prospection active." },
+                        { texte: "Investir massivement dans un système de prospection en parallèle de l'activité principale, sans tester au préalable.",
+                            estCorrecte: false, consequence: "L'investissement est trop lourd. Les résultats ne sont pas au rendez-vous. Vous avez dépensé de l'argent sans retour." }
+                    ]
+                }, {
+                    histoire: "Votre entreprise est challenger sur son marché. Un concurrent historique est affaibli. Vous voyez une opportunité pour conquérir des parts de marché et devenir le leader. Vous disposez d'un budget de 150 000 €.",
+                    decisions: [
+                        { texte: "Investir la totalité du budget dans une campagne publicitaire massive, en ciblant les clients du concurrent avec des remises exceptionnelles.",
+                            estCorrecte: false, consequence: "La campagne attire beaucoup de prospects non qualifiés. Les remises réduisent les marges. La rentabilité s'effondre." },
+                        { texte: "Segmenter le budget : 50% pour la notoriété, 30% pour une équipe commerciale dédiée, 20% pour des outils d'IA. Tester d'abord sur 50 prospects.",
+                            estCorrecte: true, consequence: "La campagne génère 15 nouveaux clients qualifiés. La part de marché augmente de 8%. Vous devenez leader." },
+                        { texte: "Investir 100% du budget dans une équipe de commerciaux chasseurs, sans formation ni préparation.",
+                            estCorrecte: false, consequence: "Les commerciaux sont agressifs. Ils brûlent des pistes. La réputation se dégrade. Le concurrent, alerté, se renforce." }
+                    ]
+                }]
+            },
+            "VENTE": {
+                situations: [{
+                    histoire: "Le taux de conversion de votre entreprise est en chute libre. Les commerciaux vendent chacun à leur manière. Les clients potentiels ne comprennent pas l'offre et partent chez les concurrents. Vous êtes en train de perdre votre marché.",
+                    decisions: [
+                        { texte: "Demander à vos commerciaux de « faire plus d'efforts » sans leur donner de méthode ni de formation. Les presser pour signer plus vite.",
+                            estCorrecte: false, consequence: "Les commerciaux sont frustrés. Les départs s'accumulent. Les résultats continuent de baisser." },
+                        { texte: "Acheter un logiciel CRM dernier cri en espérant que l'outil résoudra tous vos problèmes. Ne pas former vos équipes à son utilisation.",
+                            estCorrecte: false, consequence: "Le budget est dépensé pour rien. Le CRM est sous-utilisé, voire abandonné." },
+                        { texte: "Faire appel à un consultant pour auditer votre process commercial. Définir des étapes claires, des critères de qualification, et mettre en place une formation continue.",
+                            estCorrecte: true, consequence: "En 6 mois, le taux de conversion double. Les commerciaux sont plus efficaces et plus motivés." }
+                    ]
+                }, {
+                    histoire: "Votre process commercial est bien rodé. Le taux de conversion est excellent. Les clients sont fidèles. Vous êtes satisfait, mais vous savez que vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Ne rien changer. « Pourquoi toucher à ce qui fonctionne ? » Continuer avec le même process.",
+                            estCorrecte: false, consequence: "Le marché évolue. Le process devient obsolète. Le taux de conversion baisse lentement." },
+                        { texte: "Optimiser le process sans le révolutionner. Ajouter quelques outils d'automatisation et former les commerciaux à de nouvelles techniques.",
+                            estCorrecte: true, consequence: "Le taux de conversion augmente de 10%. Les commerciaux sont plus efficaces." },
+                        { texte: "Révolutionner radicalement l'approche de la vente du jour au lendemain, sans préparation ni test.",
+                            estCorrecte: false, consequence: "Les équipes sont perdues. La transition est chaotique. Les résultats chutent temporairement." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué sur votre marché par un nouveau concurrent qui pratique des prix très agressifs. Vous devez réagir vite pour ne pas perdre vos parts de marché.",
+                    decisions: [
+                        { texte: "Baisser vos prix pour répondre au concurrent. Lancer une campagne agressive de réduction de prix.",
+                            estCorrecte: false, consequence: "Les marges s'effondrent. La rentabilité plonge. Le concurrent encaisse le choc et continue." },
+                        { texte: "Ne pas baisser vos prix, mais augmenter la valeur perçue de votre offre. Enrichir vos services et améliorer l'expérience client.",
+                            estCorrecte: true, consequence: "Les clients comprennent la différence de valeur. Vous perdez quelques clients sensibles au prix, mais fidélisez les meilleurs." },
+                        { texte: "Lancer une guerre des prix tout en réduisant la qualité de vos produits pour compenser.",
+                            estCorrecte: false, consequence: "La réputation se dégrade. Les clients partent. L'entreprise est en danger." }
+                    ]
+                }]
+            },
+            "RELATION CLIENT": {
+                situations: [{
+                    histoire: "Vous perdez vos clients historiques les uns après les autres. Le taux de churn est à 40%. Les clients se plaignent du manque de suivi et de considération.",
+                    decisions: [
+                        { texte: "Penser que les clients qui partent ne sont « pas assez fidèles ». Continuer votre politique de suivi minimal.",
+                            estCorrecte: false, consequence: "Le churn continue d'augmenter. La réputation se dégrade." },
+                        { texte: "Mettre en place un programme de suivi client basique : un appel après la vente, un questionnaire de satisfaction.",
+                            estCorrecte: false, consequence: "Le churn ralentit, mais ne s'arrête pas. Les clients n'ont pas le sentiment d'être vraiment considérés." },
+                        { texte: "Mettre en place une stratégie de fidélisation complète : suivi post-vente structuré, programme de parrainage, enquêtes de satisfaction.",
+                            estCorrecte: true, consequence: "En 12 mois, le churn passe de 40% à 15%. Les clients deviennent des ambassadeurs." }
+                    ]
+                }, {
+                    histoire: "Vos clients sont très fidèles. Le taux de churn est faible. Les clients recommandent votre entreprise. Vous êtes satisfait, mais vous savez que vous pourriez faire encore mieux.",
+                    decisions: [
+                        { texte: "Vous contenter de la situation actuelle. Continuer d'entretenir vos clients de la même manière.",
+                            estCorrecte: false, consequence: "Les concurrents innovent dans l'expérience client. Le churn augmente lentement." },
+                        { texte: "Améliorer progressivement l'expérience client : un peu plus de suivi, des enquêtes de satisfaction régulières.",
+                            estCorrecte: true, consequence: "La satisfaction client augmente légèrement. Le churn baisse encore un peu." },
+                        { texte: "Transformer radicalement l'expérience client du jour au lendemain, sans préparation.",
+                            estCorrecte: false, consequence: "Les clients sont perdus par les changements. Certains se plaignent." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué par un concurrent qui propose des prix bas et des conditions avantageuses à vos meilleurs clients. Vous devez réagir rapidement.",
+                    decisions: [
+                        { texte: "Répondre au concurrent en proposant des conditions encore plus avantageuses : remises supplémentaires, conditions de paiement prolongées.",
+                            estCorrecte: false, consequence: "La marge s'effondre. Les clients profitent des avantages, mais ne sont pas plus fidèles." },
+                        { texte: "Consolider vos meilleurs clients en renforçant la relation : rendez-vous personnalisés, services exclusifs, implication dans la stratégie.",
+                            estCorrecte: true, consequence: "Les meilleurs clients restent. Ils se sentent valorisés. Votre base est consolidée." },
+                        { texte: "Ignorer l'attaque et espérer que vos clients resteront fidèles par habitude.",
+                            estCorrecte: false, consequence: "Les clients partent chez le concurrent. Vous perdez votre base." }
+                    ]
+                }]
+            },
+            "MARKETING": {
+                situations: [{
+                    histoire: "Vous dépensez des sommes colossales en marketing sans résultats visibles. Les campagnes sont incohérentes. Les leads sont de mauvaise qualité. Vous ne comprenez pas où part votre argent.",
+                    decisions: [
+                        { texte: "Supprimer tout budget marketing. Considérer que le marketing ne rapporte rien.",
+                            estCorrecte: false, consequence: "Sans marketing, la notoriété s'effondre. Les ventes suivent la même trajectoire." },
+                        { texte: "Réduire drastiquement le budget et se concentrer uniquement sur le référencement naturel (SEO).",
+                            estCorrecte: false, consequence: "Le SEO est une stratégie de long terme. Les résultats sont lents à venir." },
+                        { texte: "Faire un diagnostic complet de votre stratégie marketing. Identifier ce qui fonctionne et redéfinir votre stratégie avec des objectifs clairs.",
+                            estCorrecte: true, consequence: "Vous réallouez votre budget vers les canaux qui fonctionnent. Les résultats s'améliorent en 3 mois." }
+                    ]
+                }, {
+                    histoire: "Vous avez une bonne notoriété et une clientèle stable. Le marketing est efficace, mais pas extraordinaire. Vous savez que vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de la situation. Continuer d'investir dans les mêmes canaux, sans chercher à innover.",
+                            estCorrecte: false, consequence: "Les concurrents innovent sur de nouveaux canaux. Vous perdez progressivement du terrain." },
+                        { texte: "Optimiser ce qui fonctionne déjà. Ajuster vos campagnes, tester de nouveaux messages, améliorer votre ROI.",
+                            estCorrecte: true, consequence: "Le ROI marketing augmente de 15%. Vous obtenez de meilleurs résultats avec le même budget." },
+                        { texte: "Repositionner radicalement votre marque sur un nouveau segment du jour au lendemain.",
+                            estCorrecte: false, consequence: "Vous perdez vos clients historiques sans en gagner de nouveaux. La transition est chaotique." }
+                    ]
+                }, {
+                    histoire: "Vous êtes menacé par un concurrent qui a une stratégie marketing très agressive, avec des campagnes omniprésentes sur tous les canaux.",
+                    decisions: [
+                        { texte: "Répondre au concurrent en multipliant votre budget marketing sur tous les canaux, sans ciblage précis.",
+                            estCorrecte: false, consequence: "Le budget s'épuise rapidement. Les résultats sont médiocres." },
+                        { texte: "Ne pas suivre le concurrent sur le terrain généraliste. Vous recentrer sur un segment de niche où le concurrent est absent.",
+                            estCorrecte: true, consequence: "Vous devenez leader de votre niche. La rentabilité est forte." },
+                        { texte: "Copier exactement la stratégie du concurrent, en espérant l'égaler.",
+                            estCorrecte: false, consequence: "Vous êtes toujours en retard. Vous ne créez pas de différenciation." }
+                    ]
+                }]
+            },
+            "PRICING": {
+                situations: [{
+                    histoire: "Vous avez toujours fixé vos prix au hasard. Vous alternez entre des prix trop bas qui tuent vos marges et des prix trop hauts qui font fuir les clients.",
+                    decisions: [
+                        { texte: "Continuer de fixer vos prix au doigt mouillé, sans analyse de marché ni de concurrence.",
+                            estCorrecte: false, consequence: "Les clients sont perdus par les variations de prix. La rentabilité est structurellement faible." },
+                        { texte: "Aligner vos prix sur ceux de votre concurrent principal. Les suivre dans toutes leurs variations.",
+                            estCorrecte: false, consequence: "Vous perdez votre autonomie. Vous subissez les décisions du concurrent." },
+                        { texte: "Construire une véritable stratégie de prix. Analyser vos coûts, le positionnement de vos concurrents, la valeur perçue et l'élasticité de la demande.",
+                            estCorrecte: true, consequence: "Vous maîtrisez votre rentabilité. Votre marge s'améliore de 20%." }
+                    ]
+                }, {
+                    histoire: "Vous avez des prix corrects, en phase avec le marché. Les clients sont satisfaits. Vous savez que vous pourriez optimiser votre politique de prix.",
+                    decisions: [
+                        { texte: "Ne pas toucher à vos prix. « Pourquoi changer ce qui fonctionne ? »",
+                            estCorrecte: false, consequence: "Les coûts augmentent. Les concurrents ajustent leurs prix. Votre marge se réduit." },
+                        { texte: "Augmenter vos prix de 5% sur certains produits, en testant la réaction des clients.",
+                            estCorrecte: true, consequence: "La marge s'améliore légèrement. Les clients acceptent l'augmentation." },
+                        { texte: "Augmenter tous vos prix de 20% du jour au lendemain, sans test ni préparation.",
+                            estCorrecte: false, consequence: "Les clients partent en masse. Les concurrents vous dépassent." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué sur le prix par un concurrent low-cost. Vous devez réagir pour ne pas perdre vos parts de marché sans sacrifier votre rentabilité.",
+                    decisions: [
+                        { texte: "Baisser vos prix pour répondre au concurrent. Aligner vos tarifs sur les siens.",
+                            estCorrecte: false, consequence: "La marge s'effondre. Vous vous engagez dans une guerre que vous ne pouvez pas gagner." },
+                        { texte: "Ne pas baisser vos prix, mais renforcer la perception de valeur de votre offre. Ajouter des services, améliorer l'expérience client.",
+                            estCorrecte: true, consequence: "Vous perdez quelques clients sensibles au prix, mais fidélisez ceux qui recherchent la valeur." },
+                        { texte: "Lancer une offre low-cost pour répondre au concurrent tout en gardant une offre premium pour vos clients historiques.",
+                            estCorrecte: false, consequence: "Vous cannibalisez vos propres ventes premium. La confusion s'installe chez vos clients." }
+                    ]
+                }]
+            },
+            "PRODUCTIVITÉ": {
+                situations: [{
+                    histoire: "Votre entreprise est débordée. Les équipes sont surmenées, les délais s'allongent, la qualité se dégrade. Vous ne comprenez pas pourquoi vous n'arrivez pas à suivre la demande.",
+                    decisions: [
+                        { texte: "Continuer de pousser vos équipes à faire plus, sans analyser les causes de la baisse de productivité.",
+                            estCorrecte: false, consequence: "Les équipes s'épuisent. Le turnover explose. La qualité continue de se dégrader." },
+                        { texte: "Embaucher encore plus de personnes pour absorber la charge de travail, sans analyse des besoins.",
+                            estCorrecte: false, consequence: "Les charges augmentent. La productivité ne s'améliore pas. La masse salariale explose." },
+                        { texte: "Faire un audit complet de la productivité. Analyser les processus, identifier les goulots d'étranglement, et mettre en place des indicateurs de performance.",
+                            estCorrecte: true, consequence: "En 6 mois, la productivité augmente de 30%. Les équipes sont moins stressées." }
+                    ]
+                }, {
+                    histoire: "Vous avez une bonne productivité. Les équipes sont efficaces, les délais sont respectés. Vous savez que vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de la situation. Continuer avec les mêmes méthodes.",
+                            estCorrecte: false, consequence: "Les concurrents améliorent leur productivité. Vous perdez votre avantage." },
+                        { texte: "Optimiser vos processus en identifiant les points de friction et en les améliorant progressivement.",
+                            estCorrecte: true, consequence: "La productivité augmente de 10%. Les équipes sont plus efficaces." },
+                        { texte: "Transformer radicalement la productivité du jour au lendemain, sans formation ni préparation.",
+                            estCorrecte: false, consequence: "Les équipes sont perdues. La productivité chute temporairement." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué par un concurrent qui produit plus vite et moins cher. Vous devez réagir pour ne pas perdre votre marché.",
+                    decisions: [
+                        { texte: "Suivre le rythme du concurrent en demandant à vos équipes d'accélérer, sans changer vos processus.",
+                            estCorrecte: false, consequence: "Les équipes s'épuisent. La qualité se dégrade. Les clients partent." },
+                        { texte: "Ne pas concurrencer le concurrent sur la vitesse, mais sur la qualité. Vous recentrer sur les clients qui recherchent la valeur.",
+                            estCorrecte: true, consequence: "Vous conservez une base de clients fidèles. Votre rentabilité est bonne." },
+                        { texte: "Révolutionner vos processus de production. Investir dans l'automatisation, l'IA, et la formation de vos équipes.",
+                            estCorrecte: false, consequence: "L'investissement est trop lourd. Les retours ne sont pas immédiats. Vous êtes fragilisé." }
+                    ]
+                }]
+            },
+            "TRÉSORERIE": {
+                situations: [{
+                    histoire: "Vous avez un trou de trésorerie massif. Les clients ne paient pas. Les fournisseurs sont impayés. La banque menace de couper les lignes de crédit.",
+                    decisions: [
+                        { texte: "Continuer à dépenser comme si de rien n'était, en espérant que les clients finiront par payer.",
+                            estCorrecte: false, consequence: "La faillite est inévitable. Les fournisseurs assignent en justice." },
+                        { texte: "Réduire toutes vos dépenses, renégocier vos délais de paiement, et relancer vos clients en retard.",
+                            estCorrecte: false, consequence: "La situation s'améliore temporairement, mais le problème revient." },
+                        { texte: "Mettre en place un système complet de gestion de trésorerie : prévision à 12 mois, politique de recouvrement stricte, renégociation des conditions.",
+                            estCorrecte: true, consequence: "En 6 mois, vous avez assaini votre trésorerie. Vous avez une vision claire sur 12 mois." }
+                    ]
+                }, {
+                    histoire: "Vous avez une trésorerie saine. Les délais de paiement sont respectés. Vous savez que vous pourriez optimiser votre gestion.",
+                    decisions: [
+                        { texte: "Être confiant et ne rien faire pour améliorer votre trésorerie.",
+                            estCorrecte: false, consequence: "Un imprévu survient. Vous êtes pris au dépourvu." },
+                        { texte: "Mettre en place une prévision de trésorerie sur 3 mois. Suivre régulièrement vos flux.",
+                            estCorrecte: true, consequence: "Vous avez une visibilité à court terme. Vous pouvez anticiper les tensions." },
+                        { texte: "Investir tous vos excédents de trésorerie dans des placements risqués.",
+                            estCorrecte: false, consequence: "Vous perdez une partie de votre trésorerie. La situation se dégrade." }
+                    ]
+                }, {
+                    histoire: "Vous devez saisir une opportunité de croissance exceptionnelle, mais elle nécessite un investissement massif qui va mettre à rude épreuve votre trésorerie.",
+                    decisions: [
+                        { texte: "Saisir l'opportunité sans préparation, en espérant que les revenus suivront.",
+                            estCorrecte: false, consequence: "La trésorerie s'assèche. L'opportunité se transforme en catastrophe." },
+                        { texte: "Passer l'opportunité pour préserver votre trésorerie. Préférer la sécurité.",
+                            estCorrecte: false, consequence: "Un concurrent saisit l'opportunité et prend un avantage décisif." },
+                        { texte: "Monter un plan de financement solide : apport en capital, emprunt bancaire, prévision de trésorerie détaillée sur 18 mois.",
+                            estCorrecte: true, consequence: "Vous saisissez l'opportunité en toute sécurité. La croissance est au rendez-vous." }
+                    ]
+                }]
+            },
+            "KPI": {
+                situations: [{
+                    histoire: "Vous n'avez aucun indicateur de performance. Vous pilotez à l'intuition. Les décisions sont basées sur des ressentis, pas sur des données.",
+                    decisions: [
+                        { texte: "Continuer de piloter à l'intuition, persuadé que votre expérience vous suffit.",
+                            estCorrecte: false, consequence: "Les erreurs s'accumulent. Les résultats se dégradent." },
+                        { texte: "Suivre quelques indicateurs de base : chiffre d'affaires, marge, trésorerie. Regarder ces chiffres une fois par mois.",
+                            estCorrecte: false, consequence: "Vous avez un peu plus de visibilité, mais pas assez pour piloter finement." },
+                        { texte: "Construire un tableau de bord stratégique complet avec une vingtaine d'indicateurs clés. Les suivre en temps réel.",
+                            estCorrecte: true, consequence: "Vous pilotez avec précision. Les décisions sont éclairées. Les résultats s'améliorent." }
+                    ]
+                }, {
+                    histoire: "Vous suivez des KPI depuis plusieurs années. Les indicateurs sont bons, mais vous pourriez aller plus loin.",
+                    decisions: [
+                        { texte: "Continuer de suivre les mêmes indicateurs de la même manière. Être confiant.",
+                            estCorrecte: false, consequence: "Les concurrents développent des systèmes d'analyse plus performants." },
+                        { texte: "Ajouter quelques nouveaux indicateurs à votre tableau de bord.",
+                            estCorrecte: false, consequence: "Vous avez plus de données, mais pas nécessairement plus d'insights." },
+                        { texte: "Transformer radicalement votre approche des données. Investir dans des outils d'analyse avancée et des tableaux de bord prédictifs.",
+                            estCorrecte: true, consequence: "Vous pilotez en temps réel. Vous anticipez les problèmes avant qu'ils ne surviennent." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué sur votre marché. Le concurrent a une approche data-driven qui lui permet de réagir plus vite.",
+                    decisions: [
+                        { texte: "Suivre le concurrent en copiant ses indicateurs.",
+                            estCorrecte: false, consequence: "Vous êtes en retard. Vous réagissez, mais n'anticipez pas." },
+                        { texte: "Optimiser vos KPI existants en les rendant plus précis et plus réactifs.",
+                            estCorrecte: false, consequence: "Vous êtes plus efficace, mais vous n'avez pas d'avantage décisif." },
+                        { texte: "Créer un avantage concurrentiel grâce à la data. Développer des indicateurs propriétaires et investir dans l'IA prédictive.",
+                            estCorrecte: true, consequence: "Vous voyez les tendances avant les autres. Vous devenez leader." }
+                    ]
+                }]
+            },
+            "NÉGOCIATION": {
+                situations: [{
+                    histoire: "Vous perdez de l'argent sur chaque négociation. Vos commerciaux cèdent systématiquement sur les prix. Les marges sont de plus en plus faibles.",
+                    decisions: [
+                        { texte: "Mettre la pression sur vos commerciaux pour qu'ils fassent de meilleures marges. Les menacer, les sanctionner.",
+                            estCorrecte: false, consequence: "Les commerciaux sont stressés. Les meilleurs partent. La situation s'aggrave." },
+                        { texte: "Former vos commerciaux aux techniques de négociation de base. Leur apprendre à résister à la pression du client.",
+                            estCorrecte: false, consequence: "Les commerciaux sont un peu plus efficaces. Les marges s'améliorent légèrement." },
+                        { texte: "Investir dans un programme complet de négociation stratégique. Former vos équipes à la préparation, à l'analyse des intérêts et à la gestion des concessions.",
+                            estCorrecte: true, consequence: "Les marges augmentent de 30%. Les commerciaux sont plus confiants." }
+                    ]
+                }, {
+                    histoire: "Vos commerciaux négocient correctement. Les marges sont correctes. Vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de vos commerciaux. Continuer avec la même approche.",
+                            estCorrecte: false, consequence: "Les concurrents améliorent leurs capacités de négociation. Vous perdez votre avantage." },
+                        { texte: "Former vos commerciaux à des techniques de négociation plus avancées.",
+                            estCorrecte: true, consequence: "Les marges s'améliorent de 10%. Vous avez fait un progrès." },
+                        { texte: "Transformer vos commerciaux en stratèges de la négociation du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les commerciaux sont perdus. La performance chute." }
+                    ]
+                }, {
+                    histoire: "Vous devez négocier un contrat stratégique avec un gros client qui représente 50% de votre activité. Les enjeux sont énormes.",
+                    decisions: [
+                        { texte: "Mener la négociation vous-même, sans préparation. Vous fier à votre instinct.",
+                            estCorrecte: false, consequence: "Vous cédez sur des points clés. Les conditions sont défavorables." },
+                        { texte: "Bien préparer la négociation. Analyser les intérêts du client, préparer vos arguments, définir vos limites.",
+                            estCorrecte: true, consequence: "La négociation est un succès. Vous obtenez des conditions correctes." },
+                        { texte: "Mener une négociation agressive, en menaçant de partir si vous n'obtenez pas ce que vous voulez.",
+                            estCorrecte: false, consequence: "Le client se braque. La négociation échoue. Vous perdez le contrat." }
+                    ]
+                }]
+            },
+            "CROSS-SELLING": {
+                situations: [{
+                    histoire: "Vous n'avez jamais fait de cross-selling. Les clients n'achètent qu'un seul produit et ne reviennent jamais. Vous laissez passer des opportunités colossales.",
+                    decisions: [
+                        { texte: "Continuer de ne pas faire de cross-selling. Considérer que vos clients savent ce qu'ils veulent.",
+                            estCorrecte: false, consequence: "Les clients sous-exploitent votre offre. Vous laissez passer des revenus considérables." },
+                        { texte: "Faire des suggestions de produits complémentaires de manière ponctuelle et informelle.",
+                            estCorrecte: false, consequence: "Les ventes complémentaires augmentent légèrement, mais sans méthode." },
+                        { texte: "Mettre en place un système de cross-selling : analyse des besoins, identification des opportunités, offres personnalisées.",
+                            estCorrecte: true, consequence: "Les ventes complémentaires augmentent de 40%. Les clients sont plus satisfaits." }
+                    ]
+                }, {
+                    histoire: "Vous faites du cross-selling de manière occasionnelle. Les résultats sont corrects, mais vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait des résultats actuels. Continuer avec la même approche ponctuelle.",
+                            estCorrecte: false, consequence: "Les concurrents développent des systèmes plus efficaces. Vous perdez des opportunités." },
+                        { texte: "Systématiser le cross-selling en formant vos équipes et en mettant en place des processus simples.",
+                            estCorrecte: true, consequence: "Les ventes complémentaires augmentent de 25%. Vous êtes sur la bonne voie." },
+                        { texte: "Transformer le cross-selling en moteur de croissance du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les équipes sont submergées. La qualité du service client se dégrade." }
+                    ]
+                }, {
+                    histoire: "Vous devez augmenter rapidement votre chiffre d'affaires sans augmenter votre budget marketing. Vous décidez de vous concentrer sur le cross-selling.",
+                    decisions: [
+                        { texte: "Faire du cross-selling agressif. Proposer des produits complémentaires à chaque client, sans analyse des besoins.",
+                            estCorrecte: false, consequence: "Les clients se sentent importunés. La réputation se dégrade." },
+                        { texte: "Aborder le cross-selling comme une vente conseil. Analyser les besoins et proposer des solutions complémentaires qui apportent de la valeur.",
+                            estCorrecte: true, consequence: "Les clients sont satisfaits. Les ventes complémentaires augmentent significativement." },
+                        { texte: "Ne pas faire de cross-selling pour ne pas prendre de risque.",
+                            estCorrecte: false, consequence: "Vous manquez une opportunité de croissance simple et rapide." }
+                    ]
+                }]
+            },
+            "RECRUTEMENT": {
+                situations: [{
+                    histoire: "Vous ne cessez de recruter des personnes incompétentes. Les recrutements se font « au feeling » sans process. Les erreurs coûtent cher.",
+                    decisions: [
+                        { texte: "Continuer de recruter « au feeling » sans changer de méthode.",
+                            estCorrecte: false, consequence: "Les erreurs s'accumulent. Le turnover explose. La réputation est détruite." },
+                        { texte: "Formaliser votre processus de recrutement : définir des critères clairs, structurer les entretiens.",
+                            estCorrecte: false, consequence: "Les recrutements s'améliorent. Mais vous n'avez pas de système durable." },
+                        { texte: "Construire un système de recrutement : anticipation des besoins, définition des compétences, méthode d'évaluation structurée.",
+                            estCorrecte: true, consequence: "Les recrutements sont de qualité. Le turnover baisse. Les performances augmentent." }
+                    ]
+                }, {
+                    histoire: "Vous recrutez correctement. Les équipes sont stables. Vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de vos recrutements. Continuer avec la même méthode.",
+                            estCorrecte: false, consequence: "Les concurrents améliorent leurs recrutements. Vous perdez votre avantage." },
+                        { texte: "Optimiser votre processus en ajoutant des tests de compétences et des mises en situation.",
+                            estCorrecte: true, consequence: "Les recrutements sont un peu meilleurs. Vous avez fait un progrès." },
+                        { texte: "Transformer le recrutement en avantage concurrentiel du jour au lendemain.",
+                            estCorrecte: false, consequence: "Le changement est trop brutal. Vos équipes sont déstabilisées." }
+                    ]
+                }, {
+                    histoire: "Vous devez recruter 20 personnes en 6 mois pour soutenir une croissance rapide. Un recrutement raté pourrait mettre en danger la croissance.",
+                    decisions: [
+                        { texte: "Recruter rapidement sans trop de process. Embaucher des profils « qui ont l'air bien ».",
+                            estCorrecte: false, consequence: "Les mauvais recrutements s'accumulent. La croissance est compromise." },
+                        { texte: "Organiser le recrutement de manière structurée : définition des profils, process de sélection, intégration.",
+                            estCorrecte: true, consequence: "Vous recrutez correctement. Les 20 personnes sont en place. La croissance est soutenue." },
+                        { texte: "Déléguer entièrement le recrutement à un cabinet externe, sans supervision.",
+                            estCorrecte: false, consequence: "Les profils ne correspondent pas à votre culture. Le turnover est élevé." }
+                    ]
+                }]
+            },
+            "REPORTING": {
+                situations: [{
+                    histoire: "Vous produisez des rapports inutiles, remplis de chiffres sans analyse. Personne ne les lit. Les décisions sont prises sans données.",
+                    decisions: [
+                        { texte: "Continuer de produire les mêmes rapports inutiles, sans chercher à les améliorer.",
+                            estCorrecte: false, consequence: "Les décisions sont toujours basées sur l'intuition. Les erreurs persistent." },
+                        { texte: "Simplifier vos rapports en vous concentrant sur les indicateurs clés.",
+                            estCorrecte: false, consequence: "Les rapports sont plus utiles. Mais vous n'avez pas de système durable." },
+                        { texte: "Transformer le reporting en un outil de décision stratégique. Définir des indicateurs clés et produire des analyses causales.",
+                            estCorrecte: true, consequence: "Les rapports servent à prendre des décisions. Les résultats s'améliorent." }
+                    ]
+                }, {
+                    histoire: "Vos rapports sont corrects et utilisés. Vous pourriez améliorer leur pertinence.",
+                    decisions: [
+                        { texte: "Être satisfait de vos reporting. Continuer de produire les mêmes rapports.",
+                            estCorrecte: false, consequence: "Les concurrents améliorent leurs reporting. Vous perdez en réactivité." },
+                        { texte: "Ajouter des analyses plus poussées : commentaires, recommandations, comparaisons.",
+                            estCorrecte: true, consequence: "Les rapports sont plus utiles. Les décisions s'améliorent." },
+                        { texte: "Transformer vos reporting en tableaux de bord interactifs du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les équipes ne sont pas formées. L'outil est sous-utilisé." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué sur votre marché. Le concurrent a des reporting plus précis et prend des décisions plus rapides.",
+                    decisions: [
+                        { texte: "Copier le reporting de votre concurrent, en espérant égaler sa performance.",
+                            estCorrecte: false, consequence: "Vous êtes en retard. Vous réagissez, mais n'anticipez pas." },
+                        { texte: "Optimiser vos reporting existants en les rendant plus précis et plus réactifs.",
+                            estCorrecte: false, consequence: "Vous êtes plus efficace, mais pas différencié." },
+                        { texte: "Créer un reporting propriétaire qui donne un avantage concurrentiel. Développer des indicateurs uniques et des analyses prédictives.",
+                            estCorrecte: true, consequence: "Vous voyez les tendances avant vos concurrents. Vous devenez leader." }
+                    ]
+                }]
+            },
+            "PARCOURS CLIENT": {
+                situations: [{
+                    histoire: "Votre parcours client est chaotique. Les clients se perdent, abandonnent, se plaignent. Les taux de conversion sont catastrophiques.",
+                    decisions: [
+                        { texte: "Continuer de fonctionner sans cartographier ni améliorer le parcours client.",
+                            estCorrecte: false, consequence: "Les clients continuent de partir. La réputation se dégrade." },
+                        { texte: "Identifier quelques points de friction évidents et les corriger.",
+                            estCorrecte: false, consequence: "Le parcours s'améliore légèrement. Mais vous n'avez pas de vision d'ensemble." },
+                        { texte: "Cartographier complètement le parcours client, de bout en bout. Identifier tous les points de friction et mettre en place des actions correctives.",
+                            estCorrecte: true, consequence: "Les taux de conversion doublent. Les clients sont plus satisfaits." }
+                    ]
+                }, {
+                    histoire: "Votre parcours client est correct, sans grands problèmes. Vous pourriez optimiser certains points.",
+                    decisions: [
+                        { texte: "Être satisfait du parcours client. Continuer sans chercher à l'améliorer.",
+                            estCorrecte: false, consequence: "Les concurrents améliorent leurs parcours. Vous perdez des clients." },
+                        { texte: "Optimiser certains points du parcours en fonction des retours clients.",
+                            estCorrecte: true, consequence: "Le parcours s'améliore. Les clients sont plus satisfaits." },
+                        { texte: "Repenser complètement le parcours client du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les clients sont perdus. L'expérience se dégrade temporairement." }
+                    ]
+                }, {
+                    histoire: "Vous devez conquérir un nouveau segment de marché. Le parcours client actuel n'est pas adapté à ces nouveaux clients.",
+                    decisions: [
+                        { texte: "Adapter votre parcours client actuel pour le nouveau segment, en espérant que cela fonctionnera.",
+                            estCorrecte: false, consequence: "Le parcours n'est pas parfaitement adapté. Les conversions sont faibles." },
+                        { texte: "Refondre complètement le parcours client pour le nouveau segment. Le construire sur mesure.",
+                            estCorrecte: true, consequence: "Les conversions sont bonnes. Vous conquérez le nouveau segment." },
+                        { texte: "Utiliser le même parcours client pour tous les segments, sans adaptation.",
+                            estCorrecte: false, consequence: "Le nouveau segment ne se sent pas concerné. Les conversions sont faibles." }
+                    ]
+                }]
+            },
+            "EXPÉRIENCE CLIENT": {
+                situations: [{
+                    histoire: "Votre expérience client est négligée. Les clients se plaignent constamment. Les avis sont mauvais. La réputation est en chute libre.",
+                    decisions: [
+                        { texte: "Ignorer les plaintes des clients. Penser qu'ils sont « de mauvaise foi ».",
+                            estCorrecte: false, consequence: "Les clients partent en masse. La réputation est détruite." },
+                        { texte: "Répondre aux plaintes et améliorer les points les plus critiques.",
+                            estCorrecte: false, consequence: "L'expérience s'améliore légèrement. Mais vous restez dans une approche réactive." },
+                        { texte: "Créer une stratégie d'expérience client. Concevoir l'expérience comme un avantage concurrentiel, cartographier chaque interaction, former vos équipes.",
+                            estCorrecte: true, consequence: "Les clients sont ravis. La réputation est restaurée." }
+                    ]
+                }, {
+                    histoire: "Vous avez une bonne expérience client. Les clients sont satisfaits. Vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de l'expérience client. Continuer sans chercher à l'améliorer.",
+                            estCorrecte: false, consequence: "Les concurrents innovent dans l'expérience. Vous perdez des clients." },
+                        { texte: "Améliorer progressivement l'expérience client en fonction des retours.",
+                            estCorrecte: true, consequence: "L'expérience s'améliore. Les clients sont plus fidèles." },
+                        { texte: "Créer une expérience client mémorable du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop brusques. Les clients sont perturbés." }
+                    ]
+                }, {
+                    histoire: "Vous devez vous différencier sur un marché où les produits sont similaires. L'expérience client sera votre avantage concurrentiel.",
+                    decisions: [
+                        { texte: "Copier l'expérience client de vos concurrents, en espérant les égaler.",
+                            estCorrecte: false, consequence: "Vous n'êtes pas différencié. Les clients n'ont pas de raison de vous choisir." },
+                        { texte: "Améliorer certains aspects de l'expérience pour être un peu meilleur que vos concurrents.",
+                            estCorrecte: false, consequence: "Vous êtes légèrement meilleur, mais restez dans une logique de suivi." },
+                        { texte: "Créer une expérience client signature, unique et mémorable. Faire de l'expérience la marque de fabrique de votre entreprise.",
+                            estCorrecte: true, consequence: "Les clients vous choisissent pour l'expérience. Vous devenez leader." }
+                    ]
+                }]
+            },
+            "CONFORMITÉ": {
+                situations: [{
+                    histoire: "Vous avez négligé la conformité pendant des années. Un contrôle fiscal révèle des irrégularités. Des amendes massives tombent.",
+                    decisions: [
+                        { texte: "Accepter les amendes sans rien changer. Continuer de négliger la conformité.",
+                            estCorrecte: false, consequence: "Les amendes se multiplient. Les contrôles se succèdent. Vous êtes en faillite." },
+                        { texte: "Vous mettre en conformité de manière réactive. Corriger les problèmes identifiés.",
+                            estCorrecte: false, consequence: "La conformité est assurée pour l'instant, mais vous n'avez pas de système durable." },
+                        { texte: "Intégrer la conformité dans la culture de l'entreprise. Mettre en place des processus, des contrôles, des formations.",
+                            estCorrecte: true, consequence: "Les risques sont maîtrisés. La réputation est solide." }
+                    ]
+                }, {
+                    histoire: "Vous êtes en conformité. Les obligations sont respectées. Vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de votre conformité. Continuer de respecter les obligations.",
+                            estCorrecte: false, consequence: "Les obligations évoluent. Vous risquez de ne pas suivre." },
+                        { texte: "Faire une veille régulière pour suivre les évolutions réglementaires.",
+                            estCorrecte: true, consequence: "Vous êtes à jour. Les risques sont maîtrisés." },
+                        { texte: "Transformer la conformité en levier de confiance du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos équipes sont désorientées." }
+                    ]
+                }, {
+                    histoire: "Vous êtes dans un secteur très réglementé. Les risques de non-conformité sont importants.",
+                    decisions: [
+                        { texte: "Respecter scrupuleusement les obligations, sans chercher à aller plus loin.",
+                            estCorrecte: false, consequence: "Vous êtes conforme, mais pas différencié. Les concurrents peuvent vous égaler." },
+                        { texte: "Dépasser les obligations en matière de conformité. Obtenir des certifications.",
+                            estCorrecte: true, consequence: "Vous êtes reconnu comme un acteur sérieux. La conformité devient un avantage." },
+                        { texte: "Ignorer certaines obligations en pensant que vous ne serez pas contrôlé.",
+                            estCorrecte: false, consequence: "Le contrôle arrive. Les amendes sont massives. Votre réputation est détruite." }
+                    ]
+                }]
+            },
+            "GESTION FINANCIÈRE": {
+                situations: [{
+                    histoire: "Votre gestion financière est catastrophique. Les comptes sont désordonnés. Les décisions sont prises sans analyse financière.",
+                    decisions: [
+                        { texte: "Continuer de négliger la gestion financière. Penser que « les chiffres sont pour les comptables ».",
+                            estCorrecte: false, consequence: "Les pertes s'accumulent. Vous êtes en faillite." },
+                        { texte: "Faire appel à un expert-comptable pour mettre vos comptes en ordre.",
+                            estCorrecte: false, consequence: "Vous avez une vision de votre situation. Mais vous n'avez pas de pilotage stratégique." },
+                        { texte: "Mettre en place un pilotage financier : suivi des marges, analyse des coûts, prévision de trésorerie, indicateurs de performance.",
+                            estCorrecte: true, consequence: "Vous pilotez financièrement votre entreprise. La rentabilité s'améliore." }
+                    ]
+                }, {
+                    histoire: "Votre gestion financière est correcte. Les comptes sont suivis. Vous pourriez faire mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de votre gestion financière. Continuer sans chercher à l'améliorer.",
+                            estCorrecte: false, consequence: "Les concurrents améliorent leur pilotage financier. Vous perdez en agilité." },
+                        { texte: "Optimiser votre gestion en ajoutant quelques indicateurs et analyses.",
+                            estCorrecte: true, consequence: "Vous avez une meilleure vision. Les décisions s'améliorent." },
+                        { texte: "Transformer votre gestion financière en levier stratégique du jour au lendemain.",
+                            estCorrecte: false, consequence: "Le changement est trop brutal. Vos équipes ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous devez réaliser un investissement majeur. Vous devez décider si vous pouvez vous le permettre.",
+                    decisions: [
+                        { texte: "Investir sur un coup de tête, sans analyse financière approfondie.",
+                            estCorrecte: false, consequence: "L'investissement est mal dimensionné. La trésorerie est sous pression." },
+                        { texte: "Faire une analyse financière de base : simulateur de rentabilité, plan de financement, prévision de trésorerie.",
+                            estCorrecte: true, consequence: "Vous prenez une décision éclairée. L'investissement est bien dimensionné." },
+                        { texte: "Ne pas investir par peur du risque, même si l'opportunité est bonne.",
+                            estCorrecte: false, consequence: "Vous manquez une opportunité de croissance. Un concurrent la saisit." }
+                    ]
+                }]
+            },
+            "RSE": {
+                situations: [{
+                    histoire: "Vous n'avez aucune politique RSE. Un scandale environnemental éclate. Les médias s'en mêlent. Les clients boycottent.",
+                    decisions: [
+                        { texte: "Nier la réalité, minimiser l'impact, et ne rien changer.",
+                            estCorrecte: false, consequence: "La crise s'aggrave. La réputation est détruite." },
+                        { texte: "Réagir à la crise en prenant des mesures correctives.",
+                            estCorrecte: false, consequence: "La crise est résolue à court terme. Mais vous n'avez pas de stratégie RSE." },
+                        { texte: "Construire une stratégie RSE. Intégrer l'environnement et le social dans votre stratégie, certifier vos processus.",
+                            estCorrecte: true, consequence: "La réputation est restaurée. Les clients sont plus fidèles." }
+                    ]
+                }, {
+                    histoire: "Vous avez des actions RSE ponctuelles. Vous pourriez en faire plus.",
+                    decisions: [
+                        { texte: "Être satisfait de vos actions RSE. Continuer sans chercher à aller plus loin.",
+                            estCorrecte: false, consequence: "Les concurrents développent des stratégies RSE plus ambitieuses." },
+                        { texte: "Ajouter quelques actions RSE supplémentaires et communiquer davantage.",
+                            estCorrecte: true, consequence: "Votre image s'améliore. Les clients sont plus satisfaits." },
+                        { texte: "Faire de la RSE un pilier de votre stratégie du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos équipes sont désorientées." }
+                    ]
+                }, {
+                    histoire: "Un concurrent se démarque grâce à sa politique RSE. Vous devez intégrer la RSE pour rester compétitif.",
+                    decisions: [
+                        { texte: "Copier la politique RSE de votre concurrent, en espérant l'égaler.",
+                            estCorrecte: false, consequence: "Vous êtes en retard. Vous n'êtes pas différencié." },
+                        { texte: "Avoir une politique RSE un peu plus ambitieuse que celle de votre concurrent.",
+                            estCorrecte: false, consequence: "Vous vous démarquez légèrement, mais restez dans une logique de suivi." },
+                        { texte: "Faire de la RSE votre signature. Intégrer la RSE dans tous les aspects de votre entreprise.",
+                            estCorrecte: true, consequence: "Vous devenez le leader RSE de votre secteur. Les clients vous choisissent pour vos valeurs." }
+                    ]
+                }]
+            },
+            "IFRS": {
+                situations: [{
+                    histoire: "Vous ne maîtrisez pas les normes comptables IFRS. Les comptes sont non conformes. Un contrôle fiscal révèle des anomalies.",
+                    decisions: [
+                        { texte: "Ignorer les normes IFRS. Penser que c'est un sujet pour les comptables.",
+                            estCorrecte: false, consequence: "Les comptes sont non conformes. Les amendes tombent." },
+                        { texte: "Faire appel à un expert pour mettre vos comptes en conformité avec les normes IFRS.",
+                            estCorrecte: false, consequence: "Les comptes sont conformes. Vous avez évité le pire, mais vous ne maîtrisez pas les normes." },
+                        { texte: "Maîtriser les normes IFRS. Former votre équipe et intégrer les normes dans vos processus.",
+                            estCorrecte: true, consequence: "Vous maîtrisez les normes. Vous anticipez les évolutions." }
+                    ]
+                }, {
+                    histoire: "Vous êtes en conformité IFRS. Les comptes sont corrects. Vous pourriez mieux utiliser cette maîtrise.",
+                    decisions: [
+                        { texte: "Être satisfait de votre conformité. Continuer sans chercher à aller plus loin.",
+                            estCorrecte: false, consequence: "Les normes évoluent. Vous risquez d'être en retard." },
+                        { texte: "Faire une veille sur les évolutions des normes IFRS pour anticiper les changements.",
+                            estCorrecte: true, consequence: "Vous êtes à jour. Vous anticipez les évolutions." },
+                        { texte: "Transformer votre maîtrise des normes IFRS en avantage stratégique du jour au lendemain.",
+                            estCorrecte: false, consequence: "Le changement est trop brutal. Vos équipes ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous souhaitez vous financer sur les marchés internationaux. La maîtrise des normes IFRS est un prérequis.",
+                    decisions: [
+                        { texte: "Faire le strict minimum pour être conforme. Confier tout à votre expert-comptable.",
+                            estCorrecte: false, consequence: "Vous êtes conforme, mais vous ne maîtrisez pas les normes. Vous êtes dépendant de votre expert." },
+                        { texte: "Maîtriser les normes IFRS en interne. Former vos équipes et intégrer les normes dans vos processus.",
+                            estCorrecte: true, consequence: "Vous maîtrisez les normes. Vous êtes crédible auprès des investisseurs." },
+                        { texte: "Ignorer les normes IFRS et espérer que les investisseurs ne vérifieront pas.",
+                            estCorrecte: false, consequence: "Les investisseurs vérifient. Votre dossier est rejeté." }
+                    ]
+                }]
+            },
+            "AGENTS IA OPÉRATIONNELS": {
+                situations: [{
+                    histoire: "Vous n'avez pas intégré l'IA dans vos opérations. Les concurrents automatisent leurs processus et deviennent plus efficaces.",
+                    decisions: [
+                        { texte: "Ignorer l'IA. Penser que c'est une mode et que vous n'en avez pas besoin.",
+                            estCorrecte: false, consequence: "Les concurrents prennent un avantage décisif. Vous perdez des parts de marché." },
+                        { texte: "Tester un outil d'IA sur un processus simple pour voir les résultats.",
+                            estCorrecte: false, consequence: "Les résultats sont positifs. Mais vous êtes en retard sur les concurrents." },
+                        { texte: "Transformer vos opérations grâce à l'IA. Automatiser les processus répétitifs et former vos équipes.",
+                            estCorrecte: true, consequence: "Vous gagnez en efficacité. Vous rattrapez votre retard." }
+                    ]
+                }, {
+                    histoire: "Vous utilisez l'IA de manière ponctuelle. Les résultats sont corrects. Vous pourriez faire plus.",
+                    decisions: [
+                        { texte: "Être satisfait de l'utilisation de l'IA. Continuer avec les mêmes outils.",
+                            estCorrecte: false, consequence: "Les concurrents développent des usages plus avancés. Vous perdez des opportunités." },
+                        { texte: "Étendre l'utilisation de l'IA à d'autres processus de l'entreprise.",
+                            estCorrecte: true, consequence: "L'impact de l'IA augmente. Vous êtes sur la bonne voie." },
+                        { texte: "Faire de l'IA un pilier de votre stratégie opérationnelle du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos équipes sont désorientées." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué par un concurrent qui utilise l'IA pour être plus efficace. Vous devez répondre.",
+                    decisions: [
+                        { texte: "Acheter les mêmes outils d'IA que votre concurrent pour l'égaler.",
+                            estCorrecte: false, consequence: "Vous êtes en retard. Vous réagissez, mais ne créez pas d'avantage." },
+                        { texte: "Adopter l'IA de manière plus efficace que votre concurrent. Choisir les meilleurs outils.",
+                            estCorrecte: true, consequence: "Vous devenez plus efficace. Vous créez un avantage." },
+                        { texte: "Ignorer l'attaque et espérer que votre expérience suffira.",
+                            estCorrecte: false, consequence: "Le concurrent vous dépasse. Vous perdez votre position." }
+                    ]
+                }]
+            },
+            "CULTURE DE L'ENTREPRISE": {
+                situations: [{
+                    histoire: "Votre culture est toxique. Les équipes sont désengagées. Les départs s'accumulent. La performance est en chute libre.",
+                    decisions: [
+                        { texte: "Ignorer les signaux de détresse de vos équipes. Continuer de gérer comme avant.",
+                            estCorrecte: false, consequence: "Les départs s'accélèrent. La performance s'effondre." },
+                        { texte: "Réagir en organisant des séminaires et en communiquant sur des valeurs.",
+                            estCorrecte: false, consequence: "Les équipes sont sceptiques. La culture ne change pas vraiment." },
+                        { texte: "Transformer radicalement la culture de l'entreprise. Vous remettre en question et impliquer toutes les équipes.",
+                            estCorrecte: true, consequence: "La culture se transforme. Les équipes sont engagées. La performance s'améliore." }
+                    ]
+                }, {
+                    histoire: "Votre culture est positive. Les équipes sont engagées. Vous pourriez faire encore mieux.",
+                    decisions: [
+                        { texte: "Être satisfait de votre culture. Continuer sans chercher à l'améliorer.",
+                            estCorrecte: false, consequence: "La culture s'essouffle. La performance stagne." },
+                        { texte: "Améliorer certains aspects de la culture : plus de reconnaissance, plus d'échanges.",
+                            estCorrecte: true, consequence: "La culture s'améliore. Les équipes sont plus engagées." },
+                        { texte: "Faire de la culture d'entreprise votre signature du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop brusques. Les équipes sont perturbées." }
+                    ]
+                }, {
+                    histoire: "Vous devez transformer votre entreprise pour survivre. La culture actuelle est un frein.",
+                    decisions: [
+                        { texte: "Imposer la transformation par décret, sans impliquer les équipes.",
+                            estCorrecte: false, consequence: "Les équipes résistent. La transformation échoue." },
+                        { texte: "Impliquer les équipes dans la transformation. Écouter leurs idées et construire la nouvelle culture avec elles.",
+                            estCorrecte: true, consequence: "La transformation réussit. Les équipes sont engagées." },
+                        { texte: "Ne pas transformer la culture et espérer que l'entreprise survivra.",
+                            estCorrecte: false, consequence: "L'entreprise disparaît. Vous êtes dépassé par les événements." }
+                    ]
+                }]
+            },
+            "BUSINESS MODEL": {
+                situations: [{
+                    histoire: "Votre modèle économique est obsolète. Les concurrents disruptent le marché. Les marges s'effondrent.",
+                    decisions: [
+                        { texte: "Vous accrocher à votre modèle économique historique. Refuser de changer.",
+                            estCorrecte: false, consequence: "Le marché vous dépasse. L'entreprise disparaît." },
+                        { texte: "Adapter votre modèle économique en ajoutant quelques éléments modernes.",
+                            estCorrecte: false, consequence: "Vous survivez, mais restez vulnérable." },
+                        { texte: "Refondre complètement votre modèle économique. Créer un nouveau modèle qui répond aux besoins du marché.",
+                            estCorrecte: true, consequence: "Vous vous réinventez. Vous devenez leader sur un nouveau marché." }
+                    ]
+                }, {
+                    histoire: "Votre modèle économique est solide. Vous pourriez l'optimiser.",
+                    decisions: [
+                        { texte: "Être satisfait de votre modèle économique. Continuer sans chercher à l'améliorer.",
+                            estCorrecte: false, consequence: "Les concurrents innovent dans leurs modèles. Vous perdez votre avantage." },
+                        { texte: "Optimiser votre modèle économique en ajustant certains aspects.",
+                            estCorrecte: true, consequence: "Vous améliorez votre performance." },
+                        { texte: "Réinventer votre modèle économique du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos clients ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué par un nouveau concurrent avec un modèle économique disruptif.",
+                    decisions: [
+                        { texte: "Défendre votre modèle économique actuel, en pensant qu'il est solide.",
+                            estCorrecte: false, consequence: "Le concurrent gagne du terrain. Vous perdez des parts de marché." },
+                        { texte: "Adapter votre modèle économique pour répondre à la menace.",
+                            estCorrecte: false, consequence: "Vous survivez, mais restez en position de poursuivant." },
+                        { texte: "Créer un modèle économique encore plus disruptif que celui de votre concurrent. Anticiper les tendances.",
+                            estCorrecte: true, consequence: "Vous devenez le leader disruptif. Le concurrent est dépassé." }
+                    ]
+                }]
+            },
+            "STRATÉGIE": {
+                situations: [{
+                    histoire: "Vous n'avez pas de stratégie claire. Vous naviguez à vue. Les décisions sont contradictoires. Les résultats sont en chute libre.",
+                    decisions: [
+                        { texte: "Continuer de naviguer à vue, sans stratégie. Réagir aux opportunités au jour le jour.",
+                            estCorrecte: false, consequence: "Les résultats continuent de se dégrader. Vous êtes en crise permanente." },
+                        { texte: "Définir une stratégie simple : quelques objectifs et quelques priorités.",
+                            estCorrecte: false, consequence: "Vous avez une direction. Mais la stratégie est fragile." },
+                        { texte: "Construire une stratégie structurée : vision, mission, objectifs, plans d'action, indicateurs de suivi.",
+                            estCorrecte: true, consequence: "Vous pilotez votre entreprise. Les résultats s'améliorent." }
+                    ]
+                }, {
+                    histoire: "Votre stratégie est correcte. Vous pourriez la rendre plus ambitieuse.",
+                    decisions: [
+                        { texte: "Être satisfait de votre stratégie. Continuer sans chercher à l'améliorer.",
+                            estCorrecte: false, consequence: "Les concurrents affinent leurs stratégies. Vous perdez en agilité." },
+                        { texte: "Optimiser votre stratégie en ajustant certains objectifs et priorités.",
+                            estCorrecte: true, consequence: "La stratégie est plus efficace. Vous faites un progrès." },
+                        { texte: "Créer une stratégie de rupture du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos équipes ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous êtes attaqué sur votre marché. Le concurrent a une stratégie agressive.",
+                    decisions: [
+                        { texte: "Définir une stratégie réactive, qui répond aux actions du concurrent.",
+                            estCorrecte: false, consequence: "Vous êtes en retard. Vous réagissez, mais n'anticipez pas." },
+                        { texte: "Définir une stratégie pour contrer le concurrent. L'attaquer sur ses points faibles.",
+                            estCorrecte: false, consequence: "Vous gagnez du terrain, mais restez dans une logique de combat." },
+                        { texte: "Définir une stratégie pour dominer le marché. Créer un avantage concurrentiel durable.",
+                            estCorrecte: true, consequence: "Vous devenez le leader incontesté. Vous créez un avantage durable." }
+                    ]
+                }]
+            },
+            "PRISE DE DÉCISION": {
+                situations: [{
+                    histoire: "Vous prenez des décisions à l'intuition. Les erreurs s'accumulent. Les résultats sont catastrophiques.",
+                    decisions: [
+                        { texte: "Continuer de décider à l'intuition, persuadé d'avoir raison.",
+                            estCorrecte: false, consequence: "Les erreurs s'accumulent. L'entreprise est en danger." },
+                        { texte: "Consulter votre équipe avant de prendre des décisions importantes.",
+                            estCorrecte: false, consequence: "Les décisions sont meilleures. Mais vous n'avez pas de processus structuré." },
+                        { texte: "Mettre en place un processus de décision structuré : collecte des données, analyse des options, évaluation des risques.",
+                            estCorrecte: true, consequence: "Les décisions sont de meilleure qualité. Vous créez un avantage." }
+                    ]
+                }, {
+                    histoire: "Vous prenez de bonnes décisions. Vous pourriez être plus rapide et plus précis.",
+                    decisions: [
+                        { texte: "Être satisfait de vos décisions. Continuer de la même manière.",
+                            estCorrecte: false, consequence: "Les concurrents prennent des décisions plus rapides. Vous perdez en réactivité." },
+                        { texte: "Accélérer le processus de décision en réduisant les étapes inutiles.",
+                            estCorrecte: true, consequence: "Vous prenez des décisions plus rapides. Vous êtes plus réactif." },
+                        { texte: "Transformer votre prise de décision en utilisant l'IA du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les outils ne sont pas maîtrisés. Les décisions se dégradent." }
+                    ]
+                }, {
+                    histoire: "Vous devez prendre une décision stratégique majeure qui engage l'avenir de l'entreprise.",
+                    decisions: [
+                        { texte: "Prendre la décision basée sur votre intuition et votre expérience.",
+                            estCorrecte: false, consequence: "La décision est risquée. Vous pouvez vous tromper." },
+                        { texte: "Faire une analyse approfondie de la situation avant de décider. Consulter des experts.",
+                            estCorrecte: true, consequence: "Vous prenez une décision éclairée. Le risque est maîtrisé." },
+                        { texte: "Repousser la décision en espérant que la situation évoluera d'elle-même.",
+                            estCorrecte: false, consequence: "Vous perdez du temps. Les concurrents avancent." }
+                    ]
+                }]
+            },
+            "LEADERSHIP": {
+                situations: [{
+                    histoire: "Votre leadership est absent ou toxique. Les équipes sont désengagées. Les départs s'accumulent.",
+                    decisions: [
+                        { texte: "Continuer de diriger de la même manière, refusant de voir les problèmes.",
+                            estCorrecte: false, consequence: "Les départs s'accélèrent. L'entreprise est en danger." },
+                        { texte: "Prendre conscience de vos problèmes et essayer de changer votre comportement.",
+                            estCorrecte: false, consequence: "La situation s'améliore légèrement. Mais vous restez fragile." },
+                        { texte: "Transformer radicalement votre leadership. Faire appel à un coach et travailler sur vous-même.",
+                            estCorrecte: true, consequence: "Vous devenez un leader inspirant. Les équipes sont engagées." }
+                    ]
+                }, {
+                    histoire: "Vous avez un bon leadership. Vous pourriez être encore meilleur.",
+                    decisions: [
+                        { texte: "Être satisfait de votre leadership. Continuer de la même manière.",
+                            estCorrecte: false, consequence: "Vous stagnez. L'engagement des équipes diminue." },
+                        { texte: "Améliorer votre leadership en développant certaines compétences.",
+                            estCorrecte: true, consequence: "Vous êtes meilleur. Les équipes sont plus engagées." },
+                        { texte: "Transformer votre leadership pour porter l'entreprise vers un nouveau niveau du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop brusques. Vos équipes ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous devez traverser une période de transformation majeure. Le leadership est crucial.",
+                    decisions: [
+                        { texte: "Imposer votre vision et exiger l'obéissance. Diriger de manière autoritaire.",
+                            estCorrecte: false, consequence: "Les équipes résistent. La transformation échoue." },
+                        { texte: "Mobiliser vos équipes autour de la vision. Expliquer, convaincre, impliquer.",
+                            estCorrecte: true, consequence: "La transformation réussit. Les équipes sont engagées." },
+                        { texte: "Ne pas prendre de leadership et laisser les équipes se débrouiller.",
+                            estCorrecte: false, consequence: "La transformation échoue. L'entreprise est en crise." }
+                    ]
+                }]
+            },
+            "BUSINESS PLAN": {
+                situations: [{
+                    histoire: "Vous n'avez pas de business plan. Vous pilotez sans cap. Les décisions sont incohérentes.",
+                    decisions: [
+                        { texte: "Continuer de piloter sans business plan, en réagissant aux événements.",
+                            estCorrecte: false, consequence: "Les résultats continuent de se dégrader." },
+                        { texte: "Créer un business plan simple : quelques objectifs et quelques prévisions.",
+                            estCorrecte: false, consequence: "Vous avez une direction. Mais le plan est fragile." },
+                        { texte: "Construire un business plan stratégique complet : vision, objectifs, plans d'action, prévisions financières.",
+                            estCorrecte: true, consequence: "Vous pilotez votre entreprise. Vous créez un avantage." }
+                    ]
+                }, {
+                    histoire: "Votre business plan est correct. Vous pourriez le rendre plus dynamique.",
+                    decisions: [
+                        { texte: "Être satisfait de votre business plan. Continuer sans le mettre à jour.",
+                            estCorrecte: false, consequence: "Le business plan devient obsolète. Vous perdez en agilité." },
+                        { texte: "Mettre à jour votre business plan régulièrement pour suivre les évolutions.",
+                            estCorrecte: true, consequence: "Le business plan reste pertinent. Vous êtes réactif." },
+                        { texte: "Transformer votre business plan en outil de pilotage dynamique du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos équipes ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous devez convaincre des investisseurs. Le business plan est la clé pour lever des fonds.",
+                    decisions: [
+                        { texte: "Préparer un business plan standard, comme un document administratif.",
+                            estCorrecte: false, consequence: "Les investisseurs ne sont pas convaincus. Vous ne levez pas de fonds." },
+                        { texte: "Préparer un business plan solide avec des prévisions crédibles et une stratégie claire.",
+                            estCorrecte: true, consequence: "Les investisseurs sont intéressés. Vous levez des fonds." },
+                        { texte: "Présenter un business plan irréaliste pour impressionner les investisseurs.",
+                            estCorrecte: false, consequence: "Les investisseurs détectent les incohérences. Votre crédibilité est détruite." }
+                    ]
+                }]
+            },
+            "RECHERCHE DE FINANCEMENT": {
+                situations: [{
+                    histoire: "Vous avez besoin de financements urgents. Les banques refusent. Les investisseurs ne sont pas intéressés.",
+                    decisions: [
+                        { texte: "Abandonner et ne plus chercher de financements. Laisser l'entreprise dépérir.",
+                            estCorrecte: false, consequence: "L'entreprise est en faillite." },
+                        { texte: "Continuer de démarcher les mêmes banques et investisseurs, sans changer d'approche.",
+                            estCorrecte: false, consequence: "Les refus s'accumulent. Vous perdez du temps." },
+                        { texte: "Construire une stratégie de financement. Identifier les sources les plus adaptées et préparer un dossier solide.",
+                            estCorrecte: true, consequence: "Vous trouvez des financements. L'entreprise est sauvée." }
+                    ]
+                }, {
+                    histoire: "Vous avez trouvé des financements. Vous pourriez obtenir de meilleures conditions.",
+                    decisions: [
+                        { texte: "Être satisfait de vos financements. Continuer avec les mêmes sources.",
+                            estCorrecte: false, consequence: "Vous ratez des opportunités de meilleures conditions." },
+                        { texte: "Renégocier vos conditions avec vos financeurs.",
+                            estCorrecte: true, consequence: "Vous obtenez de meilleures conditions." },
+                        { texte: "Changer radicalement de sources de financement du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les nouveaux financeurs sont plus exigeants. Vous perdez en stabilité." }
+                    ]
+                }, {
+                    histoire: "Vous avez une opportunité de croissance exceptionnelle. Vous devez lever des fonds rapidement.",
+                    decisions: [
+                        { texte: "Chercher des financements à tout prix, sans préparation, en acceptant des conditions défavorables.",
+                            estCorrecte: false, consequence: "Vous levez des fonds, mais à des conditions qui pénalisent l'entreprise." },
+                        { texte: "Préparer un dossier solide et aller voir plusieurs financeurs.",
+                            estCorrecte: true, consequence: "Vous saisissez l'opportunité. La croissance est au rendez-vous." },
+                        { texte: "Ne pas chercher de financements et espérer que l'opportunité attendra.",
+                            estCorrecte: false, consequence: "L'opportunité est saisie par un concurrent." }
+                    ]
+                }]
+            },
+            "RENTABILITÉ": {
+                situations: [{
+                    histoire: "Vos marges sont en chute libre. Les coûts explosent. Vous perdez de l'argent sur chaque vente.",
+                    decisions: [
+                        { texte: "Ne pas voir le problème. Continuer de vendre sans analyser votre rentabilité.",
+                            estCorrecte: false, consequence: "Les pertes s'accumulent. L'entreprise est en faillite." },
+                        { texte: "Augmenter vos prix pour améliorer votre rentabilité.",
+                            estCorrecte: false, consequence: "La rentabilité s'améliore, mais vous avez perdu des clients." },
+                        { texte: "Construire une stratégie de rentabilité complète. Analyser votre rentabilité par produit, client et canal.",
+                            estCorrecte: true, consequence: "Vous retrouvez une rentabilité durable." }
+                    ]
+                }, {
+                    histoire: "Vous avez une bonne rentabilité. Vous pourriez l'optimiser.",
+                    decisions: [
+                        { texte: "Être satisfait de votre rentabilité. Continuer sans chercher à l'améliorer.",
+                            estCorrecte: false, consequence: "Les concurrents améliorent leur rentabilité. Vous perdez en compétitivité." },
+                        { texte: "Optimiser votre rentabilité en ajustant vos prix et en réduisant certains coûts.",
+                            estCorrecte: true, consequence: "La rentabilité s'améliore légèrement." },
+                        { texte: "Transformer votre rentabilité en avantage concurrentiel du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos équipes ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous voulez conquérir de nouvelles parts de marché. Vous pouvez le faire en baissant vos prix, mais au risque de réduire votre rentabilité.",
+                    decisions: [
+                        { texte: "Baisser vos prix pour conquérir des parts de marché, en acceptant une baisse de rentabilité.",
+                            estCorrecte: false, consequence: "Vous conquérez des parts de marché, mais votre rentabilité s'effondre." },
+                        { texte: "Maintenir vos prix pour préserver votre rentabilité. Accepter de perdre des parts de marché.",
+                            estCorrecte: false, consequence: "Vous restez rentable, mais perdez du terrain." },
+                        { texte: "Trouver le moyen de conquérir des parts de marché sans sacrifier votre rentabilité. Améliorer votre efficacité.",
+                            estCorrecte: true, consequence: "Vous conquérez des parts de marché en préservant votre rentabilité. Vous devenez leader." }
+                    ]
+                }]
+            },
+            "AGENTS IA COGNITIFS": {
+                situations: [{
+                    histoire: "Vous n'utilisez pas l'IA pour vos décisions stratégiques. Les concurrents anticipent les tendances grâce à l'IA.",
+                    decisions: [
+                        { texte: "Ignorer l'IA. Continuer de prendre des décisions à l'intuition.",
+                            estCorrecte: false, consequence: "Les concurrents prennent un avantage. Vous perdez des parts de marché." },
+                        { texte: "Tester un outil d'IA pour vous aider dans vos décisions stratégiques.",
+                            estCorrecte: false, consequence: "Vous découvrez l'utilité de l'IA. Mais vous êtes en retard." },
+                        { texte: "Intégrer l'IA cognitive dans vos décisions stratégiques. Utiliser l'IA pour analyser les données et simuler des scénarios.",
+                            estCorrecte: true, consequence: "Vous prenez de meilleures décisions. Vous créez un avantage." }
+                    ]
+                }, {
+                    histoire: "Vous utilisez l'IA de manière ponctuelle. Vous pourriez en faire plus.",
+                    decisions: [
+                        { texte: "Être satisfait de l'utilisation de l'IA. Continuer avec les mêmes outils.",
+                            estCorrecte: false, consequence: "Les concurrents développent des usages plus avancés. Vous perdez en agilité." },
+                        { texte: "Étendre l'utilisation de l'IA cognitive à d'autres domaines de décision.",
+                            estCorrecte: true, consequence: "Vous utilisez l'IA dans plus de décisions. Vous êtes plus efficace." },
+                        { texte: "Faire de l'IA cognitive un pilier de votre stratégie de décision du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vos équipes ne suivent pas." }
+                    ]
+                }, {
+                    histoire: "Vous devez prendre une décision stratégique majeure. L'IA peut vous aider à évaluer les options.",
+                    decisions: [
+                        { texte: "Utiliser l'IA pour confirmer votre intuition, mais ne pas changer votre décision si l'IA dit autre chose.",
+                            estCorrecte: false, consequence: "Vous ratez des opportunités. L'IA est sous-utilisée." },
+                        { texte: "Utiliser l'IA comme un outil d'aide à la décision. Prendre en compte les recommandations de l'IA.",
+                            estCorrecte: true, consequence: "Vous prenez de meilleures décisions. L'IA est utilisée efficacement." },
+                        { texte: "Déléguer entièrement la décision à l'IA, sans supervision humaine.",
+                            estCorrecte: false, consequence: "L'IA n'a pas le contexte humain. La décision est inadaptée." }
+                    ]
+                }]
+            },
+            "FINANCEMENT BANCAIRE": {
+                situations: [{
+                    histoire: "Vous avez besoin d'un financement bancaire urgent. Les banques refusent systématiquement.",
+                    decisions: [
+                        { texte: "Abandonner et chercher d'autres solutions de financement.",
+                            estCorrecte: false, consequence: "Vous ne trouvez pas de financement. L'entreprise est en danger." },
+                        { texte: "Continuer de présenter les mêmes dossiers aux mêmes banques, sans les améliorer.",
+                            estCorrecte: false, consequence: "Les refus s'accumulent. Vous perdez du temps." },
+                        { texte: "Construire une stratégie bancaire complète. Préparer des dossiers solides et développer des relations avec les banquiers.",
+                            estCorrecte: true, consequence: "Vous obtenez un financement bancaire. L'entreprise est sauvée." }
+                    ]
+                }, {
+                    histoire: "Vous avez de bonnes relations avec votre banque. Vous pourriez obtenir de meilleures conditions.",
+                    decisions: [
+                        { texte: "Être satisfait de vos conditions bancaires. Continuer avec la même banque.",
+                            estCorrecte: false, consequence: "Vous ratez des opportunités de meilleures conditions." },
+                        { texte: "Renégocier vos conditions bancaires.",
+                            estCorrecte: true, consequence: "Vous obtenez de meilleures conditions." },
+                        { texte: "Changer de banque du jour au lendemain, sans préparation.",
+                            estCorrecte: false, consequence: "La nouvelle banque est plus exigeante. Vous perdez en stabilité." }
+                    ]
+                }, {
+                    histoire: "Vous devez financer un investissement majeur. Le financement bancaire est la solution la plus adaptée.",
+                    decisions: [
+                        { texte: "Préparer un dossier bancaire standard, sans vous démarquer.",
+                            estCorrecte: false, consequence: "Le dossier passe inaperçu. Vous n'obtenez pas le financement." },
+                        { texte: "Préparer un dossier solide avec des prévisions crédibles et une stratégie claire.",
+                            estCorrecte: true, consequence: "Vous obtenez le financement à des conditions correctes." },
+                        { texte: "Présenter un dossier bancaire irréaliste pour impressionner les banques.",
+                            estCorrecte: false, consequence: "Les banques détectent les incohérences. Votre crédibilité est détruite." }
+                    ]
+                }]
+            },
+            "IKIGAI": {
+                situations: [{
+                    histoire: "Votre entreprise est en crise. Vous êtes épuisé, désengagé, et avez perdu le sens de votre travail.",
+                    decisions: [
+                        { texte: "Abandonner et arrêter l'entreprise. Ne pas voir d'issue.",
+                            estCorrecte: false, consequence: "L'entreprise disparaît. Vous êtes ruiné." },
+                        { texte: "Continuer de manière mécanique, sans motivation, en espérant que les choses s'arrangent.",
+                            estCorrecte: false, consequence: "La situation ne s'améliore pas. Vous êtes épuisé." },
+                        { texte: "Prendre du recul, redéfinir votre vision, et retrouver le sens de votre travail.",
+                            estCorrecte: true, consequence: "Vous retrouvez l'énergie et la motivation. L'entreprise est sauvée." }
+                    ]
+                }, {
+                    histoire: "Votre entreprise fonctionne bien. Vous êtes satisfait, mais vous pourriez avoir plus d'impact.",
+                    decisions: [
+                        { texte: "Être satisfait de votre situation. Continuer sans chercher à donner plus de sens à votre travail.",
+                            estCorrecte: false, consequence: "Vous stagnez. Vous finissez par vous ennuyer." },
+                        { texte: "Ajuster votre activité pour mieux correspondre à vos valeurs.",
+                            estCorrecte: true, consequence: "Vous retrouvez du sens. Vous êtes plus motivé." },
+                        { texte: "Réinventer complètement votre activité du jour au lendemain.",
+                            estCorrecte: false, consequence: "Les changements sont trop radicaux. Vous perdez vos repères." }
+                    ]
+                }, {
+                    histoire: "Vous devez transformer votre entreprise. Vous devez trouver une nouvelle source de motivation.",
+                    decisions: [
+                        { texte: "Porter la transformation par devoir, sans motivation profonde.",
+                            estCorrecte: false, consequence: "Vous vous épuisez. La transformation échoue." },
+                        { texte: "Trouver une motivation personnelle pour porter la transformation.",
+                            estCorrecte: true, consequence: "Vous êtes engagé. La transformation réussit." },
+                        { texte: "Ne pas faire la transformation et espérer que l'entreprise survivra.",
+                            estCorrecte: false, consequence: "L'entreprise disparaît. Vous êtes dépassé." }
+                    ]
+                }]
+            }
+        };
+
+        // ================================================================
+        // ÉTAT DE L'APPLICATION
+        // ================================================================
+        const state = {
+            currentCodex: null,
+            currentSituationIndex: null,
+            currentDecisionIndex: null,
+            hasAnswered: false,
+        };
+
+        // ================================================================
+        // RÉFÉRENCES DOM
+        // ================================================================
+        const screens = {
+            welcome: document.getElementById('screen-welcome'),
+            codexList: document.getElementById('screen-codex-list'),
+            situations: document.getElementById('screen-situations'),
+            decision: document.getElementById('screen-decision'),
+            result: document.getElementById('screen-result'),
+        };
+
+        const $ = (id) => document.getElementById(id);
+
+        // ================================================================
+        // FONCTIONS
+        // ================================================================
+        function showScreen(name) {
+            Object.keys(screens).forEach(key => {
+                screens[key].classList.remove('active', 'screen-exit');
+            });
+            screens[name].classList.add('active');
+            updateHeader(name);
+        }
+
+        function updateHeader(screen) {
+            const phaseText = document.getElementById('header-phase-text');
+            const labels = {
+                welcome: 'LAB',
+                codexList: 'CODEX',
+                situations: 'SITUATIONS',
+                decision: 'DÉCISION',
+                result: 'RÉSULTAT',
+            };
+            phaseText.textContent = labels[screen] || 'LAB';
+        }
+
+        function getCodexIcon(name) {
+            const icons = {
+                'PROSPECTION': '🎯',
+                'VENTE': '🤝',
+                'RELATION CLIENT': '❤️',
+                'MARKETING': '📣',
+                'PRICING': '💰',
+                'PRODUCTIVITÉ': '⚡',
+                'TRÉSORERIE': '💳',
+                'KPI': '📊',
+                'NÉGOCIATION': '🤝',
+                'CROSS-SELLING': '🔄',
+                'RECRUTEMENT': '👥',
+                'REPORTING': '📈',
+                'PARCOURS CLIENT': '🗺️',
+                'EXPÉRIENCE CLIENT': '✨',
+                'CONFORMITÉ': '✅',
+                'GESTION FINANCIÈRE': '📊',
+                'RSE': '🌱',
+                'IFRS': '📑',
+                'AGENTS IA OPÉRATIONNELS': '🤖',
+                'CULTURE DE L\'ENTREPRISE': '🏛️',
+                'BUSINESS MODEL': '🧩',
+                'STRATÉGIE': '🎯',
+                'PRISE DE DÉCISION': '🧠',
+                'LEADERSHIP': '👑',
+                'BUSINESS PLAN': '📋',
+                'RECHERCHE DE FINANCEMENT': '💎',
+                'RENTABILITÉ': '📈',
+                'AGENTS IA COGNITIFS': '🧠',
+                'FINANCEMENT BANCAIRE': '🏦',
+                'IKIGAI': '🌟',
+            };
+            return icons[name] || '📌';
+        }
+
+        // ================================================================
+        // ÉCRAN LISTE DES CODEX
+        // ================================================================
+        function renderCodexList() {
+            const container = document.getElementById('codex-grid-container');
+            let html = '';
+            const codexNames = Object.keys(CODEX_DATA);
+
+            codexNames.forEach(name => {
+                const icon = getCodexIcon(name);
+                html += `
+                            <div class="codex-card" data-codex="${name}" tabindex="0" role="button">
+                                <span class="icon">${icon}</span>
+                                <span class="name">${name}</span>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.codex-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const name = this.dataset.codex;
+                    selectCodex(name);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const name = this.dataset.codex;
+                        selectCodex(name);
+                    }
+                });
+            });
+        }
+
+        function selectCodex(name) {
+            state.currentCodex = name;
+            state.currentSituationIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasAnswered = false;
+            renderSituations(name);
+            showScreen('situations');
+        }
+
+        // ================================================================
+        // ÉCRAN SITUATIONS
+        // ================================================================
+        function renderSituations(codexName) {
+            const data = CODEX_DATA[codexName];
+            const title = document.getElementById('situation-codex-title');
+            const container = document.getElementById('situation-grid-container');
+
+            title.innerHTML = `CODEX <span class="violet">${codexName}</span>`;
+
+            let html = '';
+            data.situations.forEach((s, index) => {
+                const preview = s.histoire.substring(0, 60) + '...';
+                html += `
+                            <div class="situation-card" data-index="${index}" tabindex="0" role="button">
+                                <div class="num">SITUATION ${index + 1}</div>
+                                <div class="preview">${preview}</div>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.situation-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index, 10);
+                    selectSituation(index);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.dataset.index, 10);
+                        selectSituation(index);
+                    }
+                });
+            });
+        }
+
+        function selectSituation(index) {
+            state.currentSituationIndex = index;
+            state.currentDecisionIndex = null;
+            state.hasAnswered = false;
+            renderDecision();
+            showScreen('decision');
+        }
+
+        // ================================================================
+        // ÉCRAN DÉCISION
+        // ================================================================
+        function renderDecision() {
+            const codexName = state.currentCodex;
+            const situationIndex = state.currentSituationIndex;
+            const data = CODEX_DATA[codexName];
+            const situation = data.situations[situationIndex];
+
+            document.getElementById('decision-codex-label').textContent = codexName;
+            document.getElementById('decision-situation-label').textContent = `SITUATION ${situationIndex + 1}`;
+            document.getElementById('decision-story').innerHTML = `<p>${situation.histoire}</p>`;
+
+            const container = document.getElementById('decisions-container');
+            const letters = ['1', '2', '3'];
+
+            let html = '';
+            situation.decisions.forEach((d, i) => {
+                html += `
+                            <div class="decision-card" data-index="${i}" tabindex="0" role="button">
+                                <div class="letter">DÉCISION ${letters[i]}</div>
+                                <div class="text">${d.texte}</div>
+                            </div>
+                        `;
+            });
+
+            container.innerHTML = html;
+
+            document.querySelectorAll('.decision-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index, 10);
+                    selectDecision(index);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const index = parseInt(this.dataset.index, 10);
+                        selectDecision(index);
+                    }
+                });
+            });
+        }
+
+        function selectDecision(index) {
+            if (state.hasAnswered) return;
+            state.currentDecisionIndex = index;
+            state.hasAnswered = true;
+            renderResult();
+            showScreen('result');
+        }
+
+        // ================================================================
+        // ÉCRAN RÉSULTAT
+        // ================================================================
+        function renderResult() {
+            const codexName = state.currentCodex;
+            const situationIndex = state.currentSituationIndex;
+            const decisionIndex = state.currentDecisionIndex;
+            const data = CODEX_DATA[codexName];
+            const situation = data.situations[situationIndex];
+            const decision = situation.decisions[decisionIndex];
+
+            const container = document.getElementById('result-container');
+
+            let html = '';
+
+            // En-tête
+            html += `
+                        <div style="display:flex; align-items:center; gap:var(--space-sm); margin-bottom:var(--space-md);">
+                            <span style="font-size:var(--fs-tiny); font-weight:600; color:var(--violet); letter-spacing:1px; text-transform:uppercase;">${codexName}</span>
+                            <span style="font-size:var(--fs-tiny); color:var(--gray);">—</span>
+                            <span style="font-size:var(--fs-tiny); font-weight:500; color:var(--gray);">SITUATION ${situationIndex + 1}</span>
+                        </div>
+                    `;
+
+            if (decision.estCorrecte) {
+                html += `
+                            <div class="verdict success">✅ FÉLICITATIONS</div>
+                            <div style="font-size:var(--fs-base); color:var(--black-muted); margin-bottom:var(--space-md);">
+                                Vous avez pris la bonne décision !
+                            </div>
+                            <div class="consequence">
+                                <div class="label">💡 CONSÉQUENCE</div>
+                                <p>${decision.consequence}</p>
+                            </div>
+                        `;
+            } else {
+                html += `
+                            <div class="verdict fail">❌ MAUVAISE DÉCISION</div>
+                            <div style="font-size:var(--fs-base); color:var(--black-muted); margin-bottom:var(--space-md);">
+                                Vous avez pris une décision qui n'était pas la plus adaptée.
+                            </div>
+                            <div class="consequence">
+                                <div class="label">💡 CONSÉQUENCE DE VOTRE CHOIX</div>
+                                <p>${decision.consequence}</p>
+                            </div>
+                        `;
+
+                // Trouver la bonne décision
+                const bonneDecision = situation.decisions.find(d => d.estCorrecte === true);
+                if (bonneDecision) {
+                    html += `
+                                <div class="good-answer">
+                                    <div class="label">💡 LA BONNE DÉCISION ÉTAIT</div>
+                                    <p><strong>${bonneDecision.texte}</strong></p>
+                                    <div style="margin-top:var(--space-sm); padding-top:var(--space-sm); border-top:1px solid rgba(124,58,237,0.1);">
+                                        <div style="font-weight:600; color:var(--violet); font-size:var(--fs-tiny); text-transform:uppercase; letter-spacing:1px; margin-bottom:var(--space-xs);">✅ CONSÉQUENCE</div>
+                                        <p>${bonneDecision.consequence}</p>
+                                    </div>
+                                </div>
+                            `;
+                }
+            }
+
+            html += `
+                        <div class="result-actions">
+                            <button class="btn-secondary" id="btn-retry">🔄 REESSAYER CE SCÉNARIO</button>
+                            <button class="btn-secondary" id="btn-back-situations-result">← REVENIR AUX SITUATIONS</button>
+                            <button class="btn-small-ghost" id="btn-home-result">← ACCUEIL</button>
+                        </div>
+                    `;
+
+            container.innerHTML = html;
+
+            document.getElementById('btn-retry').addEventListener('click', function() {
+                state.hasAnswered = false;
+                state.currentDecisionIndex = null;
+                renderDecision();
+                showScreen('decision');
+            });
+
+            document.getElementById('btn-back-situations-result').addEventListener('click', function() {
+                state.hasAnswered = false;
+                state.currentDecisionIndex = null;
+                renderSituations(state.currentCodex);
+                showScreen('situations');
+            });
+
+            document.getElementById('btn-home-result').addEventListener('click', function() {
+                state.currentCodex = null;
+                state.currentSituationIndex = null;
+                state.currentDecisionIndex = null;
+                state.hasAnswered = false;
+                showScreen('welcome');
+            });
+        }
+
+        // ================================================================
+        // ÉVÉNEMENTS PRINCIPAUX
+        // ================================================================
+
+        // Accueil → Liste des Codex
+        document.getElementById('btn-start').addEventListener('click', function() {
+            renderCodexList();
+            showScreen('codexList');
+        });
+
+        // Retour à l'accueil
+        document.getElementById('btn-back-home').addEventListener('click', function() {
+            state.currentCodex = null;
+            state.currentSituationIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasAnswered = false;
+            showScreen('welcome');
+        });
+
+        // Retour aux Codex depuis les situations
+        document.getElementById('btn-back-codex').addEventListener('click', function() {
+            state.currentSituationIndex = null;
+            state.currentDecisionIndex = null;
+            state.hasAnswered = false;
+            renderCodexList();
+            showScreen('codexList');
+        });
+
+        // Retour aux situations depuis la décision
+        document.getElementById('btn-back-situations').addEventListener('click', function() {
+            state.hasAnswered = false;
+            state.currentDecisionIndex = null;
+            renderSituations(state.currentCodex);
+            showScreen('situations');
+        });
+
+        // Scroll effect on header
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('brand-header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ================================================================
+        // INITIALISATION
+        // ================================================================
+        showScreen('welcome');
+        console.log('🚀 MCE DECISION LAB chargé.');
+        console.log(`📊 ${Object.keys(CODEX_DATA).length} Codex chargés.`);
+        console.log(`🎯 ${Object.values(CODEX_DATA).reduce((acc, c) => acc + c.situations.length, 0)} situations disponibles.`);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>CAS · Génération de Leads</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --couleur-principale: #e8a317;
+            --couleur-secondaire: #f0b830;
+            --couleur-accent: #f8d060;
+            --couleur-fond: #fdf8ee;
+            --couleur-texte: #2a2010;
+            --couleur-badge: #b87a0a;
+            --couleur-bordure: #e0b840;
+            --couleur-avatar1: #f0b830;
+            --couleur-avatar2: #b87a0a;
+            --couleur-ombre: rgba(184, 122, 10, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: var(--couleur-fond); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; margin: 0; touch-action: manipulation; }
+        .agent-card { max-width: 760px; width: 100%; background: rgba(253, 248, 238, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 56px 56px 48px 48px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 10px 25px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6); padding: 24px 20px 32px; border: 1px solid rgba(224, 184, 64, 0.3); position: relative; overflow: hidden; }
+        .agent-card::before { content: ''; position: absolute; top: -20%; right: -10%; width: 220px; height: 220px; background: radial-gradient(circle, rgba(232, 163, 23, 0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
+        .agent-card::after { content: ''; position: absolute; bottom: -10%; left: -5%; width: 180px; height: 180px; background: radial-gradient(circle, rgba(232, 163, 23, 0.08) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
+        .header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; position: relative; z-index: 2; flex-wrap: wrap; }
+        .avatar { width: 64px; height: 64px; background: linear-gradient(145deg, var(--couleur-avatar1), var(--couleur-avatar2)); border-radius: 28px 12px 28px 12px; display: flex; align-items: center; justify-content: center; color: #fdf8ee; font-size: 30px; box-shadow: 0 8px 14px var(--couleur-ombre); flex-shrink: 0; }
+        .title-group { flex: 1; }
+        .title-group h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.4px; color: var(--couleur-texte); line-height: 1.2; }
+        .title-group span { display: block; font-size: 0.85rem; font-weight: 400; color: #7a6a2a; opacity: 0.8; letter-spacing: 0.2px; }
+        .status-badge { background: #e8dcc0; padding: 6px 18px; border-radius: 40px; font-size: 0.75rem; font-weight: 600; color: var(--couleur-texte); display: inline-flex; align-items: center; gap: 8px; border: 1px solid #d0c0a0; backdrop-filter: blur(4px); white-space: nowrap; }
+        .status-badge i { font-size: 0.65rem; color: #2a7a4a; }
+        .btn-nav { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 40px; font-weight: 600; font-size: 0.8rem; text-decoration: none; transition: all 0.2s ease; cursor: pointer; border: none; }
+        .btn-nav:active { transform: scale(0.96); }
+        .btn-hub { background: #1a2a4a; color: #f5f0ea; border: 1px solid #2a4a7a; }
+        .btn-hub:hover { background: #2a4a7a; }
+        .btn-mce { background: #b48a6a; color: #f5f0ea; border: 1px solid #c8a080; }
+        .btn-mce:hover { background: #c8a080; }
+        .btn-coaching { background: #3a6a3a; color: #f5f0ea; border: 1px solid #5a8a5a; }
+        .btn-coaching:hover { background: #5a8a5a; }
+        .action-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; position: relative; z-index: 2; }
+        .chat-window { background: rgba(253, 248, 238, 0.5); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border-radius: 32px; padding: 20px 18px; margin: 12px 0 20px; min-height: 180px; max-height: 420px; overflow-y: auto; border: 1px solid rgba(224, 184, 64, 0.2); box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.02); position: relative; z-index: 2; transition: all 0.2s; }
+        .chat-window p, .chat-window div { color: var(--couleur-texte); font-size: 0.95rem; line-height: 1.7; margin-bottom: 12px; }
+        .chat-window .agent-msg { font-weight: 500; color: var(--couleur-principale); }
+        .chat-window .user-msg { background: #e8dcc0; padding: 8px 16px; border-radius: 24px 24px 8px 24px; display: inline-block; margin: 6px 0 10px; color: var(--couleur-texte); }
+        .chat-window strong { color: var(--couleur-principale); }
+        .chat-window em { color: #7a6a2a; }
+        .chat-window .msg-block { background: rgba(240, 228, 200, 0.3); padding: 14px 18px; border-radius: 20px; border-left: 4px solid var(--couleur-principale); margin: 10px 0; }
+        .chat-window .conseil-block { background: rgba(240, 228, 200, 0.3); padding: 14px 18px; border-radius: 20px; border-left: 4px solid var(--couleur-principale); margin: 10px 0; }
+        .chat-window .conseil-block .analyse { color: #7a6a2a; font-style: italic; }
+        .chat-window .conseil-block .constat { color: #8a5a2a; font-weight: 500; }
+        .chat-window .conseil-block .conseil { color: #1a6a4a; font-weight: 600; }
+        .chat-window .conseil-block .score { display: inline-block; background: var(--couleur-principale); color: #fdf8ee; font-size: 0.7rem; padding: 2px 12px; border-radius: 20px; margin-top: 4px; }
+        .chat-window .swot-block { background: rgba(240, 228, 200, 0.3); padding: 14px 18px; border-radius: 20px; border-left: 4px solid #2a7a4a; margin: 10px 0; }
+        .chat-window .swot-block .force { color: #2a7a4a; }
+        .chat-window .swot-block .faiblesse { color: #8a3a2a; }
+        .chat-window .swot-block .opportunite { color: #2a5a8a; }
+        .chat-window .swot-block .menace { color: #8a5a2a; }
+        .chat-window .smart-block { background: rgba(240, 228, 200, 0.3); padding: 14px 18px; border-radius: 20px; border-left: 4px solid #2a5a8a; margin: 10px 0; }
+        .question-block { background: rgba(245, 238, 220, 0.5); padding: 18px 20px; border-radius: 24px; margin: 12px 0; border: 1px solid #d0c0a0; }
+        .question-block .question-label { font-weight: 600; font-size: 1rem; color: var(--couleur-texte); display: block; margin-bottom: 12px; }
+        .question-block .question-number { display: inline-block; background: var(--couleur-principale); color: #fdf8ee; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; margin-bottom: 6px; }
+        .options-grid { display: flex; flex-direction: column; gap: 8px; margin: 6px 0 10px; }
+        .option-btn { background: rgba(253, 248, 238, 0.7); border: 2px solid #d0c0a0; padding: 12px 18px; border-radius: 16px; font-size: 0.9rem; font-weight: 500; color: var(--couleur-texte); transition: all 0.15s ease; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; text-align: left; display: flex; align-items: center; gap: 12px; width: 100%; }
+        .option-btn:hover { background: rgba(240, 228, 200, 0.3); }
+        .option-btn:active, .option-btn.active { background: #d0c0a0; border-color: var(--couleur-principale); box-shadow: 0 2px 8px var(--couleur-ombre); transform: scale(0.98); color: var(--couleur-texte); }
+        .option-btn .opt-letter { display: inline-block; background: var(--couleur-principale); color: #fdf8ee; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+        .option-btn.active .opt-letter { background: var(--couleur-avatar2); }
+        .response-feedback { background: #e8dcc0; border-radius: 40px; padding: 4px 16px 4px 12px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--couleur-texte); margin-top: 8px; }
+        .action-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; position: relative; z-index: 2; }
+        .btn-primary { background: var(--couleur-principale); border: none; padding: 14px 28px; border-radius: 60px; font-weight: 600; font-size: 0.95rem; color: #fcf6f0; box-shadow: 0 6px 14px var(--couleur-ombre); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 12px; touch-action: manipulation; cursor: pointer; border: 1px solid var(--couleur-secondaire); flex: 1 1 auto; justify-content: center; }
+        .btn-primary:active { transform: scale(0.96); background: var(--couleur-avatar2); box-shadow: 0 2px 6px var(--couleur-ombre); }
+        .btn-secondary { background: transparent; border: 1px solid #b0a080; padding: 12px 20px; border-radius: 60px; font-weight: 500; color: #4a3a20; touch-action: manipulation; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; gap: 8px; flex: 1 1 auto; justify-content: center; }
+        .btn-secondary:active { background: #e8dcc0; border-color: #908060; }
+        .btn-pdf { background: var(--couleur-secondaire); border: none; padding: 14px 28px; border-radius: 60px; font-weight: 600; font-size: 0.95rem; color: #fcf6f0; box-shadow: 0 6px 14px var(--couleur-ombre); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 12px; touch-action: manipulation; cursor: pointer; border: 1px solid var(--couleur-accent); flex: 1 1 auto; justify-content: center; }
+        .btn-pdf:active { transform: scale(0.96); background: var(--couleur-principale); }
+        .footer { margin-top: 22px; font-size: 0.7rem; color: #7a6a2a; text-align: center; border-top: 1px solid rgba(180, 160, 110, 0.15); padding-top: 16px; letter-spacing: 0.4px; position: relative; z-index: 2; }
+        .footer i { margin: 0 4px; color: #a89060; }
+        .chat-window::-webkit-scrollbar { width: 4px; }
+        .chat-window::-webkit-scrollbar-thumb { background: #d0c0a0; border-radius: 12px; }
+        .chat-window::-webkit-scrollbar-track { background: transparent; }
+        .decor-illustration { display: flex; justify-content: flex-end; margin: 4px 0 -6px; opacity: 0.2; pointer-events: none; position: relative; z-index: 1; }
+        .decor-illustration i { font-size: 3.2rem; color: var(--couleur-principale); transform: rotate(8deg); filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.03)); }
+        .badge-conseil { display: inline-block; background: var(--couleur-principale); color: #fdf8ee; font-size: 0.6rem; padding: 2px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .serie-display { background: #ece0c8; padding: 12px 18px; border-radius: 16px; font-family: monospace; font-size: 1.1rem; text-align: center; margin: 8px 0; letter-spacing: 2px; border: 1px dashed var(--couleur-bordure); }
+        @media (max-width: 480px) {
+            .agent-card { padding: 16px; }
+            .header { gap: 10px; }
+            .title-group h1 { font-size: 1.2rem; }
+            .option-btn { padding: 10px 14px; font-size: 0.85rem; }
+            .action-buttons { flex-direction: column; align-items: stretch; }
+            .btn-nav { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="agent-card" id="app">
+        <div class="header">
+            <div class="avatar"><i class="fas fa-bullseye"></i></div>
+            <div class="title-group">
+                <h1>CAS <span style="font-weight:400;font-size:0.9rem;">· Génération de Leads</span></h1>
+                <span><i class="fas fa-circle" style="color:#2a7a4a;font-size:0.5rem;"></i> Consulting lead generation premium</span>
+            </div>
+            <div class="status-badge"><i class="fas fa-check-circle"></i> Ready</div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="../index.html" class="btn-nav btn-hub"><i class="fas fa-home"></i> Hub Central</a>
+            <a href="http://tarekfatmi.github.io/MCE" target="_blank" class="btn-nav btn-mce"><i class="fas fa-arrow-left"></i> Retour vers MCE</a>
+            <a href="http://tarekfatmi.github.io/MCE/inscriptions" target="_blank" class="btn-nav btn-coaching"><i class="fas fa-graduation-cap"></i> Programme Coaching</a>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <p class="agent-msg"><i class="fas fa-comment-dots" style="margin-right:8px;"></i>CAS Génération de Leads...Ready!</p>
+            <p style="font-size:0.9rem;color:#5a4a1a;">Bienvenue. Pour une consultation lead generation premium, tapez <strong>"Go"</strong> ou cliquez sur le bouton ci-dessous.</p>
+            <p style="font-size:0.8rem;color:#7a6a2a;font-style:italic;">Attirer · Convertir · Nourrir</p>
+        </div>
+
+        <div id="dynamicZone"></div>
+
+        <div class="action-row">
+            <button class="btn-primary" id="mainActionBtn"><i class="fas fa-play"></i> Go</button>
+            <button class="btn-secondary" id="resetBtn"><i class="fas fa-undo-alt"></i> Réinitialiser</button>
+        </div>
+
+        <div class="decor-illustration"><i class="fas fa-bullseye"></i></div>
+        <div class="footer"><i class="fas fa-gem"></i> consulting lead generation · <i class="fas fa-arrow-right"></i> MCE Coaching <i class="fas fa-crown" style="opacity:0.4;"></i></div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ÉTAT GLOBAL
+        // ============================================================
+        var state = {
+            step: 'idle', q1: [], q2: [], q3: [], q4: [], qAction: [],
+            currentQuestionIndex: 0, currentType: null, questions: [],
+            userDemand: '', userDemandOptimise: '',
+            niveau: 'B', niveauLabel: 'Moyennement développé',
+            secteur: 'leads', taille: 'moyenne',
+            planDemande: false, matrixGenerated: false, dernierConseils: null,
+            conformite: 0, archetype: '', profilLeads: '', matriceLeads: '',
+            realiteTerrain: '', syntheseFinale: '', skillsUpGrade: '', planAction: '',
+            conseils: null, scores: null, swot: null, smart: null
+        };
+
+        var chatWindow = document.getElementById('chatWindow');
+        var dynamicZone = document.getElementById('dynamicZone');
+        var mainBtn = document.getElementById('mainActionBtn');
+        var resetBtn = document.getElementById('resetBtn');
+
+        function appendMessage(html, isUser) {
+            isUser = isUser || false;
+            var msg = document.createElement('div');
+            if (isUser) { msg.innerHTML = '<div class="user-msg">' + html + '</div>'; }
+            else { msg.innerHTML = '<div class="agent-msg">' + html + '</div>'; }
+            chatWindow.appendChild(msg);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function clearDynamic() { dynamicZone.innerHTML = ''; }
+        function setMainButton(text, icon, action) {
+            icon = icon || 'fa-play';
+            mainBtn.innerHTML = '<i class="fas ' + icon + '"></i> ' + text;
+            mainBtn.onclick = action || null;
+        }
+
+        // ============================================================
+        // BANQUE DE CONSEILS DYNAMIQUE - CAS GÉNÉRATION DE LEADS
+        // ============================================================
+        var BANQUE_CONSEILS_LEADS = {
+            acquisition: {
+                analyse: [
+                    "Votre stratégie d'acquisition est {caracteristique}. {impact}",
+                    "Vos canaux d'acquisition présentent une dynamique {style}. {resultat}",
+                    "Le volume de leads entrants est {niveau}. {atout} {defi}",
+                    "Votre système d'attraction est {caracteristique}. {opportunite}",
+                    "Votre approche d'acquisition est {evaluation}. {recommandation}"
+                ],
+                constat: [
+                    "Les campagnes payantes sont {frequence}. {efficacite}",
+                    "Le SEO est {clarite}. {ajustement}",
+                    "Les réseaux sociaux génèrent {precision}. {optimisation}",
+                    "Le content marketing est {qualite}. {renforcement}",
+                    "Les partenariats sont {rapidite}. {fluidite}"
+                ],
+                conseil: [
+                    "Diversifiez vos canaux d'acquisition en {action} pendant {duree} pour {objectif}.",
+                    "Optimisez vos campagnes payantes à travers {methode}.",
+                    "Développez une stratégie de contenu {frequence} pour {objectif}.",
+                    "Structurez vos partenariats en {action}.",
+                    "Adoptez une approche inbound marketing pour {objectif}."
+                ]
+            },
+            conversion: {
+                analyse: [
+                    "Votre taux de conversion est {caracteristique}. {impact}",
+                    "Vos landing pages sont {niveau}. {ajustement}",
+                    "Votre tunnel de conversion est {precision}. {optimisation}",
+                    "Les formulaires de capture sont {clarite}. {alignement}",
+                    "Votre processus de qualification est {approche}. {adaptation}"
+                ],
+                constat: [
+                    "Les landing pages convertissent {respect}. {vigilance}",
+                    "Les CTA sont {identification}. {gestion}",
+                    "Les formulaires sont {allocation}. {optimisation}",
+                    "Le scoring des leads est {anticipation}. {mitigation}",
+                    "Le lead nurturing est {gestion}. {reactivite}"
+                ],
+                conseil: [
+                    "Optimisez votre tunnel de conversion en {action} sur {duree} pour {objectif}.",
+                    "Testez différentes versions de landing pages à travers {methode}.",
+                    "Simplifiez vos formulaires pour améliorer la conversion.",
+                    "Mettez en place un lead scoring pour {objectif}.",
+                    "Développez des séquences de nurturing {frequence}."
+                ]
+            },
+            contenu: {
+                analyse: [
+                    "Votre stratégie de contenu est {caracteristique}. {impact}",
+                    "La qualité de vos contenus est {niveau}. {priorisation}",
+                    "Votre calendrier éditorial est {style}. {efficacite}",
+                    "Les formats utilisés sont {identification}. {mitigation}",
+                    "Votre ligne éditoriale est {maturite}. {renforcement}"
+                ],
+                constat: [
+                    "La fréquence de publication est {adequation}. {renforcement}",
+                    "Les contenus sont {frequence}. {regularte}",
+                    "L'engagement est {communication}. {transparence}",
+                    "Les lead magnets sont {evaluation}. {preparation}",
+                    "La distribution est {efficacite}. {optimisation}"
+                ],
+                conseil: [
+                    "Renforcez votre stratégie de contenu en {action}.",
+                    "Créez des lead magnets à forte valeur ajoutée.",
+                    "Mettez en place un calendrier éditorial {frequence}.",
+                    "Diversifiez vos formats de contenu pour {objectif}.",
+                    "Optimisez la distribution de vos contenus pour {objectif}."
+                ]
+            },
+            nurturing: {
+                analyse: [
+                    "Votre lead nurturing est {caracteristique}. {impact}",
+                    "Vos séquences d'emails sont {niveau}. {ajustement}",
+                    "Votre scoring est {style}. {optimisation}",
+                    "La segmentation est {precision}. {renforcement}",
+                    "L'automatisation est {maturite}. {consolidation}"
+                ],
+                constat: [
+                    "Les emails de nurturing sont {controle}. {maitrise}",
+                    "La personnalisation est {adequation}. {securisation}",
+                    "Les workflows sont {suivi}. {transparence}",
+                    "L'engagement est {analyse}. {action}",
+                    "Les conversions sont {adequation}. {ajustement}"
+                ],
+                conseil: [
+                    "Structurez votre lead nurturing en {action}.",
+                    "Segmentez votre base pour personnaliser les messages.",
+                    "Mettez en place des workflows automatisés {frequence}.",
+                    "Analysez les taux d'engagement par segment.",
+                    "Optimisez vos séquences pour {objectif}."
+                ]
+            },
+            analyse: {
+                analyse: [
+                    "Votre analyse de données est {caracteristique}. {impact}",
+                    "Vos KPIs sont {niveau}. {renforcement}",
+                    "Votre attribution est {evaluation}. {developpement}",
+                    "Vos tableaux de bord sont {implication}. {mobilisation}",
+                    "Votre compréhension du parcours client est {clarite}. {optimisation}"
+                ],
+                constat: [
+                    "Le suivi des leads est {niveau}. {renforcement}",
+                    "Les sources sont {gestion}. {resolution}",
+                    "Les coûts d'acquisition sont {niveau}. {stimulation}",
+                    "Le ROI est {adequation}. {developpement}",
+                    "Les tests A/B sont {qualite}. {amelioration}"
+                ],
+                conseil: [
+                    "Renforcez votre analyse en {action}.",
+                    "Définissez des KPIs clairs pour {objectif}.",
+                    "Mettez en place un tableau de bord {frequence}.",
+                    "Analysez le coût d'acquisition par canal.",
+                    "Testez régulièrement vos hypothèses pour {objectif}."
+                ]
+            },
+            outils: {
+                analyse: [
+                    "Vos outils marketing sont {caracteristique}. {impact}",
+                    "Votre CRM est {precision}. {ajustement}",
+                    "L'intégration de vos outils est {niveau}. {optimisation}",
+                    "L'automatisation est {gestion}. {correction}",
+                    "L'écosystème technique est {fiabilite}. {securisation}"
+                ],
+                constat: [
+                    "Le CRM est {controle}. {maitrise}",
+                    "Les intégrations sont {adequation}. {securisation}",
+                    "Les workflows sont {suivi}. {transparence}",
+                    "La stack technique est {analyse}. {action}",
+                    "La formation aux outils est {adequation}. {ajustement}"
+                ],
+                conseil: [
+                    "Optimisez votre stack technique en {action}.",
+                    "Intégrez vos outils pour un flux de données fluide.",
+                    "Formez votre équipe aux outils marketing.",
+                    "Automatisez les tâches répétitives en {action}.",
+                    "Sécurisez vos données pour {objectif}."
+                ]
+            }
+        };
+
+        // ============================================================
+        // QUESTIONNAIRES
+        // ============================================================
+        var q1Data = [
+            { q: 'Quelle est votre expérience en génération de leads ?', options: ['Moins de 1 an', '1 à 3 ans', '3 à 5 ans', 'Plus de 5 ans'] },
+            { q: 'Quel est votre volume mensuel de leads ?', options: ['Moins de 50', '50 à 200', '200 à 500', 'Plus de 500'] },
+            { q: 'Quel est votre canal principal ?', options: ['SEO / Contenu', 'Publicité payante', 'Réseaux sociaux', 'Email marketing'] },
+            { q: 'Quel est votre objectif principal ?', options: ['Augmenter le volume', 'Améliorer la qualité', 'Réduire le coût', 'Automatiser le processus'] }
+        ];
+
+        var q2Data = [
+            { q: 'Comment décririez-vous votre flux de leads ?', options: ['Irrégulier', 'Stable', 'En croissance', 'Très dynamique'] },
+            { q: 'Quelle est votre principale difficulté ?', options: ['Générer du volume', 'Qualifier les leads', 'Convertir', 'Nourrir'] },
+            { q: 'Comment percevez-vous votre taux de conversion ?', options: ['Très faible', 'Faible', 'Bon', 'Excellent'] },
+            { q: 'Quelle est votre ambition à 2 ans ?', options: ['Stabiliser', 'Développer', 'Automatiser', 'Devenir leader'] }
+        ];
+
+        var q3Data = [
+            { q: 'Comment évaluez-vous votre maîtrise du SEO/Contenu ?', options: ['À créer', 'À développer', 'Bonne', 'Excellente'] },
+            { q: 'Comment évaluez-vous votre maîtrise des campagnes payantes ?', options: ['À créer', 'À développer', 'Bonne', 'Excellente'] },
+            { q: 'Comment gérez-vous le lead nurturing ?', options: ['Sans structure', 'De manière informelle', 'De manière structurée', 'De manière proactive'] },
+            { q: 'Avez-vous un appétit pour les outils d\'automatisation ?', options: ['Nul', 'Faible', 'Modéré', 'Très fort'] }
+        ];
+
+        // ============================================================
+        // GÉNÉRATION Q4 DYNAMIQUE
+        // ============================================================
+        function generateQ4Leads(demand, q1, q2, q3) {
+            var questions = [];
+            var baseQuestions = [
+                { q: 'Comment vos leads réagissent-ils à vos messages ?', options: ['Aucune réponse', 'Faible engagement', 'Bon engagement', 'Fort engagement'] },
+                { q: 'Quel est le niveau de qualité de vos leads ?', options: ['Très faible', 'Faible', 'Bon', 'Excellent'] },
+                { q: 'Avez-vous une vision claire de votre persona client ?', options: ['Aucune', 'Partielle', 'Claire', 'Parfaite'] },
+                { q: 'Comment gérez-vous l\'attribution des leads ?', options: ['Pas de suivi', 'Basique', 'Structuré', 'Avancé'] }
+            ];
+
+            if (q2 && (q2[0] === 'a' || q2[0] === 'b')) {
+                questions.push({ q: 'Quelle est la principale cause de faible volume ?', options: ['Budget', 'Compétences', 'Temps', 'Stratégie'] });
+            }
+            if (q2 && (q2[1] === 'a' || q2[1] === 'b')) {
+                questions.push({ q: 'Comment gérez-vous la qualification des leads ?', options: ['Manuellement', 'Avec un scoring', 'Avec un CRM', 'Avec IA'] });
+            }
+            if (q3 && (q3[2] === 'a' || q3[2] === 'b')) {
+                questions.push({ q: 'Quel est votre plus grand défi dans le nurturing ?', options: ['Personnalisation', 'Fréquence', 'Contenu', 'Automatisation'] });
+            }
+
+            while (questions.length < 4) {
+                var g = baseQuestions[questions.length % baseQuestions.length];
+                var exists = false;
+                for (var i = 0; i < questions.length; i++) {
+                    if (questions[i].q === g.q) { exists = true; break; }
+                }
+                if (!exists) { questions.push(g); }
+                else { questions.push({ q: 'Comment décririez-vous la qualité de votre base de données ?', options: ['Faible', 'Moyenne', 'Bonne', 'Excellente'] }); }
+            }
+            return questions.slice(0, 4);
+        }
+
+        // ============================================================
+        // SYSTÈME DE QUESTIONNAIRE AMÉLIORÉ
+        // ============================================================
+        function startQuestionnaire(questions, type, label) {
+            state.questions = questions;
+            state.currentType = type;
+            state.currentQuestionIndex = 0;
+            var arrKey = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' }[type];
+            state[arrKey] = [];
+            appendMessage('📋 <strong>' + label + '</strong> (' + questions.length + ' questions)');
+            renderQuestionImproved(0);
+        }
+
+        function renderQuestionImproved(index) {
+            var questions = state.questions;
+            if (index >= questions.length) { finalizeQuestionnaire(); return; }
+            var q = questions[index];
+            var type = state.currentType;
+            var total = questions.length;
+            var letters = ['a', 'b', 'c', 'd'];
+
+            var html = '<div class="question-block">';
+            html += '<span class="question-number">Question ' + (index + 1) + '/' + total + '</span>';
+            html += '<span class="question-label">' + q.q + '</span>';
+            html += '<div class="options-grid">';
+            for (var i = 0; i < q.options.length; i++) {
+                var letter = letters[i];
+                html += '<div class="option-btn" data-index="' + index + '" data-value="' + letter + '">';
+                html += '<span class="opt-letter">' + letter.toUpperCase() + '</span>';
+                html += q.options[i];
+                html += '</div>';
+            }
+            html += '</div><div id="questionFeedback"></div></div>';
+            clearDynamic();
+            dynamicZone.innerHTML = html;
+
+            var options = dynamicZone.querySelectorAll('.option-btn');
+            for (var j = 0; j < options.length; j++) {
+                (function(btn) {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        var allOpts = dynamicZone.querySelectorAll('.option-btn');
+                        for (var k = 0; k < allOpts.length; k++) { allOpts[k].classList.remove('active'); }
+                        this.classList.add('active');
+                        var value = this.dataset.value;
+                        var idx = parseInt(this.dataset.index);
+                        var map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' };
+                        var arrKey = map[state.currentType];
+                        state[arrKey][idx] = value;
+                        var fb = document.getElementById('questionFeedback');
+                        fb.innerHTML = '<div class="response-feedback"><i class="fas fa-check"></i> Réponse ' + value.toUpperCase() + ' enregistrée</div>';
+                        var serie = state[arrKey].join('');
+                        if (serie.length > 0) {
+                            var serieDiv = document.createElement('div');
+                            serieDiv.className = 'serie-display';
+                            serieDiv.innerHTML = '📝 Série : ' + serie;
+                            var oldSerie = dynamicZone.querySelector('.serie-display');
+                            if (oldSerie) oldSerie.remove();
+                            dynamicZone.appendChild(serieDiv);
+                        }
+                        setTimeout(function() { renderQuestionImproved(idx + 1); }, 400);
+                    });
+                })(options[j]);
+            }
+            setMainButton('Répondez en cliquant', 'fa-hand-pointer', null);
+            var map2 = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' };
+            var arrKey2 = map2[type];
+            var currentSerie = state[arrKey2] || [];
+            if (currentSerie.length > 0 && currentSerie.length < questions.length) {
+                var serieDisplay = document.createElement('div');
+                serieDisplay.className = 'serie-display';
+                serieDisplay.innerHTML = '📝 Série en cours : ' + currentSerie.join('');
+                dynamicZone.appendChild(serieDisplay);
+            }
+        }
+
+        function finalizeQuestionnaire() {
+            var type = state.currentType;
+            var map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' };
+            var arrKey = map[type];
+            var answers = state[arrKey];
+            var total = state.questions.length;
+            var allAnswered = true;
+            for (var i = 0; i < total; i++) { if (!answers[i]) { allAnswered = false; break; } }
+            if (!allAnswered || answers.length < total) {
+                appendMessage('⚠️ Veuillez répondre à toutes les questions.', false);
+                var firstMissing = 0;
+                for (var j = 0; j < total; j++) { if (!answers[j]) { firstMissing = j; break; } }
+                renderQuestionImproved(firstMissing);
+                return;
+            }
+            var serie = answers.join('');
+            appendMessage('✅ Réponses enregistrées : <strong>' + serie + '</strong>');
+            validateQuestions(type);
+        }
+
+        // ============================================================
+        // VALIDATION
+        // ============================================================
+        function validateQuestions(type) {
+            var map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4', action: 'qAction' };
+            var arrKey = map[type];
+            var answers = state[arrKey];
+            var total = state.questions.length;
+            if (!answers || answers.length < total || answers.some(function(a) { return !a; })) {
+                appendMessage('⚠️ Erreur : réponses incomplètes.', false);
+                return;
+            }
+
+            if (type === 'profil') {
+                state.secteur = 'leads';
+                var nivMap = { 'a': 'A', 'b': 'B', 'c': 'C', 'd': 'D' };
+                state.niveau = nivMap[state.q1[0]] || 'B';
+                var labelMap = { 'A': 'Très concis', 'B': 'Moyennement développé', 'C': 'Très précis', 'D': 'Ultra détaillé' };
+                state.niveauLabel = labelMap[state.niveau] || 'Moyennement développé';
+                appendMessage('✅ Agent en Calibrage.');
+                state.step = 'q1done';
+                var profil = generateProfilLeads(state.q1);
+                state.profilLeads = profil;
+                appendMessage('<div class="msg-block"><strong>📋 Profil Lead Generation</strong><br>' + profil + '</div>');
+                appendMessage('📋 Le prochain questionnaire me renseignera sur votre état d\'esprit acquisition.');
+                setTimeout(function() { startQuestionnaire(q2Data, 'cognitif', 'Questionnaire Cognitif Lead Generation'); }, 600);
+            } else if (type === 'cognitif') {
+                state.step = 'q2done';
+                var matrice = generateMatriceLeads(state.q1, state.q2);
+                state.matriceLeads = matrice;
+                appendMessage('<div class="msg-block"><strong>📊 Matrice Lead Generation</strong><br>' + matrice + '</div>');
+                appendMessage('📋 Le prochain questionnaire me renseignera sur vos compétences techniques.');
+                setTimeout(function() { startQuestionnaire(q3Data, 'competences', 'Questionnaire Compétences Lead Generation'); }, 600);
+            } else if (type === 'competences') {
+                state.step = 'q3done';
+                var archetype = generateArchetypeLeads(state.q1, state.q2, state.q3);
+                state.archetype = archetype;
+                appendMessage('<div class="msg-block"><strong>🏛️ Archétype Lead Generation</strong><br>' + archetype + '</div>');
+                appendMessage('<div class="msg-block"><strong>📊 Récapitulatif des réponses</strong><br><strong>Profil :</strong> ' + state.q1.join('') + '<br><strong>Cognitif :</strong> ' + state.q2.join('') + '<br><strong>Compétences :</strong> ' + state.q3.join('') + '</div>');
+                appendMessage('✏️ <strong>Formulez votre besoin lead generation avec vos mots.</strong>');
+                appendMessage('💡 Soyez précis : contexte, objectifs, canaux, difficultés...');
+                clearDynamic();
+                dynamicZone.innerHTML = '<div style="background:#fdf8ee;padding:16px;border-radius:24px;margin:8px 0;"><label style="font-weight:500;display:block;margin-bottom:8px;color:#2a2010;">Votre besoin :</label><textarea id="userDemandInput" rows="3" style="width:100%;padding:12px;border-radius:20px;border:1px solid #ccc;background:#fafafa;font-size:0.95rem;resize:vertical;" placeholder="Ex: Je dois augmenter mon volume de leads qualifiés et réduire mon coût d\'acquisition..."></textarea><button id="submitDemand" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre mon besoin</button></div>';
+                document.getElementById('submitDemand').addEventListener('click', function() {
+                    var demand = document.getElementById('userDemandInput').value.trim();
+                    if (demand.length < 5) { appendMessage('⚠️ Veuillez décrire votre besoin plus précisément.', false); return; }
+                    state.userDemand = demand;
+                    appendMessage('📝 <strong>Votre besoin :</strong> "' + demand + '"');
+                    var optimise = optimiserPrompt(demand, state.q1, state.q2, state.q3);
+                    state.userDemandOptimise = optimise;
+                    appendMessage('<div class="msg-block"><strong>📝 Prompt optimisé :</strong><br>' + optimise + '</div>');
+                    appendMessage('❓ <strong>Confirmez-vous ce prompt optimisé ?</strong> (ok / non)');
+                    clearDynamic();
+                    dynamicZone.innerHTML = '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="confirmOk" class="btn-primary" style="flex:1;"><i class="fas fa-check"></i> OK</button><button id="confirmNon" class="btn-secondary" style="flex:1;"><i class="fas fa-pen"></i> Modifier</button></div>';
+                    document.getElementById('confirmOk').addEventListener('click', function() {
+                        appendMessage('✅ Prompt validé. Analyse en cours...');
+                        state.step = 'q3validated';
+                        setTimeout(function() {
+                            var q4 = generateQ4Leads(state.userDemand, state.q1, state.q2, state.q3);
+                            state.q4 = [];
+                            startQuestionnaire(q4, 'situationnel', 'Questionnaire Situationnel Lead Generation');
+                        }, 600);
+                    });
+                    document.getElementById('confirmNon').addEventListener('click', function() {
+                        appendMessage('✏️ Reformulez votre besoin :');
+                        clearDynamic();
+                        dynamicZone.innerHTML = '<div style="background:#fdf8ee;padding:16px;border-radius:24px;margin:8px 0;"><label style="font-weight:500;display:block;margin-bottom:8px;color:#2a2010;">Votre besoin :</label><textarea id="userDemandInput2" rows="3" style="width:100%;padding:12px;border-radius:20px;border:1px solid #ccc;background:#fafafa;font-size:0.95rem;resize:vertical;">' + state.userDemand + '</textarea><button id="submitDemand2" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre</button></div>';
+                        document.getElementById('submitDemand2').addEventListener('click', function() {
+                            var newDemand = document.getElementById('userDemandInput2').value.trim();
+                            if (newDemand.length < 5) { appendMessage('⚠️ Veuillez décrire votre besoin plus précisément.', false); return; }
+                            state.userDemand = newDemand;
+                            var optimise2 = optimiserPrompt(newDemand, state.q1, state.q2, state.q3);
+                            state.userDemandOptimise = optimise2;
+                            appendMessage('📝 <strong>Nouveau prompt optimisé :</strong><br>' + optimise2);
+                            appendMessage('❓ <strong>Confirmez-vous ce nouveau prompt ?</strong> (ok / non)');
+                        });
+                    });
+                });
+            } else if (type === 'situationnel') {
+                state.step = 'q4done';
+                var realite = generateRealiteTerrainLeads(state.q1, state.q2, state.q3, state.q4);
+                state.realiteTerrain = realite;
+                appendMessage('<div class="msg-block"><strong>🌍 Réalité Terrain Lead Generation</strong><br>' + realite + '</div>');
+                appendMessage('❓ <strong>Souhaitez-vous une analyse SWOT de votre stratégie lead generation ?</strong>');
+                clearDynamic();
+                dynamicZone.innerHTML = '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="swotOui" class="btn-primary" style="flex:1;background:#2a7a4a;"><i class="fas fa-check"></i> Oui, SWOT</button><button id="swotNon" class="btn-secondary" style="flex:1;"><i class="fas fa-times"></i> Non</button></div>';
+                document.getElementById('swotOui').addEventListener('click', function() {
+                    appendMessage('✅ Analyse SWOT demandée.');
+                    generateSWOT();
+                    demandeSMART();
+                });
+                document.getElementById('swotNon').addEventListener('click', function() {
+                    appendMessage('⏭️ SWOT ignoré.');
+                    demandeSMART();
+                });
+            } else if (type === 'action') {
+                generatePlanActionDetaille();
+            }
+        }
+
+        // ============================================================
+        // SWOT
+        // ============================================================
+        function generateSWOT() {
+            var q1 = state.q1 || ['b', 'b', 'b', 'b'];
+            var q2 = state.q2 || ['b', 'b', 'b', 'b'];
+            var q3 = state.q3 || ['b', 'b', 'b', 'b'];
+            var q4 = state.q4 || ['b', 'b', 'b', 'b'];
+            var forces = [], faiblesses = [], opportunites = [], menaces = [];
+
+            if (q1[0] === 'd' || q1[0] === 'c') forces.push('Expérience solide en lead generation');
+            if (q1[1] === 'd' || q1[1] === 'c') forces.push('Volume de leads significatif');
+            if (q2[2] === 'd' || q2[2] === 'c') forces.push('Bon taux de conversion');
+            if (q3[0] === 'd' || q3[0] === 'c') forces.push('Maîtrise du SEO/Contenu');
+            if (q3[3] === 'd' || q3[3] === 'c') forces.push('Capacité d\'automatisation');
+
+            if (q2[0] === 'a' || q2[0] === 'b') faiblesses.push('Flux de leads irrégulier');
+            if (q2[1] === 'a' || q2[1] === 'b') faiblesses.push('Difficulté à générer du volume');
+            if (q3[1] === 'a' || q3[1] === 'b') faiblesses.push('Campagnes payantes à optimiser');
+            if (q3[2] === 'a' || q3[2] === 'b') faiblesses.push('Lead nurturing à structurer');
+
+            if (q2[3] === 'd' || q2[3] === 'c') opportunites.push('Ambition de développement');
+            if (q3[3] === 'd' || q3[3] === 'c') opportunites.push('Capacité d\'automatisation');
+            if (q1[3] === 'd' || q1[3] === 'c') opportunites.push('Objectif de rentabilité');
+
+            if (q2[0] === 'a') menaces.push('Risque de stagnation');
+            if (q4 && q4[0] === 'a') menaces.push('Faible engagement des leads');
+            if (q2[1] === 'a') menaces.push('Coût d\'acquisition élevé');
+
+            if (forces.length === 0) forces.push('Potentiel de développement');
+            if (faiblesses.length === 0) faiblesses.push('Aucune faiblesse majeure identifiée');
+            if (opportunites.length === 0) opportunites.push('Marché favorable');
+            if (menaces.length === 0) menaces.push('Concurrence sur les canaux');
+
+            var swotHtml = '<div class="swot-block"><strong>📊 ANALYSE SWOT LEAD GENERATION</strong><br><br>' +
+                '<span class="force"><strong>FORCES (S) :</strong></span><br>• ' + forces.join('<br>• ') + '<br><br>' +
+                '<span class="faiblesse"><strong>FAIBLESSES (W) :</strong></span><br>• ' + faiblesses.join('<br>• ') + '<br><br>' +
+                '<span class="opportunite"><strong>OPPORTUNITÉS (O) :</strong></span><br>• ' + opportunites.join('<br>• ') + '<br><br>' +
+                '<span class="menace"><strong>MENACES (T) :</strong></span><br>• ' + menaces.join('<br>• ') + '</div>';
+
+            state.swot = { forces: forces, faiblesses: faiblesses, opportunites: opportunites, menaces: menaces };
+            appendMessage(swotHtml);
+        }
+
+        function demandeSMART() {
+            appendMessage('❓ <strong>Souhaitez-vous une analyse SMART de vos objectifs lead generation ?</strong>');
+            clearDynamic();
+            dynamicZone.innerHTML = '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="smartOui" class="btn-primary" style="flex:1;background:#2a5a8a;"><i class="fas fa-check"></i> Oui, SMART</button><button id="smartNon" class="btn-secondary" style="flex:1;"><i class="fas fa-times"></i> Non</button></div>';
+            document.getElementById('smartOui').addEventListener('click', function() {
+                appendMessage('✅ Analyse SMART demandée.');
+                generateSMART();
+                generateConseilsLeads();
+            });
+            document.getElementById('smartNon').addEventListener('click', function() {
+                appendMessage('⏭️ SMART ignoré.');
+                generateConseilsLeads();
+            });
+        }
+
+        function generateSMART() {
+            var q1 = state.q1 || ['b', 'b', 'b', 'b'];
+            var q2 = state.q2 || ['b', 'b', 'b', 'b'];
+            var objectif = q2[3] === 'd' ? 'Devenir leader sur le marché' :
+                q2[3] === 'c' ? 'Automatiser le processus' :
+                q2[3] === 'b' ? 'Développer le volume' :
+                'Stabiliser l\'acquisition';
+
+            var smartHtml = '<div class="smart-block"><strong>📊 ANALYSE SMART - OBJECTIFS LEAD GENERATION</strong><br><br>' +
+                '<strong>🎯 SPÉCIFIQUE (S) :</strong><br>Objectif : ' + objectif +
+                '<br>→ Clarification : ' + (q2[1] === 'a' ? 'Augmenter le volume de leads' :
+                    q2[1] === 'b' ? 'Améliorer la qualification' :
+                    q2[1] === 'c' ? 'Optimiser la conversion' :
+                    'Structurer le nurturing') +
+                '<br><br><strong>📏 MESURABLE (M) :</strong><br>Indicateurs :<br>• Volume de leads : +XX%<br>• Coût par lead : -XX%<br>• Taux de conversion : +XX%<br><br>' +
+                '<strong>🎯 ATTEIGNABLE (A) :</strong><br>• Ressources : ' + (q1[1] === 'd' ? 'Volume important' : 'Volume à développer') +
+                '<br>• Canaux : ' + (q1[2] === 'd' ? 'Multi-canaux' : 'Canaux à diversifier') +
+                '<br><br><strong>✅ RÉALISTE (R) :</strong><br>• Contexte : ' + (q2[0] === 'd' ? 'Flux excellent' : q2[0] === 'c' ? 'Flux en croissance' : 'Flux à stabiliser') +
+                '<br>• Capacités : ' + (q1[0] === 'd' ? 'Expertise confirmée' : q1[0] === 'c' ? 'Bonne expertise' : 'Expertise à développer') +
+                '<br><br><strong>⏰ TEMPORELLEMENT DÉFINI (T) :</strong><br>• Échéance : 3 à 12 mois<br>• Étapes : Diagnostic → Optimisation → Automatisation' +
+                '</div>';
+
+            state.smart = smartHtml;
+            appendMessage(smartHtml);
+        }
+
+        // ============================================================
+        // LIVRABLES LEAD GENERATION
+        // ============================================================
+        function generateProfilLeads(q1) {
+            var exp = q1[0] || 'b';
+            var volume = q1[1] || 'b';
+            var canal = q1[2] || 'b';
+            var objectif = q1[3] || 'b';
+
+            var expText = { 'a': 'débutant', 'b': 'confirmé', 'c': 'expérimenté', 'd': 'expert' }[exp] || 'praticien';
+            var volumeText = { 'a': 'un petit volume', 'b': 'un volume moyen', 'c': 'un bon volume', 'd': 'un volume important' }[volume] || 'un volume';
+            var canalText = { 'a': 'SEO / Contenu', 'b': 'Publicité payante', 'c': 'Réseaux sociaux', 'd': 'Email marketing' }[canal] || 'un canal';
+            var objectifText = { 'a': 'augmenter le volume', 'b': 'améliorer la qualité', 'c': 'réduire le coût', 'd': 'automatiser' }[objectif] || 'un objectif';
+
+            return 'Vous êtes ' + expText + ' en génération de leads, avec ' + volumeText +
+                ' mensuel, principalement via ' + canalText +
+                ', avec pour objectif d\'' + objectifText +
+                '. Cette configuration vous confère une vision unique des enjeux d\'acquisition.';
+        }
+
+        function generateMatriceLeads(q1, q2) {
+            var flux = q2[0] || 'b';
+            var difficulte = q2[1] || 'b';
+            var conversion = q2[2] || 'b';
+            var ambition = q2[3] || 'b';
+
+            var fluxText = { 'a': 'un flux irrégulier à stabiliser', 'b': 'un flux stable à maintenir', 'c': 'un flux en croissance à accompagner', 'd': 'un flux très dynamique à gérer' }[flux] || 'un flux à surveiller';
+            var difficulteText = { 'a': 'générer du volume', 'b': 'qualifier les leads', 'c': 'convertir', 'd': 'nourrir' }[difficulte] || 'des défis variés';
+            var conversionText = { 'a': 'un taux de conversion très faible', 'b': 'un taux de conversion faible', 'c': 'un bon taux de conversion', 'd': 'un excellent taux de conversion' }[conversion] || 'un taux de conversion à consolider';
+            var ambitionText = { 'a': 'une ambition de stabilisation', 'b': 'une ambition de développement', 'c': 'une ambition d\'automatisation', 'd': 'une ambition de leadership' }[ambition] || 'une ambition de progression';
+
+            return 'Diagnostic primaire : Votre activité présente ' + fluxText +
+                '. Votre principale difficulté est ' + difficulteText +
+                '. Vous avez ' + conversionText +
+                '. Votre ambition est ' + ambitionText +
+                '. Cette configuration suggère un besoin d\'équilibre entre volume et qualité.';
+        }
+
+        function generateArchetypeLeads(q1, q2, q3) {
+            var exp = q1[0] || 'b';
+            var flux = q2[0] || 'b';
+            var seo = q3[0] || 'b';
+            var automatisation = q3[3] || 'b';
+
+            var archetype = '';
+            if ((exp === 'a' || exp === 'b') && flux === 'a') archetype = 'Le Lead Generator en Construction';
+            else if (exp === 'd' && seo === 'd') archetype = 'Le Lead Generator d\'Élite';
+            else if (flux === 'd' && automatisation === 'd') archetype = 'Le Lead Generator Automatisé';
+            else if (flux === 'a') archetype = 'Le Lead Generator en Rattrapage';
+            else if (exp === 'a') archetype = 'Le Lead Generator Débutant';
+            else if (seo === 'd') archetype = 'Le Lead Generator Content';
+            else archetype = 'Le Lead Generator en Évolution';
+
+            var seoText = seo === 'a' ? 'à créer' : seo === 'b' ? 'à développer' : seo === 'c' ? 'bonne' : 'excellente';
+            var automatisationText = automatisation === 'a' ? 'à initier' : automatisation === 'b' ? 'à développer' : automatisation === 'c' ? 'bonne' : 'très forte';
+
+            return 'Votre archétype lead generation est **' + archetype +
+                '**. La maîtrise du SEO/Contenu est ' + seoText +
+                ', avec une capacité d\'automatisation ' + automatisationText +
+                '. Cette combinaison vous positionne comme un professionnel capable de performer.';
+        }
+
+        function optimiserPrompt(demand, q1, q2, q3) {
+            var exp = q1[0] || 'b';
+            var volume = q1[1] || 'b';
+            var expText = { 'a': 'débutant', 'b': 'confirmé', 'c': 'expérimenté', 'd': 'expert' }[exp] || 'confirmé';
+            var volumeText = { 'a': 'petit volume', 'b': 'volume moyen', 'c': 'bon volume', 'd': 'grand volume' }[volume] || 'volume moyen';
+
+            return '**Contexte** : Praticien lead generation ' + expText + ' avec ' + volumeText +
+                '.\n**Demande** : ' + demand +
+                '\n**Objectif** : Améliorer la génération et la conversion de leads' +
+                '\n**Contrainte** : Environnement concurrentiel' +
+                '\n**Cible** : Leads qualifiés et clients' +
+                '\n**Style** : ' + state.niveauLabel;
+        }
+
+        function generateRealiteTerrainLeads(q1, q2, q3, q4) {
+            var attributs = [];
+            if (q4 && q4.length > 0) {
+                for (var i = 0; i < q4.length; i++) {
+                    var r = q4[i];
+                    var label = { 'a': 'Défis majeurs à relever', 'b': 'Obstacles à surmonter', 'c': 'Progression en cours', 'd': 'Atouts confirmés' }[r] || 'Éléments à considérer';
+                    attributs.push(label);
+                }
+            }
+            if (attributs.length === 0) attributs = ['Volume à augmenter', 'Qualité à améliorer', 'Potentiel de croissance'];
+
+            return 'Les attributs tangibles de votre situation lead generation révèlent : ' + attributs.join(', ') +
+                '. Ces éléments constituent la réalité terrain sur laquelle s\'appuiera la synthèse finale.';
+        }
+
+        // ============================================================
+        // CONSEILS DYNAMIQUES
+        // ============================================================
+        function genererConseilDynamique(specialite, contexte) {
+            var templates = BANQUE_CONSEILS_LEADS[specialite];
+            if (!templates) return { analyse: 'Analyse en cours', constat: 'Constat en cours', conseil: 'Conseil en cours' };
+
+            var analyseTemplate = templates.analyse[Math.floor(Math.random() * templates.analyse.length)];
+            var constatTemplate = templates.constat[Math.floor(Math.random() * templates.constat.length)];
+            var conseilTemplate = templates.conseil[Math.floor(Math.random() * templates.conseil.length)];
+
+            function remplacer(template) {
+                return template
+                    .replace(/{caracteristique}/g, contexte.caracteristique || 'en évolution')
+                    .replace(/{impact}/g, contexte.impact || 'impactant')
+                    .replace(/{profil}/g, contexte.profil || 'praticien')
+                    .replace(/{style}/g, contexte.style || 'structuré')
+                    .replace(/{resultat}/g, contexte.resultat || 'positif')
+                    .replace(/{niveau}/g, contexte.niveau || 'moyen')
+                    .replace(/{atout}/g, contexte.atout || 'un atout')
+                    .replace(/{defi}/g, contexte.defi || 'un défi')
+                    .replace(/{opportunite}/g, contexte.opportunite || 'une opportunité')
+                    .replace(/{evaluation}/g, contexte.evaluation || 'à évaluer')
+                    .replace(/{recommandation}/g, contexte.recommandation || 'à recommander')
+                    .replace(/{frequence}/g, contexte.frequence || 'régulière')
+                    .replace(/{efficacite}/g, contexte.efficacite || 'à optimiser')
+                    .replace(/{clarite}/g, contexte.clarite || 'à clarifier')
+                    .replace(/{ajustement}/g, contexte.ajustement || 'à ajuster')
+                    .replace(/{precision}/g, contexte.precision || 'à préciser')
+                    .replace(/{optimisation}/g, contexte.optimisation || 'à optimiser')
+                    .replace(/{qualite}/g, contexte.qualite || 'bonne')
+                    .replace(/{renforcement}/g, contexte.renforcement || 'à renforcer')
+                    .replace(/{rapidite}/g, contexte.rapidite || 'suffisante')
+                    .replace(/{fluidite}/g, contexte.fluidite || 'à améliorer')
+                    .replace(/{action}/g, contexte.action || 'des actions concrètes')
+                    .replace(/{duree}/g, contexte.duree || '21 jours')
+                    .replace(/{objectif}/g, contexte.objectif || 'votre objectif')
+                    .replace(/{methode}/g, contexte.methode || 'des méthodes adaptées')
+                    .replace(/{approche}/g, contexte.approche || 'une approche adaptée')
+                    .replace(/{adaptation}/g, contexte.adaptation || 'à adapter')
+                    .replace(/{respect}/g, contexte.respect || 'à respecter')
+                    .replace(/{vigilance}/g, contexte.vigilance || 'à surveiller')
+                    .replace(/{identification}/g, contexte.identification || 'à identifier')
+                    .replace(/{gestion}/g, contexte.gestion || 'à gérer')
+                    .replace(/{allocation}/g, contexte.allocation || 'à allouer')
+                    .replace(/{anticipation}/g, contexte.anticipation || 'à anticiper')
+                    .replace(/{mitigation}/g, contexte.mitigation || 'à mitiger')
+                    .replace(/{reactivite}/g, contexte.reactivite || 'à améliorer')
+                    .replace(/{priorisation}/g, contexte.priorisation || 'à prioriser')
+                    .replace(/{maturite}/g, contexte.maturite || 'à développer')
+                    .replace(/{adequation}/g, contexte.adequation || 'à renforcer')
+                    .replace(/{regularte}/g, contexte.regularte || 'régulière')
+                    .replace(/{communication}/g, contexte.communication || 'à améliorer')
+                    .replace(/{transparence}/g, contexte.transparence || 'à renforcer')
+                    .replace(/{preparation}/g, contexte.preparation || 'à préparer')
+                    .replace(/{controle}/g, contexte.controle || 'à contrôler')
+                    .replace(/{maitrise}/g, contexte.maitrise || 'à maîtriser')
+                    .replace(/{securisation}/g, contexte.securisation || 'à sécuriser')
+                    .replace(/{suivi}/g, contexte.suivi || 'à suivre')
+                    .replace(/{analyse}/g, contexte.analyse || 'à analyser')
+                    .replace(/{fiabilite}/g, contexte.fiabilite || 'à fiabiliser')
+                    .replace(/{developpement}/g, contexte.developpement || 'à développer')
+                    .replace(/{implication}/g, contexte.implication || 'bonne')
+                    .replace(/{mobilisation}/g, contexte.mobilisation || 'à mobiliser')
+                    .replace(/{resolution}/g, contexte.resolution || 'à résoudre')
+                    .replace(/{stimulation}/g, contexte.stimulation || 'à stimuler')
+                    .replace(/{amelioration}/g, contexte.amelioration || 'à améliorer')
+                    .replace(/{engagement}/g, contexte.engagement || 'à renforcer')
+                    .replace(/{partage}/g, contexte.partage || 'à partager')
+                    .replace(/{recueil}/g, contexte.recueil || 'à recueillir')
+                    .replace(/{integration}/g, contexte.integration || 'à intégrer')
+                    .replace(/{alignement}/g, contexte.alignement || 'à aligner')
+                    .replace(/{plateforme}/g, contexte.plateforme || 'votre plateforme')
+                    .replace(/{interaction}/g, contexte.interaction || 'à augmenter');
+            }
+
+            return {
+                analyse: remplacer(analyseTemplate),
+                constat: remplacer(constatTemplate),
+                conseil: remplacer(conseilTemplate)
+            };
+        }
+
+        // ============================================================
+        // MATRICE DE CONSEILS
+        // ============================================================
+        function generateConseilsLeads() {
+            var q1 = state.q1 || ['b', 'b', 'b', 'b'];
+            var q2 = state.q2 || ['b', 'b', 'b', 'b'];
+            var q3 = state.q3 || ['b', 'b', 'b', 'b'];
+            var q4 = state.q4 || ['b', 'b', 'b', 'b'];
+
+            var contexte = {
+                caracteristique: q2[0] === 'a' ? 'fragile' : q2[0] === 'b' ? 'à consolider' : q2[0] === 'c' ? 'solide' : 'excellente',
+                impact: q2[0] === 'a' ? 'nécessite une action rapide' : 'en progression',
+                profil: q1[0] === 'a' ? 'débutant' : q1[0] === 'b' ? 'confirmé' : q1[0] === 'c' ? 'expérimenté' : 'expert',
+                style: q1[2] === 'a' ? 'SEO' : q1[2] === 'b' ? 'payant' : q1[2] === 'c' ? 'social' : 'email',
+                niveau: q2[0] === 'a' ? 'critique' : q2[0] === 'b' ? 'à surveiller' : q2[0] === 'c' ? 'bon' : 'excellent',
+                atout: q3[0] === 'd' ? 'une maîtrise exceptionnelle' : 'des compétences solides',
+                defi: q2[1] === 'a' ? 'un besoin de volume' : 'une optimisation continue',
+                opportunite: q2[3] === 'd' ? 'un potentiel de leadership' : 'un développement prometteur',
+                evaluation: q3[0] === 'a' ? 'à créer' : q3[0] === 'b' ? 'à développer' : q3[0] === 'c' ? 'bonne' : 'excellente',
+                recommandation: 'des actions ciblées',
+                frequence: 'hebdomadaire',
+                efficacite: 'à optimiser',
+                clarite: 'à clarifier',
+                ajustement: 'à ajuster',
+                precision: 'à préciser',
+                optimisation: 'à optimiser',
+                qualite: 'bonne',
+                renforcement: 'à renforcer',
+                rapidite: 'suffisante',
+                fluidite: 'à améliorer',
+                action: 'des actions concrètes',
+                duree: q1[3] === 'a' ? '15 jours' : q1[3] === 'b' ? '30 jours' : q1[3] === 'c' ? '60 jours' : '90 jours',
+                objectif: 'améliorer vos performances',
+                methode: 'des méthodes adaptées',
+                approche: 'une approche adaptée',
+                adaptation: 'à adapter',
+                respect: 'à respecter',
+                vigilance: 'à surveiller',
+                identification: 'à identifier',
+                gestion: 'à gérer',
+                allocation: 'à allouer',
+                anticipation: 'à anticiper',
+                mitigation: 'à mitiger',
+                reactivite: 'à améliorer',
+                priorisation: 'à prioriser',
+                maturite: 'à développer',
+                adequation: 'à renforcer',
+                reguarte: 'régulière',
+                communication: 'à améliorer',
+                transparence: 'à renforcer',
+                preparation: 'à préparer',
+                controle: 'à contrôler',
+                maitrise: 'à maîtriser',
+                securisation: 'à sécuriser',
+                suivi: 'à suivre',
+                analyse: 'à analyser',
+                fiabilite: 'à fiabiliser',
+                developpement: 'à développer',
+                implication: 'bonne',
+                mobilisation: 'à mobiliser',
+                resolution: 'à résoudre',
+                stimulation: 'à stimuler',
+                amelioration: 'à améliorer',
+                engagement: 'à renforcer',
+                partage: 'à partager',
+                recueil: 'à recueillir',
+                integration: 'à intégrer',
+                alignement: 'à aligner',
+                plateforme: 'votre plateforme',
+                interaction: 'à augmenter'
+            };
+
+            var specialites = [
+                { key: 'acquisition', label: '🎯 Acquisition & Canaux', icon: 'fa-search' },
+                { key: 'conversion', label: '🔄 Conversion & Tunnel', icon: 'fa-filter' },
+                { key: 'contenu', label: '📝 Contenu & Lead Magnets', icon: 'fa-pen-fancy' },
+                { key: 'nurturing', label: '💌 Nurturing & Scoring', icon: 'fa-envelope-open-text' },
+                { key: 'analyse', label: '📊 Analyse & Attribution', icon: 'fa-chart-bar' },
+                { key: 'outils', label: '⚙️ Outils & Automatisation', icon: 'fa-cogs' }
+            ];
+
+            var conseils = {};
+            var scores = calculerScoresLeads(q1, q2, q3, q4);
+
+            for (var i = 0; i < specialites.length; i++) {
+                var s = specialites[i];
+                var c = genererConseilDynamique(s.key, contexte);
+                conseils[s.key] = c;
+            }
+
+            state.conseils = conseils;
+
+            appendMessage('📊 <strong>MATRICE DE CONSEILS LEAD GENERATION</strong>');
+            appendMessage('<em>💡 Avis de consulting - Une lecture logique de votre stratégie, pas une vérité absolue.</em>');
+
+            for (var j = 0; j < specialites.length; j++) {
+                var s = specialites[j];
+                var c = conseils[s.key] || { analyse: 'Analyse en cours', constat: 'Constat en cours', conseil: 'Conseil en cours' };
+                var score = scores[s.key] || 7;
+                var etoiles = '';
+                for (var k = 0; k < Math.floor(score / 2); k++) { etoiles += '⭐'; }
+                appendMessage('<div class="conseil-block"><span class="badge-conseil"><i class="fas ' + s.icon + '"></i> ' + s.label + '</span><div style="margin-top:6px;"><div class="analyse"><strong>📌 Analyse :</strong> ' + c.analyse + '</div><div class="constat"><strong>⚠️ Constat :</strong> ' + c.constat + '</div><div class="conseil"><strong>💡 Conseil :</strong> ' + c.conseil + '</div><div class="score"><i class="fas fa-star"></i> Score : ' + score + '/10 ' + etoiles + '</div></div></div>');
+            }
+
+            state.matrixGenerated = true;
+            appendMessage('✅ <strong>Matrice de conseils lead generation générée.</strong>');
+            generateSyntheseFinale();
+        }
+
+        function calculerScoresLeads(q1, q2, q3, q4) {
+            var scores = { acquisition: 5, conversion: 5, contenu: 5, nurturing: 5, analyse: 5, outils: 5 };
+            function getScore(val) { var map = { 'a': 1, 'b': 2, 'c': 3, 'd': 4 }; return map[val] || 2; }
+
+            if (q1[0]) scores.acquisition += getScore(q1[0]) - 1;
+            if (q1[1]) scores.conversion += getScore(q1[1]) - 1;
+            if (q1[2]) scores.contenu += getScore(q1[2]) - 1;
+            if (q2[0]) scores.acquisition += getScore(q2[0]) - 1;
+            if (q2[1] === 'a') scores.acquisition += 2;
+            if (q2[1] === 'b') scores.conversion += 2;
+            if (q2[1] === 'c') scores.nurturing += 2;
+            if (q2[1] === 'd') scores.nurturing += 1;
+            if (q2[2]) scores.conversion += getScore(q2[2]) - 1;
+            if (q3[0]) scores.contenu += getScore(q3[0]) - 1;
+            if (q3[1]) scores.acquisition += getScore(q3[1]) - 1;
+            if (q3[2]) scores.nurturing += getScore(q3[2]) - 1;
+            if (q3[3]) scores.outils += getScore(q3[3]) - 1;
+
+            if (q4 && q4[0]) scores.nurturing += getScore(q4[0]) - 1;
+            if (q4 && q4[1]) scores.conversion += getScore(q4[1]) - 1;
+            if (q4 && q4[2]) scores.analyse += getScore(q4[2]) - 1;
+            if (q4 && q4[3]) scores.outils += getScore(q4[3]) - 1;
+
+            for (var key in scores) {
+                if (scores[key] > 10) scores[key] = 10;
+                if (scores[key] < 1) scores[key] = 1;
+                scores[key] = Math.round(scores[key]);
+            }
+            state.scores = scores;
+            return scores;
+        }
+
+        // ============================================================
+        // SYNTHÈSE FINALE
+        // ============================================================
+        function generateSyntheseFinale() {
+            var conformite = Math.floor(Math.random() * 20) + 80;
+            state.conformite = conformite;
+            appendMessage('📊 <strong>Agent Conformité : Audit en cours...</strong>');
+            appendMessage('📊 <strong>Score de conformité : ' + conformite + '%</strong>');
+
+            if (conformite < 80) {
+                appendMessage('⚠️ <strong>Conformité insuffisante. Retour au questionnaire situationnel.</strong>');
+                var q4 = generateQ4Leads(state.userDemand, state.q1, state.q2, state.q3);
+                state.q4 = [];
+                startQuestionnaire(q4, 'situationnel', 'Questionnaire Situationnel Lead Generation');
+                return;
+            }
+
+            var synthese = '<strong>🔍 SYNTHÈSE FINALE — CAS Génération de Leads</strong><br><br>' +
+                '<strong>📌 Général :</strong><br>' + state.archetype +
+                ' Votre flux de leads est ' + (state.q2[0] === 'a' ? 'irrégulier' : state.q2[0] === 'b' ? 'stable' : state.q2[0] === 'c' ? 'en croissance' : 'très dynamique') +
+                '. Votre taux de conversion est ' + (state.q2[2] === 'a' ? 'très faible' : state.q2[2] === 'b' ? 'faible' : state.q2[2] === 'c' ? 'bon' : 'excellent') +
+                '.<br><br>' +
+                '<strong>📌 Moyens et aptitudes :</strong><br>' +
+                'Vous disposez de ' + (state.q3[0] === 'a' ? 'compétences SEO à créer' : state.q3[0] === 'b' ? 'compétences SEO à développer' : state.q3[0] === 'c' ? 'bonnes compétences SEO' : 'compétences SEO excellentes') +
+                '. Votre lead nurturing est ' + (state.q3[2] === 'a' ? 'à créer' : state.q3[2] === 'b' ? 'à structurer' : state.q3[2] === 'c' ? 'structuré' : 'proactif') +
+                '.<br><br>' +
+                '<strong>📌 Cartographie des actions :</strong><br>' +
+                '• Acquisition : ' + (state.q3[0] === 'a' ? 'À créer' : state.q3[0] === 'b' ? 'À développer' : state.q3[0] === 'c' ? 'À renforcer' : 'À consolider') + '<br>' +
+                '• Conversion : ' + (state.q2[1] === 'b' ? 'Prioritaire' : 'À optimiser') + '<br>' +
+                '• Contenu : ' + (state.q2[1] === 'c' ? 'Prioritaire' : 'À structurer') + '<br>' +
+                '• Nurturing : ' + (state.q2[1] === 'd' ? 'Prioritaire' : 'À renforcer') + '<br>' +
+                '• Analyse : ' + (state.q3[1] === 'a' ? 'À créer' : 'À optimiser') + '<br>' +
+                '• Outils : ' + (state.q3[3] === 'a' ? 'À créer' : 'À optimiser') + '<br><br>' +
+                '<strong>📌 Points forts et points faibles :</strong><br>' +
+                '<strong>Points forts :</strong> ' + (state.q3[0] === 'd' ? 'SEO maîtrisé' : state.q3[0] === 'c' ? 'Bons SEO' : 'Potentiel d\'apprentissage') +
+                ' · ' + (state.q1[0] === 'd' ? 'Expertise confirmée' : 'Expérience en développement') + '<br>' +
+                '<strong>Points faibles :</strong> ' + (state.q2[0] === 'a' ? 'Flux irrégulier' : 'Flux à optimiser') +
+                ' · ' + (state.q3[2] === 'a' ? 'Nurturing inexistant' : 'Nurturing à optimiser');
+
+            state.syntheseFinale = synthese;
+            appendMessage('<div class="msg-block" style="border-left-color:#e8a317;">' + synthese + '</div>');
+
+            appendMessage('❓ <strong>Souhaitez-vous un plan d\'action détaillé pour mettre en œuvre ces conseils ?</strong>');
+            clearDynamic();
+            dynamicZone.innerHTML = '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="actionOui" class="btn-primary" style="flex:1;"><i class="fas fa-check"></i> Action</button><button id="actionNon" class="btn-secondary" style="flex:1;"><i class="fas fa-times"></i> Non</button></div>';
+            document.getElementById('actionOui').addEventListener('click', function() {
+                appendMessage('✅ Plan d\'action demandé.');
+                generateActionQuestions();
+            });
+            document.getElementById('actionNon').addEventListener('click', function() {
+                appendMessage('⏭️ Plan d\'action ignoré.');
+                proposeSkillsUpGrade();
+            });
+        }
+
+        // ============================================================
+        // PLAN D'ACTION
+        // ============================================================
+        function generateActionQuestions() {
+            var qActionData = [
+                { q: 'Quel est votre objectif principal pour les 30 prochains jours ?', options: ['Augmenter le volume', 'Améliorer la conversion', 'Réduire le coût', 'Automatiser'] },
+                { q: 'Quelle est la durée souhaitée pour ce plan ?', options: ['30 jours', '60 jours', '90 jours', '120 jours'] },
+                { q: 'Quels moyens humains pouvez-vous mobiliser ?', options: ['Moi seul', 'Mon équipe', 'Un consultant externe', 'Une agence'] },
+                { q: 'Avez-vous un objectif chiffré à atteindre ?', options: ['Non', 'Oui, un KPI', 'Oui, plusieurs KPI', 'Oui, un objectif de résultat'] }
+            ];
+            state.qAction = [];
+            startQuestionnaire(qActionData, 'action', 'Questionnaire Action Lead Generation');
+        }
+
+        function generatePlanActionDetaille() {
+            var qAction = state.qAction;
+            var objectif = qAction[0] || 'b';
+            var duree = qAction[1] || 'c';
+            var moyens = qAction[2] || 'b';
+            var chiffre = qAction[3] || 'b';
+
+            var objText = { 'a': 'Augmentation du volume', 'b': 'Amélioration de la conversion', 'c': 'Réduction du coût', 'd': 'Automatisation' }[objectif] || 'Objectif lead generation';
+            var dureeText = { 'a': '30 jours', 'b': '60 jours', 'c': '90 jours', 'd': '120 jours' }[duree] || '90 jours';
+            var moyensText = { 'a': 'vous-même', 'b': 'votre équipe', 'c': 'un consultant', 'd': 'une agence' }[moyens] || 'les ressources disponibles';
+            var chiffreText = { 'a': 'qualitatif', 'b': 'un KPI', 'c': 'plusieurs KPI', 'd': 'un objectif de résultat' }[chiffre] || 'mesurable';
+
+            var conseils = state.conseils || {};
+            var actionsConseils = [];
+            if (conseils.acquisition) actionsConseils.push('• ' + conseils.acquisition.conseil);
+            if (conseils.conversion) actionsConseils.push('• ' + conseils.conversion.conseil);
+            if (conseils.nurturing) actionsConseils.push('• ' + conseils.nurturing.conseil);
+            if (actionsConseils.length > 3) actionsConseils = actionsConseils.slice(0, 3);
+
+            var swotText = '';
+            if (state.swot) {
+                swotText = '<br><strong>📊 SWOT intégré :</strong><br>' +
+                    (state.swot.forces && state.swot.forces.length > 0 ? '• Forces : ' + state.swot.forces.join(', ') + '<br>' : '') +
+                    (state.swot.faiblesses && state.swot.faiblesses.length > 0 ? '• Faiblesses : ' + state.swot.faiblesses.join(', ') + '<br>' : '') +
+                    (state.swot.opportunites && state.swot.opportunites.length > 0 ? '• Opportunités : ' + state.swot.opportunites.join(', ') + '<br>' : '') +
+                    (state.swot.menaces && state.swot.menaces.length > 0 ? '• Menaces : ' + state.swot.menaces.join(', ') : '');
+            }
+
+            var plan = '<strong>📋 PLAN D\'ACTION LEAD GENERATION</strong><br><br>' +
+                '<strong>🎯 Objectif :</strong> ' + objText + '<br>' +
+                '<strong>📆 Durée :</strong> ' + dureeText + '<br>' +
+                '<strong>👥 Moyens :</strong> ' + moyensText + '<br>' +
+                '<strong>🎯 Objectif chiffré :</strong> ' + chiffreText + '<br>' +
+                swotText +
+                (state.smart ? '<br><strong>🎯 SMART intégré :</strong><br>' + state.smart : '') +
+                '<br><br>' +
+                '<strong>Phase 1 - Diagnostic & Priorisation (J1-J' + Math.floor(parseInt(dureeText) / 3) + ') :</strong><br>' +
+                '• Analyser votre situation actuelle<br>' +
+                '• Identifier les 3 priorités parmi les conseils de la matrice<br>' +
+                '• Définir les objectifs SMART pour chaque priorité<br>' +
+                (actionsConseils.length > 0 ? '<br><strong>Actions issues de la matrice :</strong><br>' + actionsConseils.join('<br>') : '') +
+                '<br><br>' +
+                '<strong>Phase 2 - Mise en Œuvre (J' + (Math.floor(parseInt(dureeText) / 3) + 1) + '-J' + Math.floor(parseInt(dureeText) * 2 / 3) + ') :</strong><br>' +
+                '• Mettre en œuvre les actions prioritaires<br>' +
+                '• Suivre les premiers indicateurs<br>' +
+                '• Ajuster si nécessaire<br><br>' +
+                '<strong>Phase 3 - Consolidation (J' + (Math.floor(parseInt(dureeText) * 2 / 3) + 1) + '-J' + parseInt(dureeText) + ') :</strong><br>' +
+                '• Consolider les actions gagnantes<br>' +
+                '• Évaluer l\'impact sur la performance<br>' +
+                '• Formaliser un plan de suite<br><br>' +
+                '<strong>Budget estimé :</strong> À définir selon les moyens mobilisés<br>' +
+                '<strong>Calendrier :</strong> À établir avec les parties prenantes<br>' +
+                '<strong>Indicateurs de succès :</strong> ' + chiffreText + ' avec revue hebdomadaire<br><br>' +
+                '<em>💡 Avis de consulting - Proposition logique basée sur votre situation lead generation.</em>';
+
+            state.planAction = plan;
+            appendMessage('<div class="msg-block" style="border-left-color:#e8a317;">' + plan + '</div>');
+            proposeSkillsUpGrade();
+        }
+
+        // ============================================================
+        // SKILLS UP GRADE
+        // ============================================================
+        function proposeSkillsUpGrade() {
+            appendMessage('📚 <strong>Souhaitez-vous un plan "Skills Up Grade Lead Generation" pour parfaire vos connaissances ?</strong>');
+            clearDynamic();
+            dynamicZone.innerHTML = '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="skillsOk" class="btn-primary" style="flex:1;"><i class="fas fa-check"></i> OK</button><button id="skillsNon" class="btn-secondary" style="flex:1;"><i class="fas fa-times"></i> Non</button></div>';
+            document.getElementById('skillsOk').addEventListener('click', function() {
+                appendMessage('✅ Plan Skills Up Grade généré.');
+                generateSkillsUpGrade();
+            });
+            document.getElementById('skillsNon').addEventListener('click', function() {
+                appendMessage('⏭️ Skills Up Grade ignoré.');
+                proposePDF();
+            });
+        }
+
+        function generateSkillsUpGrade() {
+            var lacunes = [];
+            if (state.q3[0] === 'a' || state.q3[0] === 'b') lacunes.push('SEO et Content Marketing');
+            if (state.q3[1] === 'a' || state.q3[1] === 'b') lacunes.push('Publicité payante (Google, Meta)');
+            if (state.q3[2] === 'a' || state.q3[2] === 'b') lacunes.push('Lead nurturing et scoring');
+            if (state.q3[3] === 'a' || state.q3[3] === 'b') lacunes.push('Outils d\'automatisation marketing');
+            if (lacunes.length === 0) lacunes.push('Renforcement des compétences lead generation');
+
+            var plan = '<strong>📚 SKILLS UP GRADE LEAD GENERATION — 21 JOURS</strong><br><br>' +
+                '<strong>🎯 Objectif :</strong> ' + lacunes.join(', ') + '<br><br>' +
+                '<strong>📆 Chronologie :</strong><br>' +
+                '<strong>Semaine 1 - Fondamentaux :</strong><br>' +
+                '• ' + (lacunes[0] || 'SEO et Content Marketing') + '<br>' +
+                '• Lecture : "Inbound Marketing" - B. Halligan<br>' +
+                '• Exercice pratique : Audit SEO<br><br>' +
+                '<strong>Semaine 2 - Approfondissement :</strong><br>' +
+                '• ' + (lacunes[1] || 'Publicité payante') + '<br>' +
+                '• Formation : "Google Ads et Meta Ads"<br>' +
+                '• Mise en situation : Créer une campagne<br><br>' +
+                '<strong>Semaine 3 - Application :</strong><br>' +
+                '• ' + (lacunes[2] || 'Lead nurturing') + '<br>' +
+                '• Workshop : "Automation marketing"<br>' +
+                '• Bilan : Plan de progression<br><br>' +
+                '<strong>📖 Références :</strong><br>' +
+                '• "Inbound Marketing" - B. Halligan<br>' +
+                '• "Traction" - G. Weinberg<br>' +
+                '• "The Lead Machine" - Collectif<br><br>' +
+                '<strong>Éléments indispensables :</strong> Engagement quotidien (15 min), Pratique active, Tests A/B<br>' +
+                '<strong>Éléments facultatifs :</strong> Coaching externe, Formation certifiante, Mentorat';
+
+            state.skillsUpGrade = plan;
+            appendMessage('<div class="msg-block" style="border-left-color:#e8a317;">' + plan + '</div>');
+            proposePDF();
+        }
+
+        // ============================================================
+        // EXPORT PDF
+        // ============================================================
+        function proposePDF() {
+            appendMessage('📄 <strong>Souhaitez-vous un PDF complet de la consultation ?</strong>');
+            clearDynamic();
+            dynamicZone.innerHTML = '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="pdfOk" class="btn-pdf" style="flex:1;"><i class="fas fa-file-pdf"></i> Oui</button><button id="pdfNon" class="btn-secondary" style="flex:1;"><i class="fas fa-times"></i> Non</button></div>';
+            document.getElementById('pdfOk').addEventListener('click', function() {
+                appendMessage('📄 Génération du PDF...');
+                exportPDFManager();
+            });
+            document.getElementById('pdfNon').addEventListener('click', function() {
+                appendMessage('⏭️ Export PDF ignoré.');
+                cloreConsultation();
+            });
+        }
+
+        function exportPDFManager() {
+            var swotText = '';
+            if (state.swot) {
+                swotText = '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                    '<h2 style="color:#e8a317;font-size:18px;">📊 Analyse SWOT</h2>' +
+                    '<p><strong>Forces :</strong> ' + (state.swot.forces ? state.swot.forces.join(', ') : 'Non spécifié') + '</p>' +
+                    '<p><strong>Faiblesses :</strong> ' + (state.swot.faiblesses ? state.swot.faiblesses.join(', ') : 'Non spécifié') + '</p>' +
+                    '<p><strong>Opportunités :</strong> ' + (state.swot.opportunites ? state.swot.opportunites.join(', ') : 'Non spécifié') + '</p>' +
+                    '<p><strong>Menaces :</strong> ' + (state.swot.menaces ? state.swot.menaces.join(', ') : 'Non spécifié') + '</p></div>';
+            }
+
+            var smartText = state.smart ? '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#e8a317;font-size:18px;">📊 Analyse SMART</h2>' +
+                '<div>' + state.smart + '</div></div>' : '';
+
+            var content = '<div style="font-family:Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;background:white;">' +
+                '<div style="text-align:center;border-bottom:2px solid #e8a317;padding-bottom:20px;margin-bottom:30px;">' +
+                '<h1 style="color:#e8a317;font-size:28px;">CAS · Génération de Leads</h1>' +
+                '<p style="color:#7a6a2a;font-size:16px;">Rapport complet de consultation</p>' +
+                '<p style="color:#8a7a3a;font-size:14px;">' + new Date().toLocaleDateString('fr-FR') + '</p>' +
+                '<p style="color:#8a7a3a;font-size:12px;">Niveau : ' + state.niveauLabel + '</p></div>' +
+
+                '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#e8a317;font-size:18px;">📋 Profil Lead Generation</h2>' +
+                '<p>' + state.profilLeads + '</p></div>' +
+
+                '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#e8a317;font-size:18px;">📊 Matrice Lead Generation</h2>' +
+                '<p>' + state.matriceLeads + '</p></div>' +
+
+                '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#e8a317;font-size:18px;">🏛️ Archétype Lead Generation</h2>' +
+                '<p>' + state.archetype + '</p></div>' +
+
+                '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;">' +
+                '<h2 style="color:#e8a317;font-size:18px;">🌍 Réalité Terrain</h2>' +
+                '<p>' + state.realiteTerrain + '</p></div>' +
+
+                swotText + smartText +
+
+                '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;border-left:4px solid #e8a317;">' +
+                '<h2 style="color:#e8a317;font-size:18px;">🔍 Synthèse Finale</h2>' +
+                '<div>' + state.syntheseFinale + '</div></div>';
+
+            if (state.planAction) {
+                content += '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;border-left:4px solid #2a7a4a;">' +
+                    '<h2 style="color:#2a7a4a;font-size:18px;">📋 Plan d\'Action</h2>' +
+                    '<div>' + state.planAction + '</div></div>';
+            }
+
+            if (state.skillsUpGrade) {
+                content += '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-bottom:20px;border-left:4px solid #2a5a8a;">' +
+                    '<h2 style="color:#2a5a8a;font-size:18px;">📚 Skills Up Grade</h2>' +
+                    '<div>' + state.skillsUpGrade + '</div></div>';
+            }
+
+            content += '<div style="background:#fdf8ee;padding:20px;border-radius:12px;margin-top:30px;border:1px solid #e8a317;">' +
+                '<h2 style="color:#e8a317;font-size:16px;">💡 Prochaine étape</h2>' +
+                '<p>Découvrez notre offre <strong>MCE Coaching</strong> avec suivi personnalisé.</p></div>' +
+
+                '<div style="text-align:center;border-top:1px solid #ddd;padding-top:20px;margin-top:30px;color:#8a7a3a;font-size:12px;">' +
+                '<p>CAS · Génération de Leads — ' + new Date().toLocaleDateString('fr-FR') + '</p>' +
+                '<p style="font-weight:600;color:#e8a317;">Lead generation maîtrisé. CAS Génération de Leads opérationnel.</p></div></div>';
+
+            var container = document.createElement('div');
+            container.innerHTML = content;
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            container.style.top = '0';
+            container.style.width = '800px';
+            document.body.appendChild(container);
+
+            html2canvas(container, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }).then(function(canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                var pdfWidth = pdf.internal.pageSize.getWidth();
+                var pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save('CAS_Leads_' + new Date().toISOString().slice(0, 10) + '.pdf');
+                document.body.removeChild(container);
+                appendMessage('✅ PDF exporté avec succès !');
+                cloreConsultation();
+            }).catch(function(err) {
+                console.error('Erreur export PDF:', err);
+                appendMessage('⚠️ Erreur lors de l\'export PDF.', false);
+                cloreConsultation();
+            });
+        }
+
+        // ============================================================
+        // CLÔTURE
+        // ============================================================
+        function cloreConsultation() {
+            appendMessage('🏁 <strong>CAS Génération de Leads — Fin de consultation</strong>');
+            appendMessage('<div class="msg-block" style="border-left-color:#e8a317;text-align:center;"><strong>✅ Résumé envoyé à Conformité</strong><br><em>Lead generation maîtrisé. CAS Génération de Leads opérationnel.</em></div>');
+            setMainButton('Terminé', 'fa-check', function() {});
+            appendMessage('<strong>📌 Lead generation maîtrisé. CAS Génération de Leads opérationnel.</strong>');
+        }
+
+        // ============================================================
+        // HANDLE GO
+        // ============================================================
+        function handleGo() {
+            if (state.step === 'idle' || state.step === 'go') {
+                appendMessage('🚀 <strong>Consultation lead generation premium</strong>');
+                state.step = 'go';
+                state.q1 = []; state.q2 = []; state.q3 = []; state.q4 = []; state.qAction = [];
+                state.conseils = null; state.swot = null; state.smart = null;
+                appendMessage('📋 <strong>Choisissez votre niveau de développement :</strong>');
+                clearDynamic();
+                dynamicZone.innerHTML = '<div style="display:flex;gap:12px;margin:8px 0;flex-wrap:wrap;"><button id="nivA" class="btn-primary" style="flex:1;background:#c8a830;"><i class="fas fa-compress"></i> A) Très concis</button><button id="nivB" class="btn-primary" style="flex:1;background:#e8a317;"><i class="fas fa-align-left"></i> B) Moyennement développé</button><button id="nivC" class="btn-primary" style="flex:1;background:#b87a0a;"><i class="fas fa-align-justify"></i> C) Très précis</button></div>';
+                document.getElementById('nivA').addEventListener('click', function() { setNiveau('A', 'Très concis'); });
+                document.getElementById('nivB').addEventListener('click', function() { setNiveau('B', 'Moyennement développé'); });
+                document.getElementById('nivC').addEventListener('click', function() { setNiveau('C', 'Très précis'); });
+            } else {
+                appendMessage('⚠️ Session déjà en cours.', false);
+            }
+        }
+
+        function setNiveau(niveau, label) {
+            state.niveau = niveau;
+            state.niveauLabel = label;
+            appendMessage('✅ Niveau : <strong>' + label + '</strong>');
+            startQuestionnaire(q1Data, 'profil', 'Questionnaire Profil Lead Generation');
+        }
+
+        function resetAgent() {
+            state = {
+                step: 'idle', q1: [], q2: [], q3: [], q4: [], qAction: [],
+                currentQuestionIndex: 0, currentType: null, questions: [],
+                userDemand: '', userDemandOptimise: '',
+                niveau: 'B', niveauLabel: 'Moyennement développé',
+                secteur: 'leads', taille: 'moyenne',
+                planDemande: false, matrixGenerated: false, dernierConseils: null,
+                conformite: 0, archetype: '', profilLeads: '', matriceLeads: '',
+                realiteTerrain: '', syntheseFinale: '', skillsUpGrade: '', planAction: '',
+                conseils: null, scores: null, swot: null, smart: null
+            };
+            chatWindow.innerHTML = '';
+            clearDynamic();
+            appendMessage('CAS Génération de Leads...Ready!');
+            appendMessage('Bienvenue. Tapez <strong>"Go"</strong> pour démarrer.');
+            appendMessage('💡 <em>Attirer · Convertir · Nourrir</em>');
+            setMainButton('Go', 'fa-play', handleGo);
+        }
+
+        resetBtn.addEventListener('click', resetAgent);
+        setMainButton('Go', 'fa-play', handleGo);
+        console.log('✅ CAS Génération de Leads v4.0 complet chargé');
+    </script>
+</body>
+</html>

@@ -1,0 +1,3024 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MCE BUSINESS SCORE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --black-rich: #060606;
+            --black-card: #111111;
+            --black-card-hover: #181818;
+            --gold: #d4af37;
+            --gold-light: #e8c84a;
+            --gold-subtle: rgba(212, 175, 55, 0.12);
+            --gold-glow: rgba(212, 175, 55, 0.15);
+            --white: #f5f5f5;
+            --white-muted: #888888;
+            --white-dim: #555555;
+            --white-pure: #ffffff;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --fs-micro: 0.55rem;
+            --fs-tiny: 0.65rem;
+            --fs-small: 0.75rem;
+            --fs-base: 0.9rem;
+            --fs-md: 1.05rem;
+            --fs-lg: 1.3rem;
+            --fs-xl: 1.7rem;
+            --fs-2xl: 2.4rem;
+            --fs-3xl: 3.6rem;
+            --fs-4xl: 5.2rem;
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+            --space-3xl: 64px;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-full: 9999px;
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 40px rgba(212, 175, 55, 0.06);
+            --shadow-glow-strong: 0 0 60px rgba(212, 175, 55, 0.10);
+            --transition-base: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --header-height: 60px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            -webkit-text-size-adjust: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--black-rich);
+            color: var(--white);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-top: var(--header-height);
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.02) 0%, transparent 70%);
+        }
+
+        #brand-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(6, 6, 6, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: var(--header-height);
+            transition: border-color var(--transition-base);
+        }
+
+        #brand-header.scrolled {
+            border-bottom-color: rgba(212, 175, 55, 0.15);
+        }
+
+        #brand-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+            letter-spacing: 0.5px;
+            color: var(--white);
+        }
+
+        #brand-header .brand .gold {
+            color: var(--gold);
+        }
+
+        #brand-header .brand .marker {
+            color: var(--gold);
+            font-size: 0.6rem;
+            opacity: 0.6;
+        }
+
+        #brand-header .phase-indicator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #brand-header .phase-text {
+            font-size: clamp(0.6rem, 1.4vw, 0.75rem);
+            font-weight: 500;
+            color: var(--white-muted);
+            letter-spacing: 0.3px;
+            transition: color var(--transition-base);
+        }
+
+        #brand-header .phase-text.active {
+            color: var(--gold);
+        }
+
+        #brand-header .block-counter {
+            font-size: 0.5rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.5px;
+            background: rgba(212, 175, 55, 0.06);
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            display: none;
+            white-space: nowrap;
+        }
+
+        #brand-header .block-counter.visible {
+            display: inline-block;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 80vh;
+            padding: 0 var(--space-md) var(--space-xl);
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-16px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .slide-down {
+            animation: slideDown 0.35s ease forwards;
+        }
+
+        @keyframes pulseGold {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes revealScore {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+            60% {
+                transform: scale(1.08);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        /* ===== LANDING PAGE ===== */
+        .welcome {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            min-height: 70vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome.active {
+            display: flex;
+        }
+
+        .welcome.hidden {
+            display: none !important;
+        }
+
+        .welcome .badge {
+            display: inline-block;
+            border: none;
+            color: var(--white-pure);
+            font-size: var(--fs-tiny);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 6px 0;
+            margin-bottom: var(--space-lg);
+            font-weight: 500;
+            background: transparent;
+        }
+
+        .welcome h1 {
+            font-size: clamp(2.4rem, 9vw, 3.6rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: var(--space-sm);
+        }
+
+        .welcome h1 .gold {
+            color: var(--gold);
+        }
+
+        .welcome .tagline {
+            font-size: clamp(0.95rem, 2.8vw, 1.2rem);
+            color: var(--white-muted);
+            font-weight: 300;
+            max-width: 480px;
+            margin: 0 auto var(--space-sm);
+            line-height: 1.5;
+        }
+
+        .welcome .stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin: var(--space-md) 0 var(--space-2xl);
+            flex-wrap: wrap;
+        }
+
+        .welcome .stats .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .welcome .stats .stat .number {
+            font-size: var(--fs-md);
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: -0.02em;
+        }
+
+        .welcome .stats .stat .label {
+            font-size: var(--fs-micro);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--white-dim);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-md);
+            padding: 18px 48px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            max-width: 300px;
+            letter-spacing: 0.3px;
+            min-height: 60px;
+            touch-action: manipulation;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            background: var(--gold-light);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary.hidden {
+            display: none !important;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: var(--fs-base);
+            padding: 16px 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            max-width: 300px;
+            min-height: 54px;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus-visible {
+            background: rgba(212, 175, 55, 0.06);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-secondary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-small-ghost {
+            background: transparent;
+            border: none;
+            color: var(--white-dim);
+            font-family: var(--font);
+            font-size: var(--fs-tiny);
+            cursor: pointer;
+            padding: var(--space-sm) var(--space-md);
+            transition: var(--transition-base);
+            touch-action: manipulation;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(212, 175, 55, 0.1);
+        }
+
+        .btn-small-ghost:hover {
+            color: var(--gold);
+            text-decoration-color: var(--gold);
+        }
+
+        /* ===== QUESTIONNAIRE ===== */
+        .question-screen {
+            padding: var(--space-sm) 0 var(--space-md);
+            position: relative;
+        }
+
+        .block-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 0 var(--space-md) 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.04);
+            margin-bottom: var(--space-md);
+        }
+
+        .block-header .block-title {
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .block-header .block-title .light {
+            font-weight: 300;
+            color: var(--white-muted);
+        }
+
+        .block-header .block-counter {
+            font-size: var(--fs-micro);
+            color: var(--white-dim);
+            letter-spacing: 0.5px;
+            background: rgba(212, 175, 55, 0.04);
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(212, 175, 55, 0.04);
+        }
+
+        .progress-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-md);
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--fs-tiny);
+            color: var(--white-dim);
+            letter-spacing: 0.3px;
+        }
+
+        .progress-top .qnum {
+            font-weight: 600;
+            color: var(--white-muted);
+        }
+
+        .progress-top .qnum span {
+            color: var(--gold);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            width: 0%;
+            background: var(--gold);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .question-area {
+            padding: var(--space-sm) 0 var(--space-md);
+            scroll-margin-top: 20px;
+        }
+
+        .question-codex {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--white-dim);
+            margin-bottom: var(--space-xs);
+            font-weight: 500;
+        }
+
+        .question-codex strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .question-text {
+            font-size: clamp(1.2rem, 4vw, 1.6rem);
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: var(--space-lg);
+            color: var(--white);
+            letter-spacing: -0.01em;
+        }
+
+        .reponses-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .reponse-card {
+            background: var(--black-card);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: var(--transition-base);
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            position: relative;
+        }
+
+        .reponse-card:hover {
+            border-color: rgba(212, 175, 55, 0.15);
+            background: var(--black-card-hover);
+        }
+
+        .reponse-card:active {
+            transform: scale(0.98);
+        }
+
+        .reponse-card .letter {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: var(--fs-tiny);
+            color: var(--white-dim);
+            transition: var(--transition-base);
+        }
+
+        .reponse-card .text {
+            font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+            line-height: 1.4;
+            color: var(--white-muted);
+            padding-top: 1px;
+            transition: color var(--transition-base);
+        }
+
+        .reponse-card.selected {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.04);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .reponse-card.selected .letter {
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
+        }
+
+        .reponse-card.selected .text {
+            color: var(--white);
+        }
+
+        .reponse-card.selected::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius-md);
+            padding: 1px;
+            background: linear-gradient(135deg, var(--gold), rgba(212, 175, 55, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .btn-validate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--white-dim);
+            font-family: var(--font);
+            font-size: var(--fs-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+            min-height: 54px;
+            touch-action: manipulation;
+            user-select: none;
+            margin-bottom: var(--space-xs);
+        }
+
+        .btn-validate.active {
+            background: var(--gold);
+            color: var(--black);
+            border-color: var(--gold);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-validate.active:hover,
+        .btn-validate.active:focus-visible {
+            background: var(--gold-light);
+            transform: scale(1.01);
+        }
+
+        .btn-validate.active:active {
+            transform: scale(0.97);
+        }
+
+        .btn-validate .arrow {
+            display: inline-block;
+            transition: transform var(--transition-base);
+        }
+
+        .btn-validate.active .arrow {
+            transform: translateX(4px);
+        }
+
+        .btn-validate-row {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+            margin-top: var(--space-xs);
+        }
+
+        .btn-validate-row .btn-small-ghost {
+            align-self: center;
+        }
+
+        /* ===== TRANSITION BLOC ===== */
+        .block-transition {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 50vh;
+        }
+
+        .block-transition.active {
+            display: flex;
+        }
+
+        .block-transition .chapter {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--white-dim);
+            margin-bottom: var(--space-sm);
+        }
+
+        .block-transition .block-title {
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: var(--space-sm);
+            line-height: 1.1;
+        }
+
+        .block-transition .block-sub {
+            font-size: var(--fs-base);
+            color: var(--white-muted);
+            margin-bottom: var(--space-xs);
+        }
+
+        .block-transition .block-desc {
+            font-size: var(--fs-small);
+            color: var(--white-dim);
+            margin-bottom: var(--space-xl);
+            max-width: 400px;
+        }
+
+        .block-transition .btn-primary {
+            max-width: 260px;
+        }
+
+        .block-transition .btn-primary::after {
+            display: none;
+        }
+
+        /* ===== ANALYSE ===== */
+        .analysis-screen {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-md) var(--space-xl);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 55vh;
+        }
+
+        .analysis-screen.active {
+            display: flex;
+        }
+
+        .analysis-screen .spinner {
+            width: 48px;
+            height: 48px;
+            border: 2px solid rgba(212, 175, 55, 0.06);
+            border-top: 2px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin-bottom: var(--space-xl);
+        }
+
+        .analysis-screen .title {
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            letter-spacing: -0.01em;
+        }
+
+        .analysis-screen .title.pulse {
+            animation: pulseGold 1.5s ease-in-out infinite;
+        }
+
+        .analysis-screen .sub {
+            color: var(--white-dim);
+            font-size: var(--fs-base);
+        }
+
+        .analysis-screen .progress-ring {
+            width: 120px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 4px;
+            margin-top: var(--space-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .analysis-screen .progress-ring .fill {
+            height: 100%;
+            width: 0%;
+            background: var(--gold);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .btn-analyse {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-base);
+            padding: 18px 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            max-width: 340px;
+            letter-spacing: 0.5px;
+            min-height: 56px;
+            touch-action: manipulation;
+            user-select: none;
+            margin-top: var(--space-sm);
+        }
+
+        .btn-analyse:hover,
+        .btn-analyse:focus-visible {
+            background: var(--gold-light);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-analyse:active {
+            transform: scale(0.97);
+        }
+
+        /* ===== RÉSULTATS ===== */
+        .result-screen {
+            padding: var(--space-sm) 0 var(--space-xl);
+        }
+
+        .result-header {
+            text-align: center;
+            padding: var(--space-md) 0 var(--space-xl);
+            position: relative;
+        }
+
+        .result-header .label {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--white-dim);
+            margin-bottom: var(--space-sm);
+        }
+
+        .result-header .score {
+            font-size: clamp(3.6rem, 14vw, 6rem);
+            font-weight: 800;
+            line-height: 1;
+            color: var(--gold);
+            letter-spacing: -0.03em;
+            animation: revealScore 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .result-header .score .denom {
+            font-size: 0.35em;
+            font-weight: 400;
+            color: var(--white-dim);
+        }
+
+        .result-header .level {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            font-weight: 600;
+            margin-top: var(--space-xs);
+            color: var(--white);
+            animation: fadeIn 0.6s ease 0.4s both;
+        }
+
+        .result-header .level-sub {
+            font-size: var(--fs-small);
+            color: var(--white-dim);
+            margin-top: var(--space-xs);
+            animation: fadeIn 0.6s ease 0.6s both;
+        }
+
+        .result-section {
+            margin-top: var(--space-xl);
+            border-top: 1px solid rgba(212, 175, 55, 0.04);
+            padding-top: var(--space-lg);
+            animation: fadeIn 0.5s ease 0.8s both;
+        }
+
+        .result-section .section-title {
+            font-size: var(--fs-base);
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            letter-spacing: -0.01em;
+            color: var(--white);
+        }
+
+        .result-section .section-title .gold {
+            color: var(--gold);
+        }
+
+        .radar-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-md) 0;
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            margin-bottom: var(--space-sm);
+            overflow: hidden;
+        }
+
+        .radar-wrapper canvas {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 460px;
+            aspect-ratio: 1/1;
+        }
+
+        .codex-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .codex-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .codex-item .name {
+            flex: 1;
+            font-size: var(--fs-tiny);
+            font-weight: 500;
+            color: var(--white-muted);
+        }
+
+        .codex-item .bar-wrap {
+            flex: 1.2;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .codex-item .bar-wrap .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--gold);
+            transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .codex-item .score-val {
+            font-size: var(--fs-tiny);
+            font-weight: 600;
+            color: var(--white-dim);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        .top-grid {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+
+        .top-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.01);
+            border-left: 2px solid var(--gold);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-left-width: 2px;
+        }
+
+        .top-item .rank {
+            font-size: var(--fs-tiny);
+            font-weight: 700;
+            color: var(--gold);
+            min-width: 24px;
+        }
+
+        .top-item .info {
+            flex: 1;
+        }
+
+        .top-item .info .name {
+            font-size: var(--fs-small);
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .top-item .info .desc {
+            font-size: var(--fs-tiny);
+            color: var(--white-dim);
+        }
+
+        .top-item .score-badge {
+            font-size: var(--fs-small);
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .diagnostic-box {
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            border-left: 2px solid var(--gold);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-left-width: 2px;
+            margin: var(--space-sm) 0;
+        }
+
+        .diagnostic-box p {
+            font-size: var(--fs-base);
+            line-height: 1.6;
+            color: var(--white-muted);
+        }
+
+        .diagnostic-box p strong {
+            color: var(--white);
+        }
+
+        .action-item {
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            margin-bottom: var(--space-sm);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .action-item .priority {
+            font-size: var(--fs-tiny);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .action-item .action-name {
+            font-size: var(--fs-base);
+            font-weight: 600;
+            margin: var(--space-xs) 0 var(--space-xs);
+            color: var(--white);
+        }
+
+        .action-item .action-desc {
+            font-size: var(--fs-small);
+            color: var(--white-muted);
+            line-height: 1.5;
+        }
+
+        .action-item .action-desc p {
+            margin-bottom: var(--space-xs);
+        }
+
+        .action-item .action-desc p strong {
+            color: var(--white);
+        }
+
+        .ia-boost {
+            margin-top: var(--space-sm);
+            padding: var(--space-md) var(--space-md);
+            border-radius: var(--radius-sm);
+            background: rgba(212, 175, 55, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.04);
+            position: relative;
+        }
+
+        .ia-boost .ia-tag {
+            display: inline-block;
+            font-size: var(--fs-micro);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--black);
+            background: var(--gold);
+            padding: 2px 12px;
+            border-radius: var(--radius-full);
+            margin-bottom: var(--space-xs);
+        }
+
+        .ia-boost p {
+            font-size: var(--fs-small);
+            color: var(--white-muted);
+            line-height: 1.5;
+        }
+
+        .ia-boost p strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .result-footer-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .result-footer-actions .btn-small-ghost {
+            align-self: center;
+        }
+
+        /* ===== GOOGLE FORM SECTION ===== */
+        .google-form-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            text-align: center;
+        }
+
+        .google-form-section .icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .google-form-section .title {
+            font-size: var(--fs-md);
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .google-form-section .sub {
+            font-size: var(--fs-small);
+            color: var(--white-muted);
+            line-height: 1.5;
+        }
+
+        .btn-google-form {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: var(--fs-base);
+            padding: 18px 40px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: var(--transition-base);
+            width: 100%;
+            max-width: 340px;
+            letter-spacing: 0.5px;
+            min-height: 56px;
+            touch-action: manipulation;
+            user-select: none;
+            margin: var(--space-sm) auto 0;
+        }
+
+        .btn-google-form:hover,
+        .btn-google-form:focus-visible {
+            background: var(--gold-light);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-glow-strong);
+        }
+
+        .btn-google-form:active {
+            transform: scale(0.97);
+        }
+
+        .btn-google-form .arrow {
+            display: inline-block;
+            transition: transform var(--transition-base);
+        }
+
+        .btn-google-form:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .reponse-card:focus-visible,
+        .btn-primary:focus-visible,
+        .btn-validate:focus-visible,
+        .btn-analyse:focus-visible,
+        .btn-small-ghost:focus-visible,
+        .btn-google-form:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding-top: 52px;
+            }
+            :root {
+                --header-height: 52px;
+                --space-xl: 24px;
+                --space-2xl: 32px;
+            }
+            #brand-header {
+                padding: 0 14px;
+            }
+            #brand-header .brand {
+                font-size: 0.65rem;
+                gap: 6px;
+            }
+            #app {
+                padding: 0 var(--space-sm) var(--space-lg);
+            }
+            .welcome {
+                padding: var(--space-xl) var(--space-sm) var(--space-lg);
+                min-height: 60vh;
+            }
+            .welcome h1 {
+                font-size: 2rem;
+            }
+            .welcome .tagline {
+                font-size: 0.9rem;
+            }
+            .reponse-card {
+                padding: 14px 14px;
+            }
+            .reponse-card .text {
+                font-size: 0.82rem;
+            }
+            .btn-primary {
+                font-size: var(--fs-base);
+                padding: 14px 28px;
+                min-height: 52px;
+            }
+            .question-text {
+                font-size: 1.1rem;
+            }
+            .block-header .block-title {
+                font-size: 0.65rem;
+            }
+            .result-header .score {
+                font-size: 3rem;
+            }
+            .action-item {
+                padding: var(--space-md) var(--space-md);
+            }
+            .ia-boost {
+                padding: var(--space-sm) var(--space-sm);
+            }
+            .top-item {
+                padding: var(--space-sm) var(--space-sm);
+            }
+            .radar-wrapper canvas {
+                max-width: 320px;
+            }
+            .google-form-section {
+                padding: var(--space-md);
+            }
+            .btn-google-form {
+                font-size: var(--fs-small);
+                padding: 14px 24px;
+                min-height: 48px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .reponses-grid {
+                gap: var(--space-sm);
+            }
+            .reponse-card {
+                padding: 20px 24px;
+            }
+            .reponse-card .text {
+                font-size: var(--fs-md);
+            }
+            .btn-primary {
+                font-size: var(--fs-lg);
+                padding: 20px 52px;
+                min-height: 68px;
+            }
+            .btn-validate {
+                font-size: var(--fs-md);
+                min-height: 60px;
+            }
+            .question-text {
+                font-size: var(--fs-xl);
+            }
+            .result-header .score {
+                font-size: 5.6rem;
+            }
+            .radar-wrapper canvas {
+                max-width: 460px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .reponse-card .letter {
+                width: 24px;
+                height: 24px;
+                font-size: var(--fs-micro);
+            }
+            .reponse-card .text {
+                font-size: 0.75rem;
+            }
+            .question-text {
+                font-size: 1rem;
+            }
+            .welcome h1 {
+                font-size: 1.7rem;
+            }
+            .welcome .tagline {
+                font-size: 0.8rem;
+            }
+            .btn-primary {
+                font-size: var(--fs-small);
+                padding: 12px 20px;
+                min-height: 44px;
+            }
+            .result-header .score {
+                font-size: 2.6rem;
+            }
+            .radar-wrapper canvas {
+                max-width: 260px;
+            }
+            .btn-google-form {
+                font-size: var(--fs-tiny);
+                padding: 12px 16px;
+                min-height: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== BANDEAU PERMANENT ===== -->
+    <header id="brand-header">
+        <div class="brand">
+            <span class="gold">✦</span>
+            <span>MCE <span class="gold">BUSINESS</span> CODEX</span>
+            <span class="marker">|</span>
+            <span class="phase-text" id="header-phase-text">SCORE</span>
+        </div>
+        <div class="phase-indicator">
+            <span class="block-counter" id="header-block-counter">BLOC 1 / 4</span>
+        </div>
+    </header>
+
+    <div id="app">
+
+        <!-- ===== ÉCRAN D'ACCUEIL ===== -->
+        <div id="screen-welcome" class="screen active welcome">
+            <div class="badge">30 CODEX • 1 SCORE</div>
+            <h1>MCE<br /><span class="gold">BUSINESS SCORE</span></h1>
+            <p class="tagline">
+                Découvrez en quelques minutes le niveau de maturité<br />
+                de votre entreprise sur 30 dimensions essentielles.
+            </p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="number">35</span>
+                    <span class="label">Questions</span>
+                </div>
+                <div class="stat">
+                    <span class="number">≈ 7–10</span>
+                    <span class="label">Minutes</span>
+                </div>
+                <div class="stat">
+                    <span class="number">⚡</span>
+                    <span class="label">Résultat immédiat</span>
+                </div>
+            </div>
+            <button class="btn-primary" id="btn-start">COMMENCER</button>
+        </div>
+
+        <!-- ===== ÉCRAN QUESTIONNAIRE ===== -->
+        <div id="screen-question" class="screen question-screen">
+            <div class="block-header">
+                <div class="block-title" id="block-title-display">CODEX <span class="light">PROFIL</span></div>
+                <div class="block-counter" id="block-counter-display">BLOC 1 / 4</div>
+            </div>
+
+            <div class="progress-wrapper">
+                <div class="progress-top">
+                    <span class="qnum">QUESTION <span id="q-current">1</span> / <span id="q-total">35</span></span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="fill" id="progress-fill" style="width:0%;"></div>
+                </div>
+            </div>
+
+            <div class="question-area" id="question-area">
+                <div class="question-codex" id="q-codex-label">CODEX <strong>PROFIL</strong></div>
+                <div class="question-text" id="q-text">Chargement...</div>
+                <div class="reponses-grid" id="reponses-container"></div>
+            </div>
+
+            <div class="btn-validate-row">
+                <button class="btn-validate" id="btn-validate" disabled>
+                    <span id="btn-validate-label">VALIDEZ VOTRE RÉPONSE</span>
+                    <span class="arrow" id="btn-validate-arrow">→</span>
+                </button>
+                <button class="btn-small-ghost" id="btn-restart-ghost">⟳ Recommencer</button>
+            </div>
+        </div>
+
+        <!-- ===== ÉCRAN TRANSITION BLOC ===== -->
+        <div id="screen-block-transition" class="screen block-transition">
+            <div class="chapter" id="bt-number">CHAPITRE 02</div>
+            <div class="block-title" id="bt-title">CODEX ADN</div>
+            <div class="block-sub" id="bt-sub">10 dimensions — pondération ×1</div>
+            <div class="block-desc" id="bt-desc"></div>
+            <button class="btn-primary" id="bt-continue">DÉMARRER</button>
+        </div>
+
+        <!-- ===== ÉCRAN ANALYSE ===== -->
+        <div id="screen-analysis" class="screen analysis-screen">
+            <div class="spinner"></div>
+            <div class="title pulse">ANALYSE EN COURS</div>
+            <div class="sub">Vos 30 codes sont en train d'être analysés...</div>
+            <div class="progress-ring">
+                <div class="fill" id="analysis-progress" style="width:0%;"></div>
+            </div>
+        </div>
+
+        <!-- ===== ÉCRAN RÉSULTAT ===== -->
+        <div id="screen-result" class="screen result-screen"></div>
+
+    </div>
+
+    <script>
+        // ================================================================
+        // DONNÉES DU QUESTIONNAIRE
+        // ================================================================
+
+        const QUESTIONS = [{
+            id: 1,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Quel est votre rôle dans l'entreprise ?",
+            reponses: [
+                { texte: "Je donne parfois mon avis quand on me le demande.", valeur: 0 },
+                { texte: "Je participe à certaines décisions, surtout dans mon domaine.", valeur: 0 },
+                { texte: "Je participe régulièrement aux décisions importantes.", valeur: 0 },
+                { texte: "Je pilote directement l'entreprise ou une partie importante de ses décisions.",
+                    valeur: 0 }
+            ]
+        }, {
+            id: 2,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Depuis combien de temps votre entreprise existe-t-elle ?",
+            reponses: [
+                { texte: "Plus de 10 ans.", valeur: 0 },
+                { texte: "Entre 5 et 10 ans.", valeur: 0 },
+                { texte: "Entre 2 et 5 ans.", valeur: 0 },
+                { texte: "Moins de 2 ans.", valeur: 0 }
+            ]
+        }, {
+            id: 3,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Comment décririez-vous aujourd'hui votre entreprise ?",
+            reponses: [
+                { texte: "Nous fonctionnons surtout au jour le jour.", valeur: 0 },
+                { texte: "Nous avons commencé à structurer certaines activités.", valeur: 0 },
+                { texte: "Nous avons une organisation relativement structurée.", valeur: 0 },
+                { texte: "Notre entreprise est structurée, pilotée et cherche en permanence à progresser.",
+                    valeur: 0 }
+            ]
+        }, {
+            id: 4,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Combien de personnes travaillent dans votre entreprise ?",
+            reponses: [
+                { texte: "Plus de 100 personnes.", valeur: 0 },
+                { texte: "Entre 20 et 100 personnes.", valeur: 0 },
+                { texte: "Entre 5 et 20 personnes.", valeur: 0 },
+                { texte: "Moins de 5 personnes.", valeur: 0 }
+            ]
+        }, {
+            id: 5,
+            bloc: 1,
+            codex: "PROFIL",
+            ponderation: 0,
+            question: "Quelle est aujourd'hui votre principale préoccupation ?",
+            reponses: [
+                { texte: "Garder la tête hors de l'eau.", valeur: 0 },
+                { texte: "Stabiliser et mieux organiser l'entreprise.", valeur: 0 },
+                { texte: "Accélérer son développement et améliorer sa performance.", valeur: 0 },
+                { texte: "Transformer l'entreprise, changer d'échelle et construire son avantage pour les prochaines années.",
+                    valeur: 0 }
+            ]
+        }, {
+            id: 6,
+            bloc: 2,
+            codex: "PROSPECTION",
+            ponderation: 1,
+            question: "Comment trouvez-vous aujourd'hui vos nouveaux prospects ?",
+            reponses: [
+                { texte: "On attend surtout que les clients arrivent ou que quelqu'un nous recommande.",
+                    valeur: 10 },
+                { texte: "On contacte parfois des entreprises ou des personnes qui pourraient être intéressées.",
+                    valeur: 40 },
+                { texte: "On a une méthode pour cibler et contacter régulièrement de nouveaux prospects.",
+                    valeur: 70 },
+                { texte: "On cible les prospects à partir de besoins ou de signaux précis et on mesure les résultats de notre prospection.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 7,
+            bloc: 2,
+            codex: "VENTE",
+            ponderation: 1,
+            question: "Comment votre entreprise organise-t-elle sa vente ?",
+            reponses: [
+                { texte: "Nous avons un processus commercial clair, suivi et régulièrement amélioré.",
+                    valeur: 100 },
+                { texte: "Nous avons certaines étapes de vente, mais leur application dépend encore beaucoup des personnes.",
+                    valeur: 70 },
+                { texte: "Chaque commercial vend principalement à sa manière.", valeur: 40 },
+                { texte: "Nous présentons surtout nos produits et espérons que le client sera convaincu.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 8,
+            bloc: 2,
+            codex: "RELATION CLIENT",
+            ponderation: 1,
+            question: "Après une vente, comment entretenez-vous la relation avec vos clients ?",
+            reponses: [
+                { texte: "Nous reprenons contact surtout lorsqu'il y a un nouveau besoin à vendre.", valeur: 10 },
+                { texte: "Nous restons disponibles si le client nous contacte.", valeur: 40 },
+                { texte: "Nous suivons régulièrement nos clients et cherchons à comprendre leur satisfaction.",
+                    valeur: 70 },
+                { texte: "Nous avons une véritable stratégie de fidélisation, mesurons la satisfaction et utilisons les retours clients pour améliorer notre offre.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 9,
+            bloc: 2,
+            codex: "MARKETING",
+            ponderation: 1,
+            question: "Quel est le rôle du marketing dans votre entreprise ?",
+            reponses: [
+                { texte: "Le marketing est directement relié aux objectifs commerciaux et son impact est mesuré.",
+                    valeur: 100 },
+                { texte: "Nous faisons régulièrement de la communication pour soutenir les ventes.", valeur: 70 },
+                { texte: "Nous publions ou faisons quelques actions lorsque nous en avons besoin.", valeur: 40 },
+                { texte: "Nous faisons surtout de la publicité ou des publications parce qu'il faut bien être visible.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 10,
+            bloc: 2,
+            codex: "PRICING",
+            ponderation: 1,
+            question: "Comment fixez-vous vos prix ?",
+            reponses: [
+                { texte: "Nous regardons surtout les prix des concurrents et essayons de rester dans le marché.",
+                    valeur: 10 },
+                { texte: "Nous partons principalement de nos coûts et ajoutons une marge.", valeur: 40 },
+                { texte: "Nous tenons compte de nos coûts, du marché, de la concurrence et de la valeur apportée au client.",
+                    valeur: 70 },
+                { texte: "Nous construisons nos prix en fonction de notre stratégie, de la valeur perçue, de nos coûts, de la demande et de la rentabilité recherchée.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 11,
+            bloc: 2,
+            codex: "PRODUCTIVITÉ",
+            ponderation: 1,
+            question: "Comment mesurez-vous la productivité de votre entreprise ?",
+            reponses: [
+                { texte: "Nous suivons régulièrement la productivité avec des indicateurs adaptés et nous agissons sur les causes des écarts.",
+                    valeur: 100 },
+                { texte: "Nous suivons certains volumes ou résultats, mais pas toujours la productivité réelle.",
+                    valeur: 70 },
+                { texte: "Nous jugeons principalement la productivité en regardant si le travail est fait dans les délais.",
+                    valeur: 40 },
+                { texte: "Nous considérons qu'une personne est productive lorsqu'elle est très occupée.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 12,
+            bloc: 2,
+            codex: "TRÉSORERIE",
+            ponderation: 1,
+            question: "Comment suivez-vous votre trésorerie ?",
+            reponses: [
+                { texte: "Nous avons une prévision de trésorerie actualisée et nous anticipons les tensions plusieurs semaines ou mois à l'avance.",
+                    valeur: 100 },
+                { texte: "Nous suivons régulièrement notre trésorerie et anticipons les principales échéances.",
+                    valeur: 70 },
+                { texte: "Nous suivons nos entrées et sorties d'argent, mais sans véritable prévision.",
+                    valeur: 40 },
+                { texte: "Nous regardons surtout le solde bancaire et réagissons lorsqu'il devient trop faible.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 13,
+            bloc: 2,
+            codex: "KPI",
+            ponderation: 1,
+            question: "Comment utilisez-vous les KPI dans votre entreprise ?",
+            reponses: [
+                { texte: "Nos KPI sont liés à nos objectifs, régulièrement suivis et servent directement à prendre des décisions.",
+                    valeur: 100 },
+                { texte: "Nous avons plusieurs indicateurs que nous suivons régulièrement.", valeur: 70 },
+                { texte: "Nous regardons surtout le chiffre d'affaires et quelques chiffres financiers.",
+                    valeur: 40 },
+                { texte: "Nous regardons les chiffres principalement lorsqu'un problème apparaît.", valeur: 10 }
+            ]
+        }, {
+            id: 14,
+            bloc: 2,
+            codex: "NÉGOCIATION",
+            ponderation: 1,
+            question: "Comment préparez-vous une négociation importante ?",
+            reponses: [
+                { texte: "Nous savons surtout jusqu'où nous pouvons baisser notre prix.", valeur: 10 },
+                { texte: "Nous préparons nos arguments et essayons d'anticiper les objections du client.",
+                    valeur: 40 },
+                { texte: "Nous préparons nos objectifs, nos limites, nos arguments et les intérêts de l'autre partie.",
+                    valeur: 70 },
+                { texte: "Nous préparons notre stratégie, nos alternatives, nos concessions, nos leviers et les conditions permettant de créer de la valeur pour les deux parties.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 15,
+            bloc: 2,
+            codex: "CROSS-SELLING",
+            ponderation: 1,
+            question: "Comment développez-vous les ventes auprès de vos clients existants ?",
+            reponses: [
+                { texte: "Nous identifions systématiquement les besoins complémentaires et proposons les bonnes solutions au bon moment.",
+                    valeur: 100 },
+                { texte: "Nous proposons parfois d'autres produits ou services lorsque l'occasion se présente.",
+                    valeur: 70 },
+                { texte: "Nous faisons des offres supplémentaires principalement lors des campagnes commerciales.",
+                    valeur: 40 },
+                { texte: "Nous attendons généralement que le client demande autre chose.", valeur: 10 }
+            ]
+        }, {
+            id: 16,
+            bloc: 3,
+            codex: "RECRUTEMENT",
+            ponderation: 2,
+            question: "Comment votre entreprise recrute-t-elle ?",
+            reponses: [
+                { texte: "Nous recrutons surtout lorsqu'un poste devient urgent.", valeur: 10 },
+                { texte: "Nous définissons le profil recherché et comparons plusieurs candidats.", valeur: 40 },
+                { texte: "Nous avons un processus de recrutement structuré avec des critères précis.", valeur: 70 },
+                { texte: "Nous anticipons nos besoins, définissons les compétences recherchées, évaluons les candidats avec méthode et mesurons la qualité des recrutements.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 17,
+            bloc: 3,
+            codex: "REPORTING",
+            ponderation: 2,
+            question: "À quoi sert votre reporting ?",
+            reponses: [
+                { texte: "Il nous permet de suivre les indicateurs clés et de prendre rapidement des décisions.",
+                    valeur: 100 },
+                { texte: "Il sert principalement à informer la direction de ce qui s'est passé.", valeur: 70 },
+                { texte: "Nous produisons des rapports lorsque cela est nécessaire.", valeur: 40 },
+                { texte: "Nous produisons surtout des tableaux remplis de chiffres parce que « quelqu'un les a demandés ».",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 18,
+            bloc: 3,
+            codex: "PARCOURS CLIENT",
+            ponderation: 2,
+            question: "Comment avez-vous pensé le parcours de vos clients ?",
+            reponses: [
+                { texte: "Nous nous concentrons surtout sur la qualité de notre produit ou service.", valeur: 10 },
+                { texte: "Nous avons identifié les principales étapes du parcours client, mais sans forcément les mesurer.",
+                    valeur: 40 },
+                { texte: "Nous avons structuré plusieurs étapes du parcours et cherchons à réduire les points de friction.",
+                    valeur: 70 },
+                { texte: "Nous cartographions le parcours de bout en bout, notamment les interactions digitales, mesurons les abandons et optimisons continuellement l'expérience.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 19,
+            bloc: 3,
+            codex: "EXPÉRIENCE CLIENT",
+            ponderation: 2,
+            question: "Comment votre entreprise travaille-t-elle l'expérience client ?",
+            reponses: [
+                { texte: "Nous concevons volontairement chaque interaction pour créer une expérience cohérente, différenciante et mémorable.",
+                    valeur: 100 },
+                { texte: "Nous faisons attention à l'accueil, au service et à la qualité de nos interactions.",
+                    valeur: 70 },
+                { texte: "Nous réagissons principalement lorsque des clients se plaignent.", valeur: 40 },
+                { texte: "Nous considérons que si le produit est bon, l'expérience client est automatiquement bonne.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 20,
+            bloc: 3,
+            codex: "CONFORMITÉ",
+            ponderation: 2,
+            question: "Comment gérez-vous la conformité dans votre entreprise ?",
+            reponses: [
+                { texte: "Nous traitons surtout les problèmes de conformité lorsqu'ils apparaissent.", valeur: 10 },
+                { texte: "Nous respectons les obligations principales et conservons les documents nécessaires.",
+                    valeur: 40 },
+                { texte: "Nous avons des règles et contrôles permettant de limiter les principaux risques.",
+                    valeur: 70 },
+                { texte: "La conformité est intégrée dans nos processus, nos contrôles, nos décisions et notre culture de gestion des risques.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 21,
+            bloc: 3,
+            codex: "GESTION FINANCIÈRE",
+            ponderation: 2,
+            question: "Comment pilotez-vous vos finances ?",
+            reponses: [
+                { texte: "Nous suivons régulièrement nos marges, notre cash, nos coûts, nos investissements et leurs impacts sur l'entreprise.",
+                    valeur: 100 },
+                { texte: "Nous suivons principalement le chiffre d'affaires, les charges et le résultat.",
+                    valeur: 70 },
+                { texte: "Nous regardons surtout les comptes avec notre comptable.", valeur: 40 },
+                { texte: "Nous découvrons souvent notre situation financière lorsque les comptes sont déjà clôturés.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 22,
+            bloc: 3,
+            codex: "RSE",
+            ponderation: 2,
+            question: "Comment la RSE est-elle intégrée dans votre entreprise ?",
+            reponses: [
+                { texte: "Nous faisons quelques actions ponctuelles, surtout lorsqu'elles peuvent améliorer notre image.",
+                    valeur: 10 },
+                { texte: "Nous avons commencé à intégrer certains sujets environnementaux ou sociaux dans notre fonctionnement.",
+                    valeur: 40 },
+                { texte: "Nous avons identifié des enjeux RSE pertinents et mis en place plusieurs actions concrètes.",
+                    valeur: 70 },
+                { texte: "La RSE est intégrée à notre stratégie, nos opérations, nos achats, nos collaborateurs et nos indicateurs de performance.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 23,
+            bloc: 3,
+            codex: "IFRS",
+            ponderation: 2,
+            question: "Quel niveau de maîtrise financière votre entreprise possède-t-elle concernant les normes comptables applicables à son activité ?",
+            reponses: [
+                { texte: "Nous maîtrisons les normes pertinentes, identifions leurs impacts sur nos comptes et les intégrons dans nos décisions financières.",
+                    valeur: 100 },
+                { texte: "Nous appliquons les normes nécessaires avec l'aide de nos experts comptables ou financiers.",
+                    valeur: 70 },
+                { texte: "Nous connaissons certaines règles mais leur impact sur notre activité reste limité dans nos décisions.",
+                    valeur: 40 },
+                { texte: "Nous considérons que les normes comptables sont uniquement un sujet pour le comptable.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 24,
+            bloc: 3,
+            codex: "AGENTS IA OPÉRATIONNELS",
+            ponderation: 2,
+            question: "Comment utilisez-vous l'IA pour les tâches répétitives ?",
+            reponses: [
+                { texte: "Nous utilisons parfois des outils d'IA pour gagner du temps.", valeur: 10 },
+                { texte: "Nous avons commencé à utiliser l'IA pour certaines tâches répétitives.", valeur: 40 },
+                { texte: "Nous avons identifié plusieurs tâches pouvant être assistées ou automatisées par l'IA.",
+                    valeur: 70 },
+                { texte: "Nous avons intégré des agents IA dans certains processus répétitifs, avec des règles de contrôle et une mesure des gains obtenus.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 25,
+            bloc: 3,
+            codex: "CULTURE DE L'ENTREPRISE",
+            ponderation: 2,
+            question: "Comment votre culture d'entreprise se manifeste-t-elle au quotidien ?",
+            reponses: [
+                { texte: "Elle est clairement définie, incarnée par le management et visible dans les comportements, les décisions et les pratiques de l'équipe.",
+                    valeur: 100 },
+                { texte: "Nous avons des valeurs et nous essayons de les faire vivre dans l'entreprise.",
+                    valeur: 70 },
+                { texte: "Les valeurs existent mais restent principalement dans les documents ou les présentations.",
+                    valeur: 40 },
+                { texte: "Nous n'avons jamais vraiment réfléchi à la culture de l'entreprise : « On verra bien avec le temps. »",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 26,
+            bloc: 4,
+            codex: "BUSINESS MODEL",
+            ponderation: 3,
+            question: "Comment votre entreprise crée-t-elle et capte-t-elle sa valeur ?",
+            reponses: [
+                { texte: "Nous vendons ce que nous savons faire, sans avoir vraiment formalisé notre modèle économique.",
+                    valeur: 10 },
+                { texte: "Nous connaissons nos produits, nos clients et nos sources de revenus, mais l'ensemble reste peu structuré.",
+                    valeur: 40 },
+                { texte: "Notre modèle économique est clairement défini et nous cherchons régulièrement à l'améliorer.",
+                    valeur: 70 },
+                { texte: "Nous maîtrisons précisément notre proposition de valeur, nos segments clients, nos revenus, nos coûts et les mécanismes qui rendent notre modèle durable et évolutif.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 27,
+            bloc: 4,
+            codex: "STRATÉGIE",
+            ponderation: 3,
+            question: "Comment votre entreprise définit-elle sa stratégie ?",
+            reponses: [
+                { texte: "Nous avons une vision claire, des priorités définies, des choix assumés et des objectifs mesurables à moyen et long terme.",
+                    valeur: 100 },
+                { texte: "Nous avons des objectifs et essayons de les atteindre au fil du temps.", valeur: 70 },
+                { texte: "Nous adaptons surtout notre stratégie en fonction des opportunités et des problèmes qui apparaissent.",
+                    valeur: 40 },
+                { texte: "Notre stratégie tient principalement en une phrase : « On verra bien ce que le marché nous réserve. »",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 28,
+            bloc: 4,
+            codex: "PRISE DE DÉCISION",
+            ponderation: 3,
+            question: "Comment sont prises les décisions importantes dans votre entreprise ?",
+            reponses: [
+                { texte: "Les décisions sont souvent prises dans l'urgence ou selon l'intuition du dirigeant.",
+                    valeur: 10 },
+                { texte: "Nous échangeons avec les personnes concernées avant de prendre les principales décisions.",
+                    valeur: 40 },
+                { texte: "Nous utilisons les données disponibles, l'expérience et l'analyse des risques pour prendre nos décisions.",
+                    valeur: 70 },
+                { texte: "Nous avons une méthode de décision structurée qui combine données, expertise, scénarios, risques, rapidité d'exécution et retour d'expérience.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 29,
+            bloc: 4,
+            codex: "LEADERSHIP",
+            ponderation: 3,
+            question: "Quel rôle le dirigeant joue-t-il dans la performance de l'entreprise ?",
+            reponses: [
+                { texte: "Le dirigeant donne l'exemple, fixe le cap, développe ses équipes, assume les décisions et fait évoluer son propre comportement avec l'entreprise.",
+                    valeur: 100 },
+                { texte: "Le dirigeant fixe les objectifs et intervient lorsque les équipes ont besoin de lui.",
+                    valeur: 70 },
+                { texte: "Le dirigeant prend la plupart des décisions importantes et contrôle régulièrement le travail.",
+                    valeur: 40 },
+                { texte: "Le dirigeant demande à son équipe de faire ce qu'il ne fait pas forcément lui-même.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 30,
+            bloc: 4,
+            codex: "BUSINESS PLAN",
+            ponderation: 3,
+            question: "À quoi sert votre Business Plan ?",
+            reponses: [
+                { texte: "Il sert principalement à présenter le projet à une banque ou à un investisseur.",
+                    valeur: 10 },
+                { texte: "Il présente notre projet, nos objectifs, nos prévisions financières et nos principaux besoins.",
+                    valeur: 40 },
+                { texte: "Il sert à structurer notre projet et à vérifier régulièrement si nos hypothèses restent réalistes.",
+                    valeur: 70 },
+                { texte: "Il constitue un véritable outil de pilotage : hypothèses, scénarios, ressources, cash-flow, objectifs, risques et écarts sont régulièrement confrontés à la réalité.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 31,
+            bloc: 4,
+            codex: "RECHERCHE DE FINANCEMENT",
+            ponderation: 3,
+            question: "Comment abordez-vous la recherche de financement pour votre projet ou votre entreprise ?",
+            reponses: [
+                { texte: "Je cherche surtout des financements auprès de mon entourage ou de banques, sans vraiment structurer ma démarche.",
+                    valeur: 10 },
+                { texte: "Je prépare un dossier et je contacte plusieurs sources de financement (banques, aides publiques).",
+                    valeur: 40 },
+                { texte: "J'identifie les sources de financement les plus adaptées à mon projet et je prépare des arguments solides pour chacune.",
+                    valeur: 70 },
+                { texte: "Je construis une stratégie de financement complète : besoins, sources, calendrier, scénarios de remboursement, et je mesure ma capacité à convaincre.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 32,
+            bloc: 4,
+            codex: "RENTABILITÉ",
+            ponderation: 3,
+            question: "Comment pilotez-vous la rentabilité de votre entreprise ?",
+            reponses: [
+                { texte: "Nous regardons principalement si le chiffre d'affaires augmente.", valeur: 10 },
+                { texte: "Nous suivons le résultat et cherchons à réduire certaines charges lorsque cela est nécessaire.",
+                    valeur: 40 },
+                { texte: "Nous suivons les marges, les coûts et les principales sources de rentabilité.",
+                    valeur: 70 },
+                { texte: "Nous analysons la rentabilité par produit, client, activité ou canal et utilisons ces informations pour arbitrer nos prix, nos ressources et nos investissements.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 33,
+            bloc: 4,
+            codex: "AGENTS IA COGNITIFS",
+            ponderation: 3,
+            question: "Quel rôle l'IA joue-t-elle dans vos décisions ?",
+            reponses: [
+                { texte: "L'IA nous aide à analyser les informations, challenger nos hypothèses, détecter des signaux, construire des scénarios et éclairer certaines décisions, tout en laissant la décision finale au responsable.",
+                    valeur: 100 },
+                { texte: "Nous utilisons l'IA pour obtenir des analyses ou des recommandations lorsque nous en avons besoin.",
+                    valeur: 70 },
+                { texte: "Quelques collaborateurs utilisent l'IA pour chercher des informations ou produire du contenu.",
+                    valeur: 40 },
+                { texte: "Nous utilisons principalement l'IA pour rédiger des textes et faire des images.",
+                    valeur: 10 }
+            ]
+        }, {
+            id: 34,
+            bloc: 4,
+            codex: "FINANCEMENT BANCAIRE",
+            ponderation: 3,
+            question: "Comment préparez-vous une demande de financement bancaire ?",
+            reponses: [
+                { texte: "Nous présentons principalement notre projet, son potentiel et notre besoin de financement.",
+                    valeur: 10 },
+                { texte: "Nous présentons le projet, les chiffres prévisionnels, les garanties disponibles et notre capacité à respecter les échéances.",
+                    valeur: 40 },
+                { texte: "Nous construisons un dossier cohérent reliant projet, hypothèses financières, capacité de remboursement, cash-flow et risques.",
+                    valeur: 70 },
+                { texte: "Nous construisons le dossier autour de la question centrale du financeur : « Le projet générera-t-il suffisamment de cash-flow pour rembourser la dette dans les meilleures conditions ? » Nous démontrons cette capacité par des hypothèses réalistes, des scénarios et des projections de cash-flow.",
+                    valeur: 100 }
+            ]
+        }, {
+            id: 35,
+            bloc: 4,
+            codex: "IKIGAI",
+            ponderation: 3,
+            question: "Comment définissez-vous le rôle que vous voulez jouer en tant qu'entrepreneur ?",
+            reponses: [
+                { texte: "Je cherche surtout à faire fonctionner l'entreprise et à atteindre mes objectifs financiers.",
+                    valeur: 10 },
+                { texte: "Je sais ce que j'aime faire et j'essaie de l'intégrer dans mon activité.", valeur: 40 },
+                { texte: "Je cherche à aligner mes compétences, mes motivations, les besoins du marché et les opportunités économiques.",
+                    valeur: 70 },
+                { texte: "J'ai construit une vision entrepreneuriale cohérente entre ce que je sais faire, ce qui me motive, ce dont le marché a besoin et ce qui peut créer une véritable valeur économique durable.",
+                    valeur: 100 }
+            ]
+        }];
+
+        // ================================================================
+        // ÉTAT
+        // ================================================================
+        const state = {
+            currentIndex: 0,
+            reponses: [],
+            isTransitioning: false,
+            blockTransitionShown: { 2: false, 3: false, 4: false },
+        };
+
+        for (let i = 0; i < QUESTIONS.length; i++) {
+            state.reponses[i] = null;
+        }
+
+        // ================================================================
+        // RÉFÉRENCES DOM
+        // ================================================================
+        const $ = (id) => document.getElementById(id);
+        const screens = {
+            welcome: $('screen-welcome'),
+            question: $('screen-question'),
+            blockTransition: $('screen-block-transition'),
+            analysis: $('screen-analysis'),
+            result: $('screen-result'),
+        };
+
+        const qElements = {
+            current: $('q-current'),
+            total: $('q-total'),
+            progress: $('progress-fill'),
+            progressPercent: $('progress-percent'),
+            codexLabel: $('q-codex-label'),
+            text: $('q-text'),
+            reponses: $('reponses-container'),
+            validate: $('btn-validate'),
+            validateLabel: $('btn-validate-label'),
+            questionArea: $('question-area'),
+            blockTitle: $('block-title-display'),
+            blockCounter: $('block-counter-display'),
+        };
+
+        const btElements = {
+            number: $('bt-number'),
+            title: $('bt-title'),
+            sub: $('bt-sub'),
+            desc: $('bt-desc'),
+            continue: $('bt-continue'),
+        };
+
+        // ================================================================
+        // FONCTIONS
+        // ================================================================
+        function showScreen(name) {
+            Object.keys(screens).forEach(key => {
+                screens[key].classList.remove('active', 'screen-exit');
+            });
+            screens[name].classList.add('active');
+            state.isTransitioning = false;
+            updateHeader();
+        }
+
+        function getBlocShortLabel(blocId) {
+            const labels = { 1: 'PROFIL', 2: 'ADN', 3: 'OPÉRATIONNEL', 4: 'STRATÉGIQUE' };
+            return labels[blocId] || '';
+        }
+
+        function getBlockTransitionData(blocId) {
+            const data = {
+                2: {
+                    number: 'CHAPITRE 02',
+                    title: 'CODEX ADN',
+                    sub: '10 dimensions — pondération ×1',
+                    desc: 'Ces dimensions mesurent les fondamentaux de votre activité commerciale et opérationnelle.'
+                },
+                3: {
+                    number: 'CHAPITRE 03',
+                    title: 'CODEX OPÉRATIONNEL',
+                    sub: '10 dimensions — pondération ×2',
+                    desc: 'Ces dimensions évaluent la structuration et la performance de vos processus internes.'
+                },
+                4: {
+                    number: 'CHAPITRE 04',
+                    title: 'CODEX STRATÉGIQUE',
+                    sub: '10 dimensions — pondération ×3',
+                    desc: 'Ces dimensions mesurent votre vision, votre leadership et votre capacité à transformer l\'entreprise.'
+                }
+            };
+            return data[blocId] || data[2];
+        }
+
+        function getCurrentBloc() {
+            if (state.currentIndex < QUESTIONS.length) {
+                return QUESTIONS[state.currentIndex].bloc;
+            }
+            return 4;
+        }
+
+        function scrollToCodex() {
+            const target = document.getElementById('question-area');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function updateHeader() {
+            const phaseText = document.getElementById('header-phase-text');
+            const blockCounter = document.getElementById('header-block-counter');
+
+            if (!phaseText) return;
+
+            if (screens.welcome.classList.contains('active')) {
+                phaseText.textContent = 'SCORE';
+                blockCounter.classList.remove('visible');
+            } else if (screens.question.classList.contains('active')) {
+                const currentBloc = getCurrentBloc();
+                const blocLabel = getBlocShortLabel(currentBloc);
+                phaseText.textContent = `BLOC ${currentBloc} — ${blocLabel}`;
+                blockCounter.textContent = `${currentBloc} / 4`;
+                blockCounter.classList.add('visible');
+            } else if (screens.blockTransition.classList.contains('active')) {
+                const btTitle = document.getElementById('bt-title');
+                phaseText.textContent = btTitle ? btTitle.textContent : 'TRANSITION';
+                blockCounter.classList.remove('visible');
+            } else if (screens.analysis.classList.contains('active')) {
+                phaseText.textContent = 'ANALYSE EN COURS';
+                blockCounter.classList.remove('visible');
+            } else if (screens.result.classList.contains('active')) {
+                phaseText.textContent = 'VOS RÉSULTATS';
+                blockCounter.classList.remove('visible');
+            }
+        }
+
+        // ================================================================
+        // RENDER QUESTION
+        // ================================================================
+        function renderQuestion(index) {
+            const q = QUESTIONS[index];
+            if (!q) return;
+
+            updateHeader();
+
+            const blocLabel = getBlocShortLabel(q.bloc);
+            qElements.blockTitle.innerHTML = `CODEX <span class="light">${blocLabel}</span>`;
+            qElements.blockCounter.textContent = `BLOC ${q.bloc} / 4`;
+
+            qElements.current.textContent = index + 1;
+            qElements.total.textContent = QUESTIONS.length;
+
+            const progress = ((index + 1) / QUESTIONS.length) * 100;
+            qElements.progress.style.width = progress + '%';
+            qElements.progressPercent.textContent = Math.round(progress) + '%';
+
+            qElements.codexLabel.innerHTML = `CODEX <strong>${q.codex}</strong>`;
+            qElements.text.textContent = q.question;
+
+            const letters = ['A', 'B', 'C', 'D'];
+            const selected = state.reponses[index];
+
+            let html = '';
+            q.reponses.forEach((r, i) => {
+                const isSelected = (selected === i);
+                html += `
+                            <div class="reponse-card ${isSelected ? 'selected' : ''}" 
+                                 data-index="${i}" 
+                                 role="button" 
+                                 tabindex="0"
+                                 aria-label="Réponse ${letters[i]} : ${r.texte}">
+                                <span class="letter">${letters[i]}</span>
+                                <span class="text">${r.texte}</span>
+                            </div>
+                        `;
+            });
+            qElements.reponses.innerHTML = html;
+
+            document.querySelectorAll('.reponse-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (state.isTransitioning) return;
+                    const idx = parseInt(this.dataset.index, 10);
+                    selectAnswer(index, idx);
+                });
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        if (state.isTransitioning) return;
+                        const idx = parseInt(this.dataset.index, 10);
+                        selectAnswer(index, idx);
+                    }
+                });
+            });
+
+            updateValidateButton(index);
+
+            qElements.questionArea.classList.remove('slide-down');
+            void qElements.questionArea.offsetWidth;
+            qElements.questionArea.classList.add('slide-down');
+
+            setTimeout(() => { scrollToCodex(); }, 80);
+        }
+
+        // ================================================================
+        // SELECTION
+        // ================================================================
+        function selectAnswer(questionIndex, answerIndex) {
+            if (state.isTransitioning) return;
+            if (questionIndex !== state.currentIndex) return;
+
+            const previous = state.reponses[questionIndex];
+            if (previous === answerIndex) return;
+
+            state.reponses[questionIndex] = answerIndex;
+
+            const cards = document.querySelectorAll('.reponse-card');
+            cards.forEach((card, i) => {
+                card.classList.toggle('selected', i === answerIndex);
+            });
+
+            updateValidateButton(questionIndex);
+            qElements.validate.focus();
+        }
+
+        // ================================================================
+        // VALIDATION
+        // ================================================================
+        function updateValidateButton(index) {
+            const selected = state.reponses[index];
+            const btn = qElements.validate;
+            const label = qElements.validateLabel;
+
+            if (selected !== null && selected !== undefined) {
+                btn.disabled = false;
+                btn.classList.add('active');
+                label.textContent = 'VALIDER →';
+            } else {
+                btn.disabled = true;
+                btn.classList.remove('active');
+                label.textContent = 'VALIDEZ VOTRE RÉPONSE';
+            }
+        }
+
+        // ================================================================
+        // HANDLE VALIDATE
+        // ================================================================
+        function handleValidate() {
+            if (state.isTransitioning) return;
+            const index = state.currentIndex;
+            const selected = state.reponses[index];
+
+            if (selected === null || selected === undefined) return;
+
+            state.isTransitioning = true;
+            qElements.validate.disabled = true;
+
+            if (index >= QUESTIONS.length - 1) {
+                setTimeout(() => { showAnalyseTrigger(); }, 300);
+                return;
+            }
+
+            const currentBloc = QUESTIONS[index].bloc;
+            const nextBloc = QUESTIONS[index + 1].bloc;
+
+            if (nextBloc > currentBloc) {
+                setTimeout(() => { showBlockTransition(nextBloc); }, 350);
+                return;
+            }
+
+            state.currentIndex = index + 1;
+            renderQuestion(state.currentIndex);
+
+            setTimeout(() => {
+                state.isTransitioning = false;
+                updateValidateButton(state.currentIndex);
+            }, 100);
+        }
+
+        // ================================================================
+        // TRANSITION BLOC
+        // ================================================================
+        function showBlockTransition(blocId) {
+            const data = getBlockTransitionData(blocId);
+            btElements.number.textContent = data.number;
+            btElements.title.textContent = data.title;
+            btElements.sub.textContent = data.sub;
+            btElements.desc.textContent = data.desc;
+            btElements.continue.textContent = 'DÉMARRER';
+
+            screens.question.classList.remove('active');
+            screens.blockTransition.classList.add('active');
+            screens.blockTransition.classList.remove('screen-exit');
+
+            state.isTransitioning = false;
+            updateHeader();
+        }
+
+        // ================================================================
+        // ANALYSE TRIGGER
+        // ================================================================
+        function showAnalyseTrigger() {
+            btElements.number.textContent = 'ANALYSE';
+            btElements.title.textContent = 'VOS CODEX SONT PRÊTS';
+            btElements.sub.textContent = '30 dimensions analysées';
+            btElements.desc.textContent = 'Cliquez sur le bouton ci-dessous pour découvrir votre MCE BUSINESS SCORE.';
+
+            const oldBtn = btElements.continue;
+            const newBtn = document.createElement('button');
+            newBtn.className = 'btn-analyse';
+            newBtn.id = 'btn-analyse-trigger';
+            newBtn.textContent = 'DÉMARRER';
+            newBtn.addEventListener('click', function() {
+                showAnalysis();
+            });
+
+            if (oldBtn && oldBtn.parentNode) {
+                oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+            }
+
+            screens.question.classList.remove('active');
+            screens.blockTransition.classList.add('active');
+            screens.blockTransition.classList.remove('screen-exit');
+
+            state.isTransitioning = false;
+            updateHeader();
+        }
+
+        // ================================================================
+        // ANALYSE
+        // ================================================================
+        function showAnalysis() {
+            screens.blockTransition.classList.remove('active');
+            screens.analysis.classList.add('active');
+            updateHeader();
+
+            const progressFill = document.getElementById('analysis-progress');
+            if (progressFill) {
+                let p = 0;
+                const interval = setInterval(() => {
+                    p += 2;
+                    if (p >= 100) {
+                        p = 100;
+                        clearInterval(interval);
+                    }
+                    progressFill.style.width = p + '%';
+                }, 80);
+            }
+
+            setTimeout(() => {
+                const results = computeResults();
+                showResults(results);
+            }, 5000);
+        }
+
+        // ================================================================
+        // COMPUTE RESULTS
+        // ================================================================
+        function computeResults() {
+            const scoredQuestions = QUESTIONS.filter(q => q.ponderation > 0);
+            const results = [];
+
+            let totalWeightedScore = 0;
+            let totalWeight = 0;
+
+            scoredQuestions.forEach(q => {
+                const answerIndex = state.reponses[q.id - 1];
+                let score = 0;
+                if (answerIndex !== null && answerIndex !== undefined) {
+                    score = q.reponses[answerIndex].valeur || 0;
+                }
+                const weighted = score * q.ponderation;
+                totalWeightedScore += weighted;
+                totalWeight += q.ponderation;
+
+                results.push({
+                    codex: q.codex,
+                    score: score,
+                    ponderation: q.ponderation,
+                    weighted: weighted,
+                    id: q.id,
+                    bloc: q.bloc,
+                });
+            });
+
+            const globalScore = totalWeight > 0 ? Math.round(totalWeightedScore / totalWeight) : 0;
+            const finalScore = Math.min(100, Math.max(10, globalScore));
+
+            let niveau = '';
+            if (finalScore < 40) niveau = 'ENTREPRISE FRAGILE';
+            else if (finalScore < 60) niveau = 'EN STRUCTURATION';
+            else if (finalScore < 75) niveau = 'ENTREPRISE STRUCTURÉE';
+            else if (finalScore < 90) niveau = 'ENTREPRISE PERFORMANTE';
+            else niveau = 'ENTREPRISE AUGMENTÉE';
+
+            const sorted = [...results].sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return b.id - a.id;
+            });
+
+            const forces = sorted.slice(0, 3);
+            const priorities = sorted.slice(-3).reverse();
+
+            const diag = generateDiagnostic(finalScore, niveau, results, forces, priorities);
+
+            return {
+                globalScore: finalScore,
+                niveau: niveau,
+                results: results,
+                forces: forces,
+                priorities: priorities,
+                diagnostic: diag,
+            };
+        }
+
+        // ================================================================
+        // GENERATE DIAGNOSTIC
+        // ================================================================
+        function generateDiagnostic(score, niveau, results, forces, priorities) {
+            const bloc2 = results.filter(r => r.bloc === 2);
+            const bloc3 = results.filter(r => r.bloc === 3);
+            const bloc4 = results.filter(r => r.bloc === 4);
+
+            const avgBloc2 = bloc2.length ? Math.round(bloc2.reduce((s, r) => s + r.score, 0) / bloc2.length) : 0;
+            const avgBloc3 = bloc3.length ? Math.round(bloc3.reduce((s, r) => s + r.score, 0) / bloc3.length) : 0;
+            const avgBloc4 = bloc4.length ? Math.round(bloc4.reduce((s, r) => s + r.score, 0) / bloc4.length) : 0;
+
+            let diagText = '';
+
+            if (score < 40) {
+                diagText =
+                    `Votre entreprise fonctionne encore de manière très réactive. Vous gérez l'urgence plus que vous ne pilotez la performance. Le risque est grand de passer à côté d'opportunités ou de vous épuiser inutilement. Votre priorité absolue : poser les bases d'un pilotage simple mais solide.`;
+            } else if (score < 60) {
+                diagText =
+                    `Vous avez commencé à structurer votre entreprise, mais de nombreux leviers restent sous-exploités. Vous avez probablement les bonnes intentions, mais il vous manque encore des outils et des méthodes pour passer à l'étape supérieure. Votre prochain gain de performance viendra de la mise en place de processus clairs.`;
+            } else if (score < 75) {
+                diagText =
+                    `Votre entreprise possède de bonnes bases, mais certains domaines stratégiques ou opérationnels sont encore en retrait. Vous êtes à un point de bascule : soit vous accélérez sur les dimensions clés (stratégie, leadership, pilotage), soit vous stagnez. Votre prochain cap : passer d'une entreprise structurée à une entreprise performante.`;
+            } else if (score < 90) {
+                diagText =
+                    `Vous êtes clairement dans le top des entreprises performantes. Vous maîtrisez vos processus, vous pilotez votre stratégie, et vous savez où vous allez. Mais le vrai challenge n'est pas de maintenir cette performance, c'est de la transformer en avantage durable. Les plus grandes entreprises ne sont jamais satisfaites. Elles cherchent en permanence à se réinventer.`;
+            } else {
+                diagText =
+                    `Vous êtes au sommet du MCE BUSINESS CODEX. Vous avez construit une entreprise augmentée, où chaque dimension est pensée, mesurée et optimisée. Mais le vrai test pour vous n'est plus la performance : c'est la capacité à rester en mouvement, à garder votre curiosité et à ne pas laisser la routine ou la suffisance s'installer. Le leadership, c'est continuer à apprendre.`;
+            }
+
+            if (avgBloc2 < 60) {
+                diagText +=
+                    ` Vos fondamentaux commerciaux (prospection, vente, marketing) sont à renforcer. Sans une bonne base, les efforts stratégiques peinent à porter leurs fruits.`;
+            } else if (avgBloc3 < 60) {
+                diagText +=
+                    ` Vos processus opérationnels sont fragiles. La performance durable ne se construit pas uniquement sur le talent, mais sur des méthodes et des outils solides.`;
+            } else if (avgBloc4 < 60) {
+                diagText +=
+                    ` Votre vision et votre stratégie sont encore en développement. C'est le moment de passer du "comment" au "pourquoi" et de clarifier votre cap à long terme.`;
+            }
+
+            return diagText;
+        }
+
+        // ================================================================
+        // SHOW RESULTS avec RADAR + Google Form pré-rempli
+        // ================================================================
+        function showResults(data) {
+            screens.analysis.classList.remove('active');
+
+            const container = screens.result;
+            const { globalScore, niveau, results, forces, priorities, diagnostic } = data;
+
+            const radarResults = results.filter(r => r.bloc >= 2 && r.bloc <= 4);
+
+            // Formatage des forces et priorités pour le pré-remplissage
+            const forcesText = forces.map((f, i) => `${i+1}. ${f.codex} (${f.score}/100)`).join('\n');
+            const prioritiesText = priorities.map((p, i) => `${i+1}. ${p.codex} (${p.score}/100)`).join('\n');
+
+            // Formatage des 30 codex avec leurs scores
+            const codexDetails = results
+                .sort((a, b) => a.codex.localeCompare(b.codex))
+                .map(r => `${r.codex}: ${r.score}/100`)
+                .join('\n');
+
+            // Construction de l'URL Google Form avec pré-remplissage
+            const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdaFXTRIGwT5VohpUOdWS4uws7dOqKM0_XvhXybEN5Ci28YKg/viewform?usp=pp_url' +
+                '&entry.1419344534=' + encodeURIComponent(globalScore) +
+                '&entry.58110243=' + encodeURIComponent(niveau) +
+                '&entry.2143644899=' + encodeURIComponent(forcesText) +
+                '&entry.669742441=' + encodeURIComponent(prioritiesText) +
+                '&entry.1166974658=' + encodeURIComponent(diagnostic) +
+                '&entry.839337160=' + encodeURIComponent(codexDetails);
+
+            let html = `
+                        <div class="result-header">
+                            <div class="label">VOTRE MCE BUSINESS SCORE</div>
+                            <div class="score">${globalScore}<span class="denom"> / 100</span></div>
+                            <div class="level">${niveau}</div>
+                            <div class="level-sub">Basé sur l'analyse de vos 30 dimensions</div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VISUALISATION <span class="gold">RADAR</span></div>
+                            <div class="radar-wrapper">
+                                <canvas id="radarChart"></canvas>
+                            </div>
+                            <div style="text-align:center;font-size:var(--fs-tiny);color:var(--white-dim);padding-top:var(--space-xs);">
+                                Les 30 codex des blocs ADN, OPÉRATIONNEL et STRATÉGIQUE
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">LES <span class="gold">30 CODEX</span></div>
+                            <div class="codex-list">
+                    `;
+
+            const sortedAlpha = [...results].sort((a, b) => a.codex.localeCompare(b.codex));
+            sortedAlpha.forEach(r => {
+                const pct = r.score;
+                html += `
+                            <div class="codex-item">
+                                <span class="name">${r.codex}</span>
+                                <div class="bar-wrap">
+                                    <div class="bar-fill" style="width:${pct}%;"></div>
+                                </div>
+                                <span class="score-val">${pct}</span>
+                            </div>
+                        `;
+            });
+
+            html += `
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VOS <span class="gold">3 FORCES</span></div>
+                            <div class="top-grid">
+                    `;
+
+            forces.forEach((f, i) => {
+                const desc = getForceDescription(f.codex);
+                html += `
+                            <div class="top-item">
+                                <span class="rank">0${i + 1}</span>
+                                <div class="info">
+                                    <div class="name">${f.codex}</div>
+                                    <div class="desc">${desc}</div>
+                                </div>
+                                <span class="score-badge">${f.score}</span>
+                            </div>
+                        `;
+            });
+
+            html += `
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VOS <span class="gold">3 PRIORITÉS</span></div>
+                            <div class="top-grid">
+                    `;
+
+            priorities.forEach((p, i) => {
+                const desc = getPriorityDescription(p.codex);
+                html += `
+                            <div class="top-item">
+                                <span class="rank">0${i + 1}</span>
+                                <div class="info">
+                                    <div class="name">${p.codex}</div>
+                                    <div class="desc">${desc}</div>
+                                </div>
+                                <span class="score-badge">${p.score}</span>
+                            </div>
+                        `;
+            });
+
+            html += `
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">DIAGNOSTIC <span class="gold">MCE</span></div>
+                            <div class="diagnostic-box">
+                                <p>${diagnostic}</p>
+                            </div>
+                        </div>
+
+                        <div class="result-section">
+                            <div class="section-title">VOTRE <span class="gold">PLAN D'AUGMENTATION</span></div>
+                    `;
+
+            priorities.forEach((p, i) => {
+                const action = getActionPlan(p.codex);
+                const iaBoost = getIaBoost(p.codex);
+                html += `
+                            <div class="action-item">
+                                <div class="priority">PRIORITÉ 0${i + 1}</div>
+                                <div class="action-name">${p.codex}</div>
+                                <div class="action-desc">
+                                    <p><strong>Ce que vous devriez travailler :</strong> ${action}</p>
+                                    <div class="ia-boost">
+                                        <div class="ia-tag">🤖 BOOST IA</div>
+                                        <p>${iaBoost}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+            });
+
+            html += `
+                        </div>
+
+                        <div class="result-section">
+                            <div class="google-form-section">
+                                <div class="icon">📋</div>
+                                <div class="title">Recevez votre diagnostic complet par email</div>
+                                <div class="sub">
+                                    Vos résultats (score, forces, priorités et diagnostic) seront automatiquement<br />
+                                    pré-remplis dans le formulaire. Il ne vous reste plus qu'à renseigner<br />
+                                    vos coordonnées pour les recevoir.
+                                </div>
+                                <button class="btn-google-form" id="btn-google-form">
+                                    <span>📩 Accéder au formulaire</span>
+                                    <span class="arrow">→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-footer-actions">
+                            <button class="btn-small-ghost" id="btn-restart" style="font-size:var(--fs-base);padding:var(--space-md);">⟳ REFAIRE LE TEST</button>
+                        </div>
+                    `;
+
+            container.innerHTML = html;
+            container.classList.add('active');
+            updateHeader();
+
+            setTimeout(() => { createRadarChart(radarResults); }, 100);
+
+            // Bouton Google Form avec pré-remplissage
+            document.getElementById('btn-google-form').addEventListener('click', function() {
+                window.open(formUrl, '_blank');
+            });
+
+            document.getElementById('btn-restart').addEventListener('click', function() {
+                goToWelcome();
+            });
+        }
+
+        // ================================================================
+        // RADAR CHART
+        // ================================================================
+        function createRadarChart(results) {
+            const canvas = document.getElementById('radarChart');
+            if (!canvas || results.length === 0) return;
+
+            const ctx = canvas.getContext('2d');
+
+            const size = Math.min(520, window.innerWidth - 60);
+            canvas.width = size;
+            canvas.height = size;
+
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const radius = Math.min(size / 2 - 70, 190);
+
+            const labels = results.map(r => r.codex);
+            const scores = results.map(r => r.score / 100);
+
+            const numPoints = labels.length;
+            const angleStep = (Math.PI * 2) / numPoints;
+
+            ctx.clearRect(0, 0, size, size);
+
+            const levels = 4;
+            for (let i = 1; i <= levels; i++) {
+                const r = (radius / levels) * i;
+                ctx.beginPath();
+                for (let j = 0; j < numPoints; j++) {
+                    const angle = -Math.PI / 2 + j * angleStep;
+                    const x = centerX + r * Math.cos(angle);
+                    const y = centerY + r * Math.sin(angle);
+                    if (j === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                const val = Math.round((i / levels) * 100);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+                ctx.font = '8px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(val + '%', centerX + 4, centerY - r + 4);
+            }
+
+            for (let i = 0; i < numPoints; i++) {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                const labelRadius = radius + 22;
+                const lx = centerX + labelRadius * Math.cos(angle);
+                const ly = centerY + labelRadius * Math.sin(angle);
+
+                const cosA = Math.cos(angle);
+                const sinA = Math.sin(angle);
+
+                ctx.fillStyle = '#888888';
+                ctx.font = '5.5px Inter, sans-serif';
+
+                if (cosA > 0.15) ctx.textAlign = 'left';
+                else if (cosA < -0.15) ctx.textAlign = 'right';
+                else ctx.textAlign = 'center';
+
+                if (sinA > 0.5) ctx.textBaseline = 'top';
+                else if (sinA < -0.5) ctx.textBaseline = 'bottom';
+                else ctx.textBaseline = 'middle';
+
+                ctx.fillText(labels[i], lx, ly);
+            }
+
+            ctx.beginPath();
+            for (let i = 0; i < numPoints; i++) {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const val = Math.min(1, Math.max(0, scores[i] || 0));
+                const r = radius * val;
+                const x = centerX + r * Math.cos(angle);
+                const y = centerY + r * Math.sin(angle);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(212, 175, 55, 0.15)';
+            ctx.fill();
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            for (let i = 0; i < numPoints; i++) {
+                const angle = -Math.PI / 2 + i * angleStep;
+                const val = Math.min(1, Math.max(0, scores[i] || 0));
+                const r = radius * val;
+                const x = centerX + r * Math.cos(angle);
+                const y = centerY + r * Math.sin(angle);
+
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#d4af37';
+                ctx.fill();
+                ctx.shadowColor = 'rgba(212, 175, 55, 0.3)';
+                ctx.shadowBlur = 6;
+            }
+            ctx.shadowBlur = 0;
+
+            const avgScore = Math.round(results.reduce((s, r) => s + r.score, 0) / results.length);
+            ctx.fillStyle = 'rgba(255,255,255,0.03)';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 26, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#d4af37';
+            ctx.font = 'bold 18px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(avgScore, centerX, centerY - 4);
+            ctx.fillStyle = '#888888';
+            ctx.font = '6px Inter, sans-serif';
+            ctx.fillText('MOYENNE', centerX, centerY + 16);
+
+            ctx.fillStyle = '#555555';
+            ctx.font = '7px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText('Les 30 codex (blocs 2, 3, 4)', centerX, size - 4);
+        }
+
+        // ================================================================
+        // DESCRIPTIONS
+        // ================================================================
+        function getForceDescription(codex) {
+            const map = {
+                'PROSPECTION': 'Vous maîtrisez l\'art de trouver et d\'attirer vos clients.',
+                'VENTE': 'Votre processus commercial est un véritable atout.',
+                'RELATION CLIENT': 'Vous fidélisez et transformez vos clients en ambassadeurs.',
+                'MARKETING': 'Votre marketing est aligné avec vos objectifs business.',
+                'PRICING': 'Vous avez une stratégie de prix qui maximise votre valeur.',
+                'PRODUCTIVITÉ': 'Vous mesurez et optimisez en continu votre efficacité.',
+                'TRÉSORERIE': 'Vous pilotez votre cash avec une vision à long terme.',
+                'KPI': 'Vous utilisez les données pour piloter vos décisions.',
+                'NÉGOCIATION': 'Vous êtes un négociateur qui crée de la valeur.',
+                'CROSS-SELLING': 'Vous développez vos ventes chez vos clients existants.',
+                'RECRUTEMENT': 'Vous recrutez de manière anticipée et structurée.',
+                'REPORTING': 'Vos rapports sont des outils de décision, pas de simple suivi.',
+                'PARCOURS CLIENT': 'Vous cartographiez et optimisez l\'expérience client.',
+                'EXPÉRIENCE CLIENT': 'Vous concevez des expériences mémorables.',
+                'CONFORMITÉ': 'La conformité est intégrée à votre culture.',
+                'GESTION FINANCIÈRE': 'Vous pilotez vos finances avec une vision globale.',
+                'RSE': 'Vous intégrez la RSE à votre stratégie et vos opérations.',
+                'IFRS': 'Vous maîtrisez les normes financières de votre secteur.',
+                'AGENTS IA OPÉRATIONNELS': 'Vous exploitez l\'IA pour optimiser vos opérations.',
+                'CULTURE DE L\'ENTREPRISE': 'Votre culture est un levier de performance.',
+                'BUSINESS MODEL': 'Vous avez un modèle économique clair et durable.',
+                'STRATÉGIE': 'Vous avez une vision et des priorités assumées.',
+                'PRISE DE DÉCISION': 'Vos décisions sont structurées et éclairées.',
+                'LEADERSHIP': 'Vous incarnez le leadership de manière exemplaire.',
+                'BUSINESS PLAN': 'Votre business plan est un outil de pilotage.',
+                'RECHERCHE DE FINANCEMENT': 'Vous savez structurer votre recherche de financement.',
+                'RENTABILITÉ': 'Vous pilotez votre rentabilité par segment.',
+                'AGENTS IA COGNITIFS': 'L\'IA éclaire vos décisions stratégiques.',
+                'FINANCEMENT BANCAIRE': 'Vous maîtrisez l\'art du financement bancaire.',
+                'IKIGAI': 'Vous avez une vision entrepreneuriale alignée avec vos valeurs.',
+            };
+            return map[codex] || 'Cette dimension est un point fort de votre entreprise.';
+        }
+
+        function getPriorityDescription(codex) {
+            const map = {
+                'PROSPECTION': 'Renforcer votre capacité à générer un flux de prospects qualifiés.',
+                'VENTE': 'Structurer un processus commercial pour augmenter votre taux de conversion.',
+                'RELATION CLIENT': 'Fidéliser vos clients pour créer des revenus récurrents.',
+                'MARKETING': 'Aligner votre marketing avec vos objectifs commerciaux.',
+                'PRICING': 'Repenser votre stratégie de prix pour capturer plus de valeur.',
+                'PRODUCTIVITÉ': 'Mesurer et améliorer votre productivité pour gagner en efficacité.',
+                'TRÉSORERIE': 'Anticiper vos besoins de cash pour sécuriser votre croissance.',
+                'KPI': 'Mettre en place des indicateurs pour piloter votre performance.',
+                'NÉGOCIATION': 'Développer vos compétences en négociation pour améliorer vos marges.',
+                'CROSS-SELLING': 'Exploiter le potentiel de vos clients existants.',
+                'RECRUTEMENT': 'Anticiper vos besoins en talents et structurer votre recrutement.',
+                'REPORTING': 'Transformer vos rapports en outils de décision.',
+                'PARCOURS CLIENT': 'Cartographier et fluidifier l\'expérience de vos clients.',
+                'EXPÉRIENCE CLIENT': 'Créer des interactions différenciantes et mémorables.',
+                'CONFORMITÉ': 'Intégrer la conformité dans vos processus pour réduire les risques.',
+                'GESTION FINANCIÈRE': 'Renforcer votre pilotage financier pour une vision globale.',
+                'RSE': 'Intégrer la RSE à votre stratégie et vos opérations.',
+                'IFRS': 'Améliorer votre maîtrise des normes financières.',
+                'AGENTS IA OPÉRATIONNELS': 'Exploiter l\'IA pour gagner en productivité.',
+                'CULTURE DE L\'ENTREPRISE': 'Définir et incarner une culture qui fédère vos équipes.',
+                'BUSINESS MODEL': 'Clarifier votre modèle économique pour le rendre durable.',
+                'STRATÉGIE': 'Définir une vision claire et des priorités pour l\'avenir.',
+                'PRISE DE DÉCISION': 'Structurer vos décisions pour plus d\'efficacité.',
+                'LEADERSHIP': 'Développer votre leadership pour entraîner vos équipes.',
+                'BUSINESS PLAN': 'Faire de votre business plan un véritable outil de pilotage.',
+                'RECHERCHE DE FINANCEMENT': 'Structurer votre approche pour convaincre les financeurs.',
+                'RENTABILITÉ': 'Piloter votre rentabilité par segment pour arbitrer vos ressources.',
+                'AGENTS IA COGNITIFS': 'Utiliser l\'IA pour éclairer vos décisions stratégiques.',
+                'FINANCEMENT BANCAIRE': 'Renforcer votre capacité à convaincre les banques.',
+                'IKIGAI': 'Aligner votre vision entrepreneuriale avec vos valeurs.',
+            };
+            return map[codex] || 'Cette dimension mérite votre attention pour progresser.';
+        }
+
+        function getActionPlan(codex) {
+            const map = {
+                'PROSPECTION': 'Mettez en place un système de prospection structuré : définissez votre cible, vos canaux et vos indicateurs de performance.',
+                'VENTE': 'Structurez votre process commercial en définissant des étapes claires et des critères de qualification.',
+                'RELATION CLIENT': 'Mettez en place un programme de fidélisation : suivi post-vente, enquêtes de satisfaction.',
+                'MARKETING': 'Définissez des objectifs marketing mesurables et identifiez vos canaux les plus performants.',
+                'PRICING': 'Analysez votre positionnement prix par rapport à vos concurrents et à la valeur perçue.',
+                'PRODUCTIVITÉ': 'Identifiez les principaux goulets d\'étranglement et mettez en place des indicateurs de productivité.',
+                'TRÉSORERIE': 'Mettez en place une prévision de trésorerie sur 12 mois glissants.',
+                'KPI': 'Définissez 5 à 7 indicateurs clés alignés avec vos objectifs stratégiques.',
+                'NÉGOCIATION': 'Formez vos équipes à la négociation et structurez vos préparations.',
+                'CROSS-SELLING': 'Identifiez les besoins complémentaires de vos clients existants.',
+                'RECRUTEMENT': 'Anticipez vos besoins en personnel sur 12 mois et définissez des fiches de poste précises.',
+                'REPORTING': 'Simplifiez vos rapports pour qu\'ils servent à prendre des décisions.',
+                'PARCOURS CLIENT': 'Cartographiez l\'ensemble du parcours de vos clients et identifiez les points de friction.',
+                'EXPÉRIENCE CLIENT': 'Formez vos équipes à l\'orientation client et mettez en place des indicateurs de satisfaction.',
+                'CONFORMITÉ': 'Réalisez un audit de vos pratiques actuelles et identifiez les risques majeurs.',
+                'GESTION FINANCIÈRE': 'Mettez en place des indicateurs financiers avancés : marge par produit, analyse des coûts.',
+                'RSE': 'Identifiez les enjeux RSE pertinents pour votre activité et définissez un plan d\'action.',
+                'IFRS': 'Formez-vous ou faites-vous accompagner sur les normes comptables applicables à votre secteur.',
+                'AGENTS IA OPÉRATIONNELS': 'Identifiez les tâches répétitives qui pourraient être automatisées par l\'IA.',
+                'CULTURE DE L\'ENTREPRISE': 'Définissez les valeurs et comportements clés que vous souhaitez voir dans votre entreprise.',
+                'BUSINESS MODEL': 'Analysez en détail votre proposition de valeur, vos segments clients, vos canaux.',
+                'STRATÉGIE': 'Définissez une vision à 5 ans et les grandes orientations stratégiques.',
+                'PRISE DE DÉCISION': 'Mettez en place une méthode de décision structurée : données, analyse des risques.',
+                'LEADERSHIP': 'Travaillez sur votre propre posture de leader : délégation, développement des talents.',
+                'BUSINESS PLAN': 'Revisitez votre business plan pour en faire un outil de pilotage.',
+                'RECHERCHE DE FINANCEMENT': 'Identifiez vos besoins de financement sur 12 à 18 mois.',
+                'RENTABILITÉ': 'Analysez votre rentabilité par segment pour prioriser vos investissements.',
+                'AGENTS IA COGNITIFS': 'Identifiez les décisions stratégiques qui pourraient bénéficier d\'une analyse augmentée par l\'IA.',
+                'FINANCEMENT BANCAIRE': 'Préparez un dossier de financement centré sur la démonstration de votre capacité de remboursement.',
+                'IKIGAI': 'Prenez le temps de réfléchir à votre alignement personnel.',
+            };
+            return map[codex] || 'Concentrez-vous sur cette dimension pour générer un impact significatif.';
+        }
+
+        function getIaBoost(codex) {
+            const map = {
+                'PROSPECTION': 'L\'IA peut analyser votre base de données clients pour identifier des segments à fort potentiel. Des outils comme <strong>Apollo.io</strong> (version gratuite) ou <strong>Clay</strong> transforment la prospection en un processus data-driven.',
+                'VENTE': 'L\'IA peut analyser vos conversations commerciales pour identifier les patterns de succès. <strong>Gong</strong> ou <strong>Salesforce Einstein</strong> (version d\'essai) offrent des analyses conversationnelles.',
+                'RELATION CLIENT': 'L\'IA peut analyser le sentiment de vos clients et recommander des actions de fidélisation. <strong>Intercom</strong> (plan gratuit) ou <strong>Zendesk AI</strong> automatisent le suivi client.',
+                'MARKETING': 'L\'IA peut générer des contenus marketing adaptés à chaque segment. <strong>Jasper</strong> ou <strong>Copy.ai</strong> (versions gratuites) produisent du contenu à grande échelle.',
+                'PRICING': 'L\'IA peut analyser l\'élasticité de vos prix. <strong>Prisync</strong> (version gratuite) ou <strong>Competera</strong> permettent une stratégie de prix data-driven.',
+                'PRODUCTIVITÉ': 'L\'IA peut analyser vos flux de travail et suggérer des automatisations. <strong>Notion AI</strong> ou <strong>Zapier</strong> (versions gratuites) automatisent les tâches répétitives.',
+                'TRÉSORERIE': 'L\'IA peut générer des prévisions précises de trésorerie. <strong>Pigment</strong> ou <strong>Qymatix</strong> (versions d\'essai) transforment la gestion de trésorerie.',
+                'KPI': 'L\'IA peut automatiser la collecte de vos indicateurs clés. <strong>Tableau</strong> ou <strong>Power BI</strong> (versions gratuites) rendent vos données actionnables.',
+                'NÉGOCIATION': 'L\'IA peut recommander des concessions optimales. <strong>Nudge.ai</strong> ou <strong>Crystal</strong> (versions d\'essai) aident à adapter votre approche.',
+                'CROSS-SELLING': 'L\'IA peut analyser l\'historique d\'achat pour identifier des combinaisons pertinentes. <strong>Amazon Personalize</strong> ou <strong>Salesforce Einstein</strong> (versions d\'essai) transforment le cross-selling.',
+                'RECRUTEMENT': 'L\'IA peut analyser les CV pour identifier les meilleures correspondances. <strong>HireVue</strong> ou <strong>Textio</strong> (versions d\'essai) aident à recruter plus efficacement.',
+                'REPORTING': 'L\'IA peut générer automatiquement des rapports en langage naturel. <strong>Power BI</strong> ou <strong>Tableau</strong> (versions gratuites) intègrent des fonctionnalités d\'IA.',
+                'PARCOURS CLIENT': 'L\'IA peut analyser le comportement des utilisateurs pour identifier les points de friction. <strong>Hotjar</strong> ou <strong>Contentsquare</strong> (versions gratuites) optimisent le parcours.',
+                'EXPÉRIENCE CLIENT': 'L\'IA peut analyser le sentiment des clients. <strong>Intercom</strong> ou <strong>Zendesk AI</strong> (versions gratuites) aident à transformer l\'expérience client.',
+                'CONFORMITÉ': 'L\'IA peut surveiller les évolutions réglementaires. <strong>OneTrust</strong> ou <strong>Vanta</strong> (versions d\'essai) automatisent la gestion des risques.',
+                'GESTION FINANCIÈRE': 'L\'IA peut analyser vos marges par segment. <strong>Pigment</strong> ou <strong>Datarails</strong> (versions d\'essai) transforment la finance en levier de performance.',
+                'RSE': 'L\'IA peut analyser l\'impact environnemental de votre chaîne de valeur. <strong>EcoVadis</strong> ou <strong>Salesforce Net Zero</strong> (versions d\'essai) structurent votre démarche RSE.',
+                'IFRS': 'L\'IA peut analyser l\'impact des normes comptables. <strong>Workiva</strong> ou <strong>CCH Tagetik</strong> (versions d\'essai) aident à maîtriser les normes IFRS.',
+                'AGENTS IA OPÉRATIONNELS': 'L\'IA peut automatiser vos processus opérationnels répétitifs. <strong>UiPath</strong> ou <strong>Microsoft Power Automate</strong> (versions gratuites) permettent de commencer à automatiser.',
+                'CULTURE DE L\'ENTREPRISE': 'L\'IA peut analyser les feedbacks de vos équipes. <strong>CultureAmp</strong> ou <strong>Officevibe</strong> (versions d\'essai) aident à transformer votre culture.',
+                'BUSINESS MODEL': 'L\'IA peut analyser votre proposition de valeur. <strong>Strategyzer AI</strong> ou <strong>Miro AI</strong> (versions gratuites) aident à formaliser votre business model.',
+                'STRATÉGIE': 'L\'IA peut analyser les tendances de votre marché. <strong>AlphaSense</strong> ou <strong>Klue</strong> (versions d\'essai) aident à passer à une stratégie data-driven.',
+                'PRISE DE DÉCISION': 'L\'IA peut simuler l\'impact de différentes décisions. <strong>ThoughtSpot</strong> ou <strong>Qlik</strong> (versions gratuites) permettent de poser des questions à vos données.',
+                'LEADERSHIP': 'L\'IA peut recommander des axes de développement. <strong>BetterUp</strong> ou <strong>Torch</strong> (versions d\'essai) aident à transformer votre leadership.',
+                'BUSINESS PLAN': 'L\'IA peut scénariser automatiquement différentes hypothèses économiques. <strong>Pigment</strong> ou <strong>Airtable AI</strong> (versions gratuites) transforment votre business plan.',
+                'RECHERCHE DE FINANCEMENT': 'L\'IA peut analyser le profil des financeurs potentiels. <strong>Pitchbook</strong> ou <strong>Proposify</strong> (versions d\'essai) aident à préparer votre recherche.',
+                'RENTABILITÉ': 'L\'IA peut analyser votre rentabilité par segment. <strong>Tableau</strong> ou <strong>Domo</strong> (versions gratuites) visualisent votre rentabilité.',
+                'AGENTS IA COGNITIFS': 'L\'IA peut analyser vos données stratégiques. <strong>ChatGPT Enterprise</strong> ou <strong>Claude</strong> (versions d\'essai) augmentent votre intelligence stratégique.',
+                'FINANCEMENT BANCAIRE': 'L\'IA peut analyser les critères des banques. <strong>Pigment</strong> ou <strong>Cashforce</strong> (versions d\'essai) aident à préparer un dossier bancaire.',
+                'IKIGAI': 'L\'IA peut analyser vos compétences et motivations. <strong>Ikigai AI</strong> ou <strong>BetterUp</strong> (versions d\'essai) aident à transformer votre vision entrepreneuriale.',
+            };
+            return map[codex] || 'L\'IA peut vous aider à progresser sur cette dimension. Des outils comme <strong>ChatGPT</strong> (gratuit) ou <strong>Notion AI</strong> (version gratuite) sont d\'excellents points de départ.';
+        }
+
+        // ================================================================
+        // GO TO WELCOME
+        // ================================================================
+        function goToWelcome() {
+            state.currentIndex = 0;
+            state.isTransitioning = false;
+            state.blockTransitionShown = { 2: false, 3: false, 4: false };
+
+            for (let i = 0; i < QUESTIONS.length; i++) {
+                state.reponses[i] = null;
+            }
+
+            const analyseBtn = document.getElementById('btn-analyse-trigger');
+            if (analyseBtn && analyseBtn.parentNode) {
+                const newBtn = document.createElement('button');
+                newBtn.className = 'btn-primary';
+                newBtn.id = 'bt-continue';
+                newBtn.textContent = 'DÉMARRER';
+                newBtn.addEventListener('click', function() {
+                    const currentBloc = state.currentIndex < QUESTIONS.length ? QUESTIONS[state.currentIndex]
+                        .bloc : 0;
+                    if (currentBloc >= 2 && currentBloc <= 4) {
+                        state.blockTransitionShown[currentBloc] = true;
+                    }
+                    screens.blockTransition.classList.remove('active');
+                    screens.question.classList.add('active');
+                    state.currentIndex = state.currentIndex + 1;
+                    renderQuestion(state.currentIndex);
+                    state.isTransitioning = false;
+                    updateValidateButton(state.currentIndex);
+                });
+                analyseBtn.parentNode.replaceChild(newBtn, analyseBtn);
+                btElements.continue = newBtn;
+            }
+
+            screens.result.classList.remove('active');
+            screens.analysis.classList.remove('active');
+            screens.blockTransition.classList.remove('active');
+            screens.question.classList.remove('active');
+
+            const welcomeContent = document.querySelector('.welcome');
+            if (welcomeContent) welcomeContent.classList.remove('hidden');
+
+            const btnStart = document.getElementById('btn-start');
+            if (btnStart) btnStart.classList.remove('hidden');
+
+            screens.welcome.classList.add('active');
+
+            qElements.progress.style.width = '0%';
+            qElements.progressPercent.textContent = '0%';
+            updateHeader();
+        }
+
+        // ================================================================
+        // ÉVÉNEMENTS PRINCIPAUX
+        // ================================================================
+
+        document.getElementById('btn-start').addEventListener('click', function() {
+            this.classList.add('hidden');
+            const welcomeContent = document.querySelector('.welcome');
+            if (welcomeContent) welcomeContent.classList.add('hidden');
+            screens.welcome.classList.remove('active');
+            screens.question.classList.add('active');
+            state.currentIndex = 0;
+            renderQuestion(0);
+        });
+
+        qElements.validate.addEventListener('click', handleValidate);
+
+        btElements.continue.addEventListener('click', function() {
+            const currentBloc = state.currentIndex < QUESTIONS.length ? QUESTIONS[state.currentIndex].bloc : 0;
+            if (currentBloc >= 2 && currentBloc <= 4) {
+                state.blockTransitionShown[currentBloc] = true;
+            }
+            screens.blockTransition.classList.remove('active');
+            screens.question.classList.add('active');
+            state.currentIndex = state.currentIndex + 1;
+            renderQuestion(state.currentIndex);
+            state.isTransitioning = false;
+            updateValidateButton(state.currentIndex);
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const btn = qElements.validate;
+                if (!btn.disabled && screens.question.classList.contains('active')) {
+                    handleValidate();
+                }
+            }
+        });
+
+        document.getElementById('btn-restart-ghost').addEventListener('click', goToWelcome);
+
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('brand-header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            const canvas = document.getElementById('radarChart');
+            if (canvas && screens.result.classList.contains('active')) {
+                const results = computeResults();
+                const radarResults = results.results.filter(r => r.bloc >= 2 && r.bloc <= 4);
+                setTimeout(() => { createRadarChart(radarResults); }, 100);
+            }
+        });
+
+        // ================================================================
+        // INITIALISATION
+        // ================================================================
+        showScreen('welcome');
+        updateHeader();
+        console.log('🚀 MCE BUSINESS SCORE — Version avec pré-remplissage Google Form');
+        console.log('✅ Accueil : uniquement "COMMENCER"');
+        console.log('✅ Écrans de transition : "DÉMARRER"');
+        console.log('✅ Questions : uniquement "VALIDER"');
+        console.log('✅ Radar : blocs 2, 3, 4');
+        console.log('✅ Google Form : pré-remplissage automatique des résultats');
+        console.log('✅ Champs pré-remplis : Score, Niveau, Forces, Priorités, Diagnostic, Codex détaillé');
+        console.log('✅ Bouton "REFAIRE LE TEST" renvoie à l\'accueil');
+    </script>
+</body>
+</html>

@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>CAS · Entrepreneuriat — Stratégique</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #f5eee8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            margin: 0;
+            touch-action: manipulation;
+        }
+        .agent-card {
+            max-width: 760px;
+            width: 100%;
+            background: rgba(250, 242, 235, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 56px 56px 48px 48px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 10px 25px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            padding: 24px 20px 32px;
+            border: 1px solid rgba(215, 180, 155, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(200, 100, 50, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .agent-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(180, 70, 40, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+        .avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(145deg, #c97a4a, #a85a2a);
+            border-radius: 28px 12px 28px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #faf2ea;
+            font-size: 30px;
+            box-shadow: 0 8px 14px rgba(160, 70, 30, 0.25);
+            flex-shrink: 0;
+        }
+        .title-group {
+            flex: 1;
+        }
+        .title-group h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: #3a2a1a;
+            line-height: 1.2;
+        }
+        .title-group span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #7a5a3a;
+            opacity: 0.85;
+            letter-spacing: 0.2px;
+        }
+        .status-badge {
+            background: #e8d4c0;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4a2a1a;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #c8a888;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        .status-badge i {
+            font-size: 0.65rem;
+            color: #c97a4a;
+        }
+        .chat-window {
+            background: rgba(245, 235, 225, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            margin: 12px 0 20px;
+            min-height: 180px;
+            max-height: 420px;
+            overflow-y: auto;
+            border: 1px solid rgba(215, 180, 155, 0.2);
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.02);
+            position: relative;
+            z-index: 2;
+            transition: all 0.2s;
+        }
+        .chat-window p,
+        .chat-window div {
+            color: #2a1a0a;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .chat-window .agent-msg {
+            font-weight: 500;
+            color: #3a2a1a;
+        }
+        .chat-window .user-msg {
+            background: #e8d4c0;
+            padding: 8px 16px;
+            border-radius: 24px 24px 8px 24px;
+            display: inline-block;
+            margin: 6px 0 10px;
+            color: #1a0a00;
+        }
+        .chat-window strong {
+            color: #8a4a2a;
+        }
+        .chat-window em {
+            color: #7a5a3a;
+        }
+        .question-block {
+            margin: 14px 0 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .question-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #4a2a1a;
+            margin-bottom: 10px;
+            display: block;
+            letter-spacing: -0.2px;
+        }
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 6px 0 14px;
+        }
+        .option-btn {
+            background: rgba(240, 225, 210, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid #d8b8a0;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #3a2a1a;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            flex: 1 0 auto;
+            justify-content: center;
+            min-width: 70px;
+        }
+        .option-btn:active,
+        .option-btn.active {
+            background: #d8a888;
+            border-color: #c97a4a;
+            box-shadow: 0 4px 8px rgba(160, 70, 30, 0.2);
+            transform: scale(0.97);
+            color: #1a0a00;
+        }
+        .option-btn i {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-primary {
+            background: #c97a4a;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #faf2ea;
+            box-shadow: 0 6px 14px rgba(180, 80, 30, 0.3);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            touch-action: manipulation;
+            cursor: pointer;
+            border: 1px solid #d88a5a;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+            background: #a85a2a;
+            box-shadow: 0 2px 6px rgba(140, 60, 20, 0.25);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #c8a888;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #4a2a1a;
+            touch-action: manipulation;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-secondary:active {
+            background: #e8d4c0;
+            border-color: #a85a2a;
+        }
+        .footer {
+            margin-top: 22px;
+            font-size: 0.7rem;
+            color: #8a6a4a;
+            text-align: center;
+            border-top: 1px solid rgba(200, 160, 140, 0.2);
+            padding-top: 16px;
+            letter-spacing: 0.4px;
+            position: relative;
+            z-index: 2;
+        }
+        .footer i {
+            margin: 0 4px;
+            color: #c97a4a;
+        }
+        .chat-window::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-window::-webkit-scrollbar-thumb {
+            background: #c8a888;
+            border-radius: 12px;
+        }
+        .chat-window::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .decor-illustration {
+            display: flex;
+            justify-content: flex-end;
+            margin: 4px 0 -6px;
+            opacity: 0.3;
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
+        }
+        .decor-illustration i {
+            font-size: 3.2rem;
+            color: #c97a4a;
+            transform: rotate(8deg);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.03));
+        }
+        .response-feedback {
+            background: #e8d4c0;
+            border-radius: 40px;
+            padding: 4px 16px 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #4a2a1a;
+        }
+        .chat-window .msg-block {
+            background: rgba(240, 225, 210, 0.3);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #c97a4a;
+            margin: 10px 0;
+        }
+        .chat-window .strategy-block {
+            background: rgba(230, 210, 195, 0.25);
+            padding: 16px 20px;
+            border-radius: 20px;
+            border-left: 4px solid #a85a2a;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .chat-window .budget-block {
+            background: rgba(220, 200, 180, 0.2);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #8a4a2a;
+            margin: 10px 0;
+        }
+        @media (max-width: 480px) {
+            .agent-card {
+                padding: 16px;
+            }
+            .header {
+                gap: 10px;
+            }
+            .title-group h1 {
+                font-size: 1.2rem;
+            }
+            .option-btn {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="agent-card" id="app">
+        <div class="header">
+            <div class="avatar"><i class="fas fa-rocket"></i></div>
+            <div class="title-group">
+                <h1>CAS Entrepreneuriat <span style="font-weight: 400; font-size: 0.9rem;">· Stratégique</span></h1>
+                <span><i class="fas fa-circle" style="color: #c97a4a; font-size: 0.5rem;"></i> consulting premium</span>
+            </div>
+            <div class="status-badge"><i class="fas fa-check-circle"></i> Ready</div>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <p class="agent-msg"><i class="fas fa-comment-dots" style="margin-right: 8px;"></i>CAS Entrepreneuriat...Ready!</p>
+            <p style="font-size: 0.9rem; color: #5a3a2a;">Bienvenue. Pour démarrer, tapez <strong>"Go"</strong> ou cliquez sur le bouton ci-dessous.</p>
+        </div>
+
+        <div id="dynamicZone"></div>
+
+        <div class="action-row">
+            <button class="btn-primary" id="mainActionBtn"><i class="fas fa-play"></i> Go</button>
+            <button class="btn-secondary" id="resetBtn"><i class="fas fa-undo-alt"></i> Réinitialiser</button>
+        </div>
+
+        <div class="decor-illustration"><i class="fas fa-chart-line"></i></div>
+        <div class="footer"><i class="fas fa-bullseye"></i> action · structure · réussite <i class="fas fa-crown" style="opacity: 0.4;"></i></div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ÉTAT GLOBAL
+        // ============================================================
+        const state = {
+            step: 'idle',
+            q1: [], // Profil
+            q2: [], // Cognitif
+            q3: [], // Compétences
+            q4: [], // Situationnel (5 questions stratégiques)
+            currentQuestionIndex: 0,
+            currentType: null,
+            questions: [],
+            need: '',
+            level: 'B',
+            strategicInsights: null,
+        };
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const chatWindow = document.getElementById('chatWindow');
+        const dynamicZone = document.getElementById('dynamicZone');
+        const mainBtn = document.getElementById('mainActionBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // ============================================================
+        // FONCTIONS D'AFFICHAGE
+        // ============================================================
+        function appendMessage(html, isUser = false) {
+            const msg = document.createElement('div');
+            if (isUser) {
+                msg.innerHTML = `<div class="user-msg">${html}</div>`;
+            } else {
+                msg.innerHTML = `<div class="agent-msg">${html}</div>`;
+            }
+            chatWindow.appendChild(msg);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function clearDynamic() {
+            dynamicZone.innerHTML = '';
+        }
+
+        function setMainButton(text, icon = 'fa-play', action = null) {
+            mainBtn.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+            mainBtn.onclick = action || null;
+        }
+
+        // ============================================================
+        // QUESTIONNAIRES
+        // ============================================================
+        const q1Data = [
+            { q: 'Quel est votre niveau d\'expérience entrepreneurial ?', options: ['a) Débutant / Première idée',
+                    'b) En cours de structuration', 'c) Entrepreneur expérimenté / Déjà lancé'
+                ] },
+            { q: 'À quel stade se trouve votre projet ?', options: ['a) Idée / Concept', 'b) Étude de marché / Prototype',
+                    'c) Lancement / Croissance'
+                ] },
+            { q: 'Quelle est la taille prévisionnelle de votre projet (CA visé à 3 ans) ?', options: [
+                    'a) Moins de 100k TND', 'b) Entre 100k et 500k TND', 'c) Plus de 500k TND'
+                ] },
+            { q: 'Quel est votre secteur d\'activité principal ?', options: ['a) Services / Conseil',
+                    'b) E-commerce / Digital', 'c) Industrie / Artisanat / Restauration'
+                ] }
+        ];
+
+        const q2Data = [
+            { q: 'Comment qualifieriez-vous votre confiance dans la réussite de votre projet ?', options: [
+                    'a) Faible, j\'ai des doutes', 'b) Modérée, je suis en réflexion',
+                    'c) Élevée, je suis convaincu(e)'
+                ] },
+            { q: 'Quelle est votre principale difficulté actuelle ?', options: ['a) Valider mon idée face au marché',
+                    'b) Structurer mon business model', 'c) Financer mon projet / Trouver des clients'
+                ] },
+            { q: 'Comment percevez-vous l\'environnement entrepreneurial ?', options: ['a) Hostile / Complexe',
+                    'b) Neutre / Ni facile ni difficile', 'c) Favorable / Plein d\'opportunités'
+                ] },
+            { q: 'Quelle est votre ambition à 3 ans ?', options: ['a) Générer un revenu complémentaire',
+                    'b) En faire mon activité principale', 'c) Développer une entreprise pérenne avec plusieurs collaborateurs'
+                ] }
+        ];
+
+        const q3Data = [
+            { q: 'Quelle est votre qualité principale en entrepreneuriat ?', options: ['a) Créativité / Vision',
+                    'b) Rigueur / Organisation', 'c) Relationnel / Réseau'
+                ] },
+            { q: 'Sur quel point souhaiteriez-vous progresser ?', options: ['a) Stratégie commerciale / Marketing',
+                    'b) Finance / Gestion', 'c) Mindset / Résilience'
+                ] },
+            { q: 'Maîtrisez-vous les outils de gestion d\'entreprise (prévisionnel, suivi) ?', options: [
+                    'a) Niveau débutant', 'b) Niveau intermédiaire', 'c) Niveau expert'
+                ] },
+            { q: 'Comment abordez-vous la formation et l\'apprentissage ?', options: ['a) En autodidacte',
+                    'b) Avec des formations ponctuelles', 'c) Avec un programme structuré'
+                ] }
+        ];
+
+        // ============================================================
+        // QUESTIONNAIRE SITUATIONNEL STRATÉGIQUE (5 questions)
+        // ============================================================
+        function getQ4Data() {
+            return [
+                { q: 'Avez-vous déjà présenté votre projet à des clients potentiels ?', options: ['a) Non, jamais',
+                        'b) Oui, de manière informelle', 'c) Oui, avec une proposition structurée'
+                    ] },
+                { q: 'Quel est votre budget de lancement estimé (en TND) ?', options: ['a) Moins de 5000 TND',
+                        'b) Entre 5000 et 20000 TND', 'c) Plus de 20000 TND'
+                    ] },
+                { q: 'Combien de personnes comptez-vous mobiliser au démarrage ?', options: ['a) Seul(e)',
+                        'b) 2-3 associés/collaborateurs', 'c) Une équipe de plus de 5 personnes'
+                    ] },
+                { q: 'Avez-vous identifié vos concurrents directs ?', options: ['a) Non, pas encore',
+                        'b) Oui, de manière générale', 'c) Oui, avec une analyse détaillée'
+                    ] },
+                { q: 'Quelle est votre principale source de motivation ?', options: ['a) La liberté / Indépendance',
+                        'b) La création de valeur / Impact', 'c) La réussite financière'
+                    ] }
+            ];
+        }
+
+        // ============================================================
+        // RENDU D'UNE QUESTION
+        // ============================================================
+        function renderQuestion(questions, type) {
+            clearDynamic();
+            state.questions = questions;
+            state.currentType = type;
+            state.currentQuestionIndex = 0;
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            const questions = state.questions;
+            if (index >= questions.length) return;
+
+            const q = questions[index];
+            const type = state.currentType;
+            const map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+            const arrKey = map[type];
+            const answers = state[arrKey] || [];
+            const already = answers[index] || null;
+
+            let html = `
+                <div class="question-block">
+                    <span class="question-label"><i class="fas fa-question-circle"></i> ${q.q}</span>
+                    <div class="options-grid">
+            `;
+
+            q.options.forEach((opt, idx) => {
+                const val = String.fromCharCode(97 + idx);
+                const active = (already === val) ? 'active' : '';
+                html += `<div class="option-btn ${active}" data-value="${val}">${opt}</div>`;
+            });
+
+            html += `
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                        <span style="font-size:0.75rem;color:#7a5a3a;">
+                            <i class="far fa-circle"></i> ${already ? 'réponse enregistrée' : 'sélectionnez une réponse'}
+                        </span>
+                        <span style="font-size:0.7rem;color:#7a5a3a;">${index+1}/${questions.length}</span>
+                    </div>
+                </div>
+            `;
+
+            dynamicZone.innerHTML = html;
+
+            const options = dynamicZone.querySelectorAll('.option-btn');
+            options.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    options.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const value = this.dataset.value;
+                    const map2 = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+                    const arrKey2 = map2[type];
+                    if (arrKey2) {
+                        state[arrKey2][index] = value;
+                    }
+
+                    const container = dynamicZone.querySelector('.question-block');
+                    let fb = container.querySelector('.response-feedback');
+                    if (!fb) {
+                        fb = document.createElement('div');
+                        fb.className = 'response-feedback';
+                        container.appendChild(fb);
+                    }
+                    fb.innerHTML = `<i class="fas fa-check"></i> réponse ${value}`;
+
+                    if (index === questions.length - 1) {
+                        setMainButton('Valider', 'fa-check', () => validateQuestions(type));
+                    } else {
+                        setMainButton('Suivant →', 'fa-arrow-right', () => {
+                            state.currentQuestionIndex = index + 1;
+                            showQuestion(index + 1);
+                        });
+                    }
+                });
+            });
+
+            if (already) {
+                if (index === questions.length - 1) {
+                    setMainButton('Valider', 'fa-check', () => validateQuestions(type));
+                } else {
+                    setMainButton('Suivant →', 'fa-arrow-right', () => {
+                        state.currentQuestionIndex = index + 1;
+                        showQuestion(index + 1);
+                    });
+                }
+            } else {
+                setMainButton('Choisissez une réponse', 'fa-hand-pointer', null);
+            }
+        }
+
+        // ============================================================
+        // VALIDATION D'UN QUESTIONNAIRE
+        // ============================================================
+        function validateQuestions(type) {
+            const map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+            const arrKey = map[type];
+            const answers = state[arrKey];
+            const total = state.questions.length;
+
+            if (!answers || answers.length < total || answers.some(a => !a)) {
+                appendMessage('⚠️ Veuillez répondre à toutes les questions avant de valider.', false);
+                return;
+            }
+
+            if (type === 'profil') {
+                const firstAns = answers[0] || 'b';
+                const levelMap = { 'a': 'A', 'b': 'B', 'c': 'C' };
+                state.level = levelMap[firstAns] || 'B';
+
+                appendMessage('✅ Réponses enregistrées. Agent en Calibrage.');
+                appendMessage('📊 <strong>Profil Entrepreneur</strong> : lecture stratégique effectuée.');
+                state.step = 'q1done';
+                setTimeout(() => {
+                    renderQuestion(q2Data, 'cognitif');
+                    appendMessage('📋 <strong>Questionnaire Cognitif Entrepreneur</strong> (4 questions)');
+                    appendMessage('💡 Le prochain questionnaire me renseignera sur votre état d\'esprit entrepreneurial.');
+                }, 400);
+            } else if (type === 'cognitif') {
+                appendMessage('✅ Réponses enregistrées. Matrice entrepreneuriale constituée.');
+                state.step = 'q2done';
+                setTimeout(() => {
+                    renderQuestion(q3Data, 'competences');
+                    appendMessage('📋 <strong>Questionnaire Compétences Entrepreneur</strong> (4 questions)');
+                    appendMessage('💡 Le prochain questionnaire me renseignera sur vos compétences entrepreneuriales.');
+                }, 400);
+            } else if (type === 'competences') {
+                appendMessage('✅ Réponses enregistrées. Archétype Entrepreneur établi.');
+
+                appendMessage(`
+                    📊 <strong>Récapitulatif des profils</strong><br>
+                    • Profil : ${q1Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q1[i])}`).join(' / ')}<br>
+                    • Cognitif : ${q2Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q2[i])}`).join(' / ')}<br>
+                    • Compétences : ${q3Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q3[i])}`).join(' / ')}
+                `);
+
+                state.step = 'q3done';
+                setTimeout(() => {
+                    appendMessage('✏️ Formulez votre besoin principal avec vos mots (Objectif, Contrainte, Cible, Style).');
+                    clearDynamic();
+                    dynamicZone.innerHTML = `
+                        <div style="background:#e8d4c0;padding:16px;border-radius:24px;margin:8px 0;">
+                            <label style="font-weight:500;display:block;margin-bottom:8px;color:#4a2a1a;">Votre demande stratégique :</label>
+                            <textarea id="needInput" rows="2" style="width:100%;padding:12px;border-radius:20px;border:1px solid #c8a888;background:#faf2ea;font-size:0.95rem;">Je veux valider mon business model</textarea>
+                            <button id="submitNeed" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre</button>
+                        </div>
+                    `;
+                    document.getElementById('submitNeed').addEventListener('click', function() {
+                        const raw = document.getElementById('needInput').value.trim();
+                        if (raw.length < 5) {
+                            appendMessage('Veuillez décrire votre besoin plus précisément.', false);
+                            return;
+                        }
+                        state.need = raw;
+                        appendMessage(`📝 Besoin enregistré : "${raw}"`);
+
+                        const optimized =
+                            `Objectif : ${raw} | Contrainte : temps/budget | Cible : marché cible | Style : pragmatique et opérationnel`;
+                        state.validatedPrompt = optimized;
+                        appendMessage(`✅ Prompt optimisé : ${optimized}`);
+                        appendMessage('👉 Validez ce prompt en cliquant sur "OK" ci-dessous.');
+
+                        clearDynamic();
+                        dynamicZone.innerHTML = `
+                            <div style="display:flex;gap:12px;margin:8px 0;">
+                                <button id="okPrompt" class="btn-primary" style="flex:1;"><i class="fas fa-check"></i> OK</button>
+                                <button id="modifyPrompt" class="btn-secondary" style="flex:1;"><i class="fas fa-edit"></i> Modifier</button>
+                            </div>
+                        `;
+
+                        document.getElementById('okPrompt').addEventListener('click', function() {
+                            appendMessage('✅ Prompt validé. Lancement de l\'analyse des modules.');
+                            appendMessage('💡 Le prochain questionnaire me permettra de mieux comprendre votre situation entrepreneuriale.');
+                            state.step = 'q4ready';
+                            setTimeout(() => {
+                                const q4 = getQ4Data();
+                                renderQuestion(q4, 'situationnel');
+                                appendMessage('📋 <strong>Questionnaire Situationnel Entrepreneur</strong> (5 questions stratégiques)');
+                            }, 400);
+                        });
+
+                        document.getElementById('modifyPrompt').addEventListener('click', function() {
+                            appendMessage('Veuillez reformuler votre besoin.');
+                            clearDynamic();
+                            dynamicZone.innerHTML = `
+                                <div style="background:#e8d4c0;padding:16px;border-radius:24px;margin:8px 0;">
+                                    <label style="font-weight:500;display:block;margin-bottom:8px;color:#4a2a1a;">Votre demande :</label>
+                                    <textarea id="needInput2" rows="2" style="width:100%;padding:12px;border-radius:20px;border:1px solid #c8a888;background:#faf2ea;font-size:0.95rem;">${raw}</textarea>
+                                    <button id="submitNeed2" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre</button>
+                                </div>
+                            `;
+                            document.getElementById('submitNeed2').addEventListener('click', function() {
+                                const newRaw = document.getElementById('needInput2').value.trim();
+                                if (newRaw.length < 5) {
+                                    appendMessage('Plus de détails svp.', false);
+                                    return;
+                                }
+                                state.need = newRaw;
+                                const newOpt =
+                                    `Objectif : ${newRaw} | Contrainte : temps/budget | Cible : marché cible | Style : pragmatique et opérationnel`;
+                                state.validatedPrompt = newOpt;
+                                appendMessage(`✅ Prompt optimisé : ${newOpt}`);
+                                appendMessage('✅ Validé automatiquement. Lancement analyse.');
+                                state.step = 'q4ready';
+                                setTimeout(() => {
+                                    const q4 = getQ4Data();
+                                    renderQuestion(q4, 'situationnel');
+                                    appendMessage('📋 <strong>Questionnaire Situationnel Entrepreneur</strong> (5 questions)');
+                                }, 400);
+                            });
+                        });
+                    });
+                }, 400);
+            } else if (type === 'situationnel') {
+                appendMessage('✅ Réponses enregistrées. Réalité Terrain Entrepreneur identifiée.');
+                state.step = 'q4done';
+                setTimeout(() => {
+                    generateStrategicReport();
+                }, 400);
+            }
+        }
+
+        // ============================================================
+        // ANALYSE STRATÉGIQUE
+        // ============================================================
+        function generateStrategicReport() {
+            const q1 = state.q1;
+            const q2 = state.q2;
+            const q3 = state.q3;
+            const q4 = state.q4;
+
+            // ---- DÉCODAGE ----
+            const exp = q1[0] === 'a' ? 'débutant / première idée' :
+                q1[0] === 'b' ? 'en cours de structuration' :
+                'expérimenté / déjà lancé';
+
+            const stade = q1[1] === 'a' ? 'idée / concept' :
+                q1[1] === 'b' ? 'étude de marché / prototype' :
+                'lancement / croissance';
+
+            const ca = q1[2] === 'a' ? 'moins de 100k TND' :
+                q1[2] === 'b' ? '100-500k TND' :
+                'plus de 500k TND';
+
+            const secteur = q1[3] === 'a' ? 'Services / Conseil' :
+                q1[3] === 'b' ? 'E-commerce / Digital' :
+                'Industrie / Artisanat / Restauration';
+
+            const confiance = q2[0] === 'a' ? 'faible' :
+                q2[0] === 'b' ? 'modérée' :
+                'élevée';
+
+            const difficulte = q2[1] === 'a' ? 'valider l\'idée face au marché' :
+                q2[1] === 'b' ? 'structurer le business model' :
+                'financer ou trouver des clients';
+
+            const environnement = q2[2] === 'a' ? 'hostile / complexe' :
+                q2[2] === 'b' ? 'neutre' :
+                'favorable';
+
+            const ambition = q2[3] === 'a' ? 'générer un revenu complémentaire' :
+                q2[3] === 'b' ? 'en faire l\'activité principale' :
+                'développer une entreprise pérenne avec plusieurs collaborateurs';
+
+            const qualite = q3[0] === 'a' ? 'créativité / vision' :
+                q3[0] === 'b' ? 'rigueur / organisation' :
+                'relationnel / réseau';
+
+            const progression = q3[1] === 'a' ? 'stratégie commerciale / marketing' :
+                q3[1] === 'b' ? 'finance / gestion' :
+                'mindset / résilience';
+
+            const outils = q3[2] === 'a' ? 'débutant' :
+                q3[2] === 'b' ? 'intermédiaire' :
+                'expert';
+
+            const formation = q3[3] === 'a' ? 'autodidacte' :
+                q3[3] === 'b' ? 'formations ponctuelles' :
+                'programme structuré';
+
+            const validation = q4[0] === 'a' ? 'aucune validation' :
+                q4[0] === 'b' ? 'validation informelle' :
+                'validation structurée';
+
+            const budget = q4[1] === 'a' ? 'moins de 5000 TND' :
+                q4[1] === 'b' ? '5000-20000 TND' :
+                'plus de 20000 TND';
+
+            const equipe = q4[2] === 'a' ? 'seul(e)' :
+                q4[2] === 'b' ? '2-3 associés' :
+                'équipe de +5 personnes';
+
+            const concurrence = q4[3] === 'a' ? 'non identifiée' :
+                q4[3] === 'b' ? 'connue globalement' :
+                'analysée en détail';
+
+            const motivation = q4[4] === 'a' ? 'liberté / indépendance' :
+                q4[4] === 'b' ? 'création de valeur / impact' :
+                'réussite financière';
+
+            // ---- DIAGNOSTIC ----
+            appendMessage('📄 <strong>Analyse Stratégique</strong> — Synthèse entrepreneuriale');
+
+            let macro = `
+                <div class="msg-block">
+                    <strong>🔍 Diagnostic stratégique</strong><br>
+                    Vous êtes un entrepreneur ${exp} avec un projet en stade ${stade}. Votre secteur est ${secteur}.
+                    Votre objectif de CA est ${ca} et votre confiance est ${confiance}.
+                    <br><br>
+                    <strong>Analyse croisée :</strong>
+            `;
+
+            if (q1[0] === 'a' && q2[0] === 'a') {
+                macro +=
+                    'Vous débutez et le doute est présent. C\'est une situation normale. L\'enjeu est de valider votre idée au plus vite avec des tests simples et des entretiens clients. La méthode du "lean startup" est votre alliée.';
+            } else if (q1[0] === 'b' && q2[0] === 'b') {
+                macro +=
+                    'Vous êtes en structuration avec une confiance modérée. Vous êtes sur la bonne voie. Concentrez-vous sur l\'affinage de votre business model et la construction de votre plan d\'affaires.';
+            } else if (q1[0] === 'c' && q2[0] === 'c') {
+                macro +=
+                    'Vous avez de l\'expérience et la confiance est là. Votre défi est de passer à l\'échelle et de structurer votre croissance.';
+            } else {
+                macro += `Votre situation est ${exp} avec une confiance ${confiance}. L'enjeu est d'aligner vos actions avec votre niveau de maturité.`;
+            }
+
+            macro +=
+                `<br><br><strong>Difficulté principale :</strong> ${difficulte}. ${q2[1] === 'a' ? 'Pour valider votre idée, réalisez 20 entretiens clients et un prototype minimal viable.' : q2[1] === 'b' ? 'Pour structurer votre business model, utilisez le Business Model Canvas et affinez votre proposition de valeur.' : 'Pour financer, préparez un business plan solide et identifiez vos sources de financement.'}`;
+
+            macro += `</div>`;
+            appendMessage(macro);
+
+            // 2. LEVIERS
+            let leviers = `
+                <div class="msg-block">
+                    <strong>⚡ Leviers stratégiques identifiés</strong><br>
+            `;
+
+            leviers +=
+                `<strong>Validation du marché :</strong> ${validation}. ${q4[0] === 'a' ? 'C\'est le point le plus critique. Lancez-vous dans des entretiens clients dès cette semaine.' : q4[0] === 'b' ? 'Vous avez commencé, formalisez vos apprentissages et itérez.' : 'Excellent, vous avez une validation solide. Passez à l\'étape suivante.'}<br><br>`;
+
+            leviers +=
+                `<strong>Budget de lancement :</strong> ${budget}. ${q4[1] === 'a' ? 'Un budget limité nécessite une approche frugale. Priorisez les dépenses essentielles et testez avec des ressources minimales.' : q4[1] === 'b' ? 'Un budget correct pour un lancement structuré. Prévoyez une marge de sécurité.' : 'Un budget conséquent vous donne des marges de manœuvre. Investissez dans les piliers clés.'}<br><br>`;
+
+            leviers +=
+                `<strong>Équipe :</strong> ${equipe}. ${q4[2] === 'a' ? 'Être seul est exigeant. Développez votre réseau et cherchez des partenaires complémentaires.' : q4[2] === 'b' ? 'Une petite équipe est idéale pour la flexibilité. Assurez une bonne répartition des rôles.' : 'Une équipe plus large est une force. Structurez la gouvernance et la communication.'}<br><br>`;
+
+            leviers +=
+                `<strong>Concurrence :</strong> ${concurrence}. ${q4[3] === 'a' ? 'Analysez vos concurrents directs et indirects. Identifiez ce qui vous différencie.' : q4[3] === 'b' ? 'Affinez votre analyse avec une matrice concurrentielle.' : 'Parfait, utilisez cette connaissance pour affiner votre positionnement.'}<br><br>`;
+
+            leviers +=
+                `<strong>Motivation :</strong> ${motivation}. ${q4[4] === 'a' ? 'La liberté est un moteur puissant. Structurez votre projet pour préserver cette indépendance.' : q4[4] === 'b' ? 'L\'impact est une source de résilience. Gardez cette vision comme boussole.' : 'La réussite financière est un objectif légitime. Définissez des jalons clairs pour mesurer vos progrès.'}`;
+
+            leviers += `</div>`;
+            appendMessage(leviers);
+
+            // 3. RECOMMANDATIONS
+            let recommandations = `
+                <div class="strategy-block">
+                    <strong>🎯 Recommandations stratégiques</strong><br>
+            `;
+
+            recommandations +=
+                `Votre qualité principale est ${qualite}, mais votre point de progression est ${progression}. `;
+
+            if (q3[0] === 'a' && q3[1] === 'a') {
+                recommandations +=
+                    'Vous avez une vision créative mais le marketing vous challenge. Structurez votre stratégie commerciale avec un plan d\'acquisition clients simple (3 canaux testés, 1 mois).';
+            } else if (q3[0] === 'b' && q3[1] === 'b') {
+                recommandations +=
+                    'Vous êtes rigoureux mais la finance vous résiste. Prenez une formation express sur les prévisionnels financiers ou faites-vous accompagner.';
+            } else if (q3[0] === 'c' && q3[1] === 'c') {
+                recommandations +=
+                    'Votre réseau est une force mais le mindset est clé. Investissez dans votre développement personnel (lectures, coaching, groupes d\'entrepreneurs).';
+            } else {
+                recommandations +=
+                    `Utilisez votre ${qualite} pour adresser votre besoin de progression sur ${progression}. Une approche pragmatique est recommandée.`;
+            }
+
+            recommandations += `<br><br>`;
+
+            recommandations +=
+                `Votre ambition est ${ambition}. `;
+
+            if (q2[3] === 'a') {
+                recommandations +=
+                    'Pour générer un revenu complémentaire, visez une rentabilité rapide. Concentrez-vous sur un produit/service qui génère des revenus dès les premiers mois.';
+            } else if (q2[3] === 'b') {
+                recommandations +=
+                    'Pour en faire votre activité principale, préparez une transition progressive. Assurez-vous d\'avoir une trésorerie de sécurité de 6 mois.';
+            } else {
+                recommandations +=
+                    'Pour développer une entreprise pérenne, structurez vos processus, documentez vos méthodes et préparez la délégation.';
+            }
+
+            recommandations += `</div>`;
+            appendMessage(recommandations);
+
+            // 4. BUDGET
+            let budgetCalc = calculateBudget(q1, q2, q3, q4);
+            appendMessage(budgetCalc);
+
+            // 5. PROPOSITION PLAN D'ACTION
+            appendMessage('📌 Souhaitez-vous un <strong>plan d\'action détaillé</strong> sur 90 jours ?');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="actionBtn" class="btn-primary" style="flex:1;"><i class="fas fa-bullseye"></i> Oui, plan d'action</button>
+                    <button id="skipActionBtn" class="btn-secondary" style="flex:1;">Passer</button>
+                </div>
+            `;
+
+            document.getElementById('actionBtn').addEventListener('click', function() {
+                generateActionPlan();
+            });
+
+            document.getElementById('skipActionBtn').addEventListener('click', function() {
+                appendMessage('✅ <strong>Entrepreneur outillé. CAS Entrepreneuriat opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+        }
+
+        // ============================================================
+        // CALCUL DU BUDGET
+        // ============================================================
+        function calculateBudget(q1, q2, q3, q4) {
+            let totalBudget = 0;
+            let details = [];
+
+            const base = q1[0] === 'c' ? 2000 : q1[0] === 'b' ? 1000 : 300;
+
+            if (q4[0] === 'a') {
+                totalBudget += 400;
+                details.push('Ateliers de validation client (20 entretiens) : 400 TND');
+            }
+            if (q4[1] === 'a') {
+                totalBudget += 200;
+                details.push('Kit de démarrage (logo, site vitrine) : 200 TND');
+            }
+            if (q3[1] === 'b') {
+                totalBudget += 600;
+                details.push('Formation Finance/Gestion : 600 TND');
+            }
+            if (q3[1] === 'a') {
+                totalBudget += 500;
+                details.push('Formation Stratégie commerciale : 500 TND');
+            }
+            if (q4[3] === 'a') {
+                totalBudget += 300;
+                details.push('Étude de marché / Analyse concurrentielle : 300 TND');
+            }
+            if (q3[2] === 'a') {
+                totalBudget += 400;
+                details.push('Formation outils de gestion : 400 TND');
+            }
+
+            totalBudget += base;
+
+            let html = `
+                <div class="budget-block">
+                    <strong>💰 Budget prévisionnel (TND)</strong><br>
+                    <strong>Enveloppe totale estimée : ${totalBudget} TND</strong><br><br>
+                    <strong>Détail :</strong><br>
+                    • Budget de base : ${base} TND<br>
+                    ${details.map(d => '• ' + d).join('<br>')}
+                    <br><br>
+                    <em>📌 Ce budget est indicatif. Un devis précis peut être établi selon vos priorités.</em>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // ============================================================
+        // PLAN D'ACTION 90 JOURS
+        // ============================================================
+        function generateActionPlan() {
+            const q1 = state.q1;
+            const q2 = state.q2;
+            const q3 = state.q3;
+            const q4 = state.q4;
+
+            appendMessage('📋 <strong>Plan d\'action entrepreneurial — 90 jours</strong>');
+
+            let steps = [];
+
+            // Phase 1 : Validation
+            if (q1[1] === 'a' || q4[0] === 'a') {
+                steps.push(`
+                    <div class="msg-block">
+                        <strong>🔹 Phase 1 : Validation du marché (J1-J30)</strong><br>
+                        • Réaliser 20 entretiens clients pour valider le besoin<br>
+                        • Créer un prototype minimal viable (MVP) ou une offre test<br>
+                        • Identifier 10 prospects et les contacter<br>
+                        • Affiner votre proposition de valeur<br>
+                        <br>
+                        <strong>Objectif :</strong> Valider que votre idée répond à un vrai besoin<br>
+                        <strong>Budget estimé :</strong> 400 TND (entretiens, outils, communication)
+                    </div>
+                `);
+            }
+
+            // Phase 2 : Structuration
+            if (q1[0] === 'b' || q2[1] === 'b') {
+                steps.push(`
+                    <div class="msg-block">
+                        <strong>🔹 Phase 2 : Structuration du business model (J31-J60)</strong><br>
+                        • Finaliser votre Business Model Canvas<br>
+                        • Construire votre plan d'affaires (prévisionnel 3 ans)<br>
+                        • Choisir votre statut juridique<br>
+                        • Ouvrir un compte professionnel<br>
+                        • Créer vos supports de présentation<br>
+                        <br>
+                        <strong>Objectif :</strong> Avoir une structure solide et un plan d'affaires<br>
+                        <strong>Budget estimé :</strong> ${q4[1] === 'a' ? '500' : '800'} TND
+                    </div>
+                `);
+            }
+
+            // Phase 3 : Acquisition
+            if (q3[1] === 'a' || q2[1] === 'c') {
+                steps.push(`
+                    <div class="msg-block">
+                        <strong>🔹 Phase 3 : Acquisition de premiers clients (J61-J90)</strong><br>
+                        • Définir votre stratégie d'acquisition (3 canaux)<br>
+                        • Lancer une campagne de communication ciblée<br>
+                        • Contacter 30 prospects qualifiés<br>
+                        • Obtenir 5 premiers clients (ou précommandes)<br>
+                        • Collecter et analyser les retours clients<br>
+                        <br>
+                        <strong>Objectif :</strong> Valider la demande et générer les premiers revenus<br>
+                        <strong>Budget estimé :</strong> ${q1[2] === 'c' ? '1000' : '600'} TND
+                    </div>
+                `);
+            }
+
+            // Phase 4 : Financement (si besoin)
+            if (q2[1] === 'c' || q1[2] === 'c') {
+                steps.push(`
+                    <div class="msg-block">
+                        <strong>🔹 Phase 4 : Recherche de financement (J61-J90)</strong><br>
+                        • Préparer votre dossier de financement<br>
+                        • Identifier 5 sources de financement (banques, aides, investisseurs)<br>
+                        • Présenter votre projet à 3 structures<br>
+                        • Négocier les conditions<br>
+                        <br>
+                        <strong>Objectif :</strong> Sécuriser le financement nécessaire au développement<br>
+                        <strong>Budget estimé :</strong> 300 TND (dossier, déplacements)
+                    </div>
+                `);
+            }
+
+            steps.forEach(step => appendMessage(step));
+
+            appendMessage(`
+                <div class="msg-block">
+                    <strong>📊 Indicateurs de suivi</strong><br>
+                    • Nombre d'entretiens clients réalisés<br>
+                    • Taux de conversion prospects/clients<br>
+                    • Chiffre d'affaires généré<br>
+                    • Marge brute<br>
+                    • Confiance dans le projet (auto-évaluation)
+                    <br><br>
+                    <strong>📅 Points d'étape</strong> : J30 (validation), J60 (structuration), J90 (acquisition)
+                </div>
+            `);
+
+            // Proposition Upgrade
+            appendMessage('📚 Souhaitez-vous un programme <strong>Skills Up Grade Entrepreneur</strong> (21 jours) ? (ok / non)');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="upgradeOk" class="btn-primary" style="flex:1;">ok</button>
+                    <button id="upgradeNo" class="btn-secondary" style="flex:1;">non</button>
+                </div>
+            `;
+
+            document.getElementById('upgradeOk').addEventListener('click', function() {
+                generateUpgradePlan();
+            });
+
+            document.getElementById('upgradeNo').addEventListener('click', function() {
+                proposePdf();
+            });
+        }
+
+        // ============================================================
+        // SKILLS UP GRADE
+        // ============================================================
+        function generateUpgradePlan() {
+            const q3 = state.q3;
+
+            let focus = [];
+            if (q3[1] === 'a') focus.push('la stratégie commerciale et le marketing');
+            if (q3[1] === 'b') focus.push('la finance et la gestion');
+            if (q3[1] === 'c') focus.push('le mindset et la résilience');
+            if (focus.length === 0) focus.push('les fondamentaux entrepreneuriaux');
+
+            appendMessage('📘 <strong>Skills Up Grade Entrepreneur — Parcours 21 jours</strong>');
+
+            appendMessage(`
+                <div class="msg-block">
+                    Programme personnalisé sur <strong>${focus.join(', ')}</strong>.
+                    <br><br>
+                    <strong>📆 Semaine 1 — Fondamentaux entrepreneuriaux</strong><br>
+                    🔹 J1-2 : Le mindset de l'entrepreneur (confiance, prise de décision)<br>
+                    🔹 J3-4 : Les bases du Business Model Canvas<br>
+                    🔹 J5-6 : La proposition de valeur et le positionnement<br>
+                    🔹 J7 : Validation du marché (entretiens, tests)
+                    <br><br>
+                    <strong>📆 Semaine 2 — Stratégie et exécution</strong><br>
+                    🔹 J8-9 : Plan d'affaires et prévisionnel financier<br>
+                    🔹 J10-11 : Stratégies d'acquisition clients<br>
+                    🔹 J12-13 : Gestion de projet et priorisation<br>
+                    🔹 J14 : Structuration juridique et fiscale
+                    <br><br>
+                    <strong>📆 Semaine 3 — Croissance et pérennité</strong><br>
+                    🔹 J15-16 : Gestion de la trésorerie et des finances<br>
+                    🔹 J17-18 : Développement du réseau et partenariats<br>
+                    🔹 J19-20 : Résilience et gestion du stress<br>
+                    🔹 J21 : Synthèse et plan d'action personnalisé
+                    <br><br>
+                    <em>📚 Ressources : "Lean Startup" (Eric Ries), "L'Entrepreneur" (Lacroix), podcasts entrepreneuriaux.</em>
+                </div>
+            `);
+
+            proposePdf();
+        }
+
+        // ============================================================
+        // PROPOSITION PDF
+        // ============================================================
+        function proposePdf() {
+            appendMessage('📄 Souhaitez-vous un <strong>PDF récapitulatif</strong> avec tous les éléments ? (ok / non)');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="pdfOk" class="btn-primary" style="flex:1;">ok</button>
+                    <button id="pdfNo" class="btn-secondary" style="flex:1;">non</button>
+                </div>
+            `;
+
+            document.getElementById('pdfOk').addEventListener('click', function() {
+                appendMessage('📎 <strong>PDF récapitulatif</strong>');
+                appendMessage(`
+                    <div class="msg-block">
+                        Contenu du document :
+                        <br><br>
+                        ✅ 4 questionnaires (Profil, Cognitif, Compétences, Situationnel)<br>
+                        ✅ Diagnostic stratégique personnalisé<br>
+                        ✅ Analyse des leviers de croissance<br>
+                        ✅ Plan d'action 90 jours détaillé<br>
+                        ✅ Budget en TND<br>
+                        ✅ Programme Skills Up Grade 21 jours
+                        <br><br>
+                        <em>📥 PDF prêt à être téléchargé.</em>
+                    </div>
+                `);
+                appendMessage('✅ <strong>Entrepreneur outillé. CAS Entrepreneuriat opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+
+            document.getElementById('pdfNo').addEventListener('click', function() {
+                appendMessage('✅ <strong>Entrepreneur outillé. CAS Entrepreneuriat opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+        }
+
+        // ============================================================
+        // HANDLE GO
+        // ============================================================
+        function handleGo() {
+            if (state.step === 'idle' || state.step === 'go') {
+                appendMessage('✅ Go lancé. Démarrage du <strong>Profil Entrepreneur</strong>.');
+                state.step = 'go';
+                state.q1 = [];
+                state.q2 = [];
+                state.q3 = [];
+                state.q4 = [];
+                renderQuestion(q1Data, 'profil');
+                appendMessage('📋 <strong>Questionnaire Profil Entrepreneur</strong> (4 questions)');
+            } else {
+                appendMessage('⚠️ Session en cours. Utilisez les boutons pour répondre.', false);
+            }
+        }
+
+        // ============================================================
+        // RESET
+        // ============================================================
+        function resetAgent() {
+            Object.assign(state, {
+                step: 'idle',
+                q1: [],
+                q2: [],
+                q3: [],
+                q4: [],
+                currentQuestionIndex: 0,
+                currentType: null,
+                questions: [],
+                need: '',
+                level: 'B',
+                strategicInsights: null,
+            });
+            chatWindow.innerHTML = '';
+            clearDynamic();
+            appendMessage('CAS Entrepreneuriat...Ready!');
+            appendMessage('Bienvenue. Pour démarrer, tapez <strong>"Go"</strong>.');
+            setMainButton('Go', 'fa-play', handleGo);
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        resetBtn.addEventListener('click', resetAgent);
+        setMainButton('Go', 'fa-play', handleGo);
+
+        console.log('✅ CAS Entrepreneuriat Stratégique chargé');
+    </script>
+</body>
+</html>

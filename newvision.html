@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>New Vision — MCE Mindset Cognitive Experience</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fafaf8;line-height:1.9;position:relative;min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(201,168,76,.05) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(26,26,46,.4) 0%,transparent 60%),linear-gradient(180deg,#0a0a0a 0%,#0f0f1a 50%,#0a0a0a 100%)}
+.container{max-width:1100px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+:root{--gold:#c9a84c;--gold-light:#e8d5a3;--black:#0a0a0a;--black-light:#141414;--gray:#2a2a2a;--off-white:#e8e6e0}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#c9a84c;border-radius:0}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:.02em}
+h1{font-size:2.6rem;color:#c9a84c;line-height:1.2}
+h2{font-size:2.4rem;color:#c9a84c;display:inline-block;position:relative}
+h2::after{content:'';position:absolute;bottom:-8px;left:0;width:60px;height:2px;background:#c9a84c;transition:width .6s ease}
+h2:hover::after{width:100%}
+h3{font-size:1.3rem;color:#c9a84c;margin-bottom:10px}
+p{font-size:1rem;font-weight:300;color:#e8e6e0;line-height:1.9}
+.gold{color:#c9a84c}
+.divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:22px auto}
+
+/* ===== TOP BAR ===== */
+.top-bar{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.15);padding:14px 0}
+.top-bar .inner{display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto;padding:0 20px;flex-wrap:wrap;gap:10px}
+.top-bar .brand{font-family:'Playfair Display',serif;font-size:1rem;color:#c9a84c;font-weight:700;letter-spacing:3px;text-decoration:none}
+.top-bar .back{font-family:'Inter',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:2px;color:#e8e6e0;text-decoration:none;padding:6px 14px;border:1px solid rgba(201,168,76,.3);border-radius:4px;transition:all .3s ease}
+.top-bar .back:hover{color:#c9a84c;border-color:#c9a84c;background:rgba(201,168,76,.05)}
+
+/* ===== HERO ===== */
+.hero-landing{padding:60px 0 40px 0;text-align:center;border-bottom:1px solid rgba(255,255,255,.03)}
+.hero-landing .eyebrow{font-size:.7rem;color:#c9a84c;letter-spacing:4px;text-transform:uppercase;font-weight:500;margin-bottom:16px}
+.hero-landing h1{font-size:3.8rem;font-weight:900;letter-spacing:4px;margin-bottom:20px}
+.hero-landing .sous-titre{font-size:1.25rem;color:#e8e6e0;font-weight:300;max-width:720px;margin:0 auto 12px auto;line-height:1.8}
+.hero-landing .tagline{font-family:'Playfair Display',serif;font-size:1.55rem;color:#e8d5a3;font-style:italic;margin-top:24px}
+
+/* ===== SECTIONS ===== */
+section{padding:70px 0;border-bottom:1px solid rgba(255,255,255,.03);scroll-margin-top:80px;position:relative}
+section:last-of-type{border-bottom:none}
+.section-titre{text-align:center;margin-bottom:40px}
+.section-titre p{max-width:640px;margin:14px auto 0 auto;color:#e8e6e0;font-size:1.05rem;text-align:center}
+
+/* ===== MODULES GRID ===== */
+.grille-modules{display:grid;grid-template-columns:1fr;gap:18px;max-width:900px;margin:0 auto}
+.module-card{background:#141414;padding:32px 24px;border:1px solid rgba(201,168,76,.1);border-radius:6px;text-align:center;transition:all .4s ease}
+.module-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.35);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.module-card .nom{font-family:'Playfair Display',serif;font-size:1.6rem;color:#c9a84c;font-weight:700;margin-bottom:10px}
+.module-card .desc{font-size:.9rem;color:#e8e6e0;font-weight:300}
+
+/* ===== AXES ===== */
+.grille-axes{display:grid;grid-template-columns:1fr;gap:18px;max-width:900px;margin:0 auto}
+.axe-card{background:#141414;padding:36px 24px;border:1px solid rgba(201,168,76,.1);border-radius:6px;text-align:center;transition:all .4s ease}
+.axe-card:hover{border-color:rgba(201,168,76,.35);transform:translateY(-4px)}
+.axe-card .num{font-family:'Playfair Display',serif;font-size:2.2rem;color:#c9a84c;font-weight:900;margin-bottom:10px;letter-spacing:2px}
+.axe-card .nom{font-family:'Playfair Display',serif;font-size:1.4rem;color:#c9a84c;font-weight:700;margin-bottom:12px}
+.axe-card .desc{font-size:.9rem;color:#e8e6e0;font-weight:300}
+
+/* ===== FORMULES (paragraphes) ===== */
+.formules-para{max-width:800px;margin:0 auto;text-align:center}
+.formules-para .para{background:#141414;border:1px solid rgba(201,168,76,.1);border-radius:6px;border-left:3px solid #c9a84c;padding:36px 32px;margin-bottom:24px;text-align:center}
+.formules-para .para:last-of-type{margin-bottom:0}
+.formules-para .para-titre{font-family:'Playfair Display',serif;font-size:1.8rem;color:#c9a84c;font-weight:700;letter-spacing:1px;margin-bottom:14px}
+.formules-para .para-sous{font-size:.95rem;color:#e8e6e0;font-weight:300;margin-bottom:10px;line-height:1.8}
+.formules-para .para-rythme{font-family:'Playfair Display',serif;font-size:1.1rem;color:#e8d5a3;font-style:italic;margin:18px 0 14px 0}
+.formules-para .para-rythmes-liste{list-style:none;text-align:center;margin:0 auto 20px auto;max-width:480px}
+.formules-para .para-rythmes-liste li{font-size:1rem;color:#e8e6e0;font-weight:300;padding:6px 0;font-family:'Playfair Display',serif}
+.formules-para .para-rythmes-liste li .gold{font-weight:600}
+.formules-para .para-prix{font-family:'Inter',sans-serif;font-size:3rem;color:#c9a84c;font-weight:300;letter-spacing:3px;margin:16px 0 6px 0}
+.formules-para .para-prix small{font-size:1.1rem;color:#e8e6e0;font-weight:300;letter-spacing:1px}
+.formules-para .para-note{font-size:.75rem;color:#2a2a2a;margin-top:10px;letter-spacing:1px}
+
+/* ===== PEDAGOGIE ===== */
+.pedagogie{max-width:800px;margin:0 auto;text-align:center;padding:44px 32px;background:#141414;border:1px solid rgba(201,168,76,.1);border-radius:6px;border-left:3px solid #c9a84c}
+.pedagogie .peda-titre{font-family:'Playfair Display',serif;font-size:1.4rem;color:#c9a84c;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+.pedagogie .peda-liste{list-style:none;text-align:left;max-width:540px;margin:0 auto}
+.pedagogie .peda-liste li{font-size:1rem;color:#e8e6e0;font-weight:300;padding:10px 0;display:flex;align-items:baseline;gap:14px;border-bottom:1px solid rgba(255,255,255,.03)}
+.pedagogie .peda-liste li:last-child{border-bottom:none}
+.pedagogie .peda-liste li .pct{font-family:'Playfair Display',serif;font-size:1.5rem;color:#c9a84c;font-weight:700;min-width:70px;flex-shrink:0}
+.pedagogie .peda-liste li .txt{font-size:.95rem;color:#e8e6e0;font-weight:300}
+.pedagogie .peda-total{margin-top:24px;padding-top:24px;border-top:1px solid rgba(201,168,76,.15);font-family:'Playfair Display',serif;font-size:1.35rem;color:#e8d5a3;font-style:italic;text-align:center}
+.pedagogie .peda-total .gold{font-weight:700;font-style:normal}
+
+/* ===== LIVRABLES ===== */
+.punchline{max-width:800px;margin:0 auto;text-align:center;padding:44px 32px;background:#141414;border:1px solid rgba(201,168,76,.1);border-radius:6px;border-left:3px solid #c9a84c}
+.punchline .livrables-titre{font-family:'Playfair Display',serif;font-size:1.4rem;color:#c9a84c;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.punchline .livrables{list-style:none;text-align:left;max-width:480px;margin:0 auto}
+.punchline .livrables li{font-size:1rem;color:#e8e6e0;font-weight:300;padding:8px 0;display:flex;align-items:center;gap:10px}
+.punchline .livrables li::before{content:'•';color:#c9a84c;font-weight:700;font-size:1.4rem;line-height:0}
+
+/* ===== CTA ===== */
+.cta-final{text-align:center;padding:70px 0 40px 0}
+.cta-final h2{margin-bottom:16px}
+.cta-final .btn-hero{margin-top:20px}
+.cta-final .sessions-info{max-width:640px;margin:20px auto 0 auto;font-size:1rem;color:#e8d5a3;font-family:'Playfair Display',serif;font-style:italic;letter-spacing:1px;text-align:center;line-height:2}
+.cta-final .sessions-info .gold{font-weight:600;font-style:normal}
+.btn-hero{display:inline-block;padding:16px 40px;background:linear-gradient(135deg,#c9a84c,#b8960c);border:none;border-radius:4px;color:#0a0a0a;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .3s ease;font-family:'Inter',sans-serif;letter-spacing:2px;text-decoration:none;text-transform:uppercase}
+.btn-hero:hover{background:#e8d5a3;transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.2)}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:40px 0 24px 0;border-top:1px solid rgba(255,255,255,.03);margin-top:40px}
+.footer p{font-size:.7rem;color:#2a2a2a;font-weight:300}
+
+/* ===== RESPONSIVE ===== */
+@media(min-width:640px){
+  .grille-modules{grid-template-columns:repeat(2,1fr)}
+  .grille-axes{grid-template-columns:repeat(3,1fr)}
+  .hero-landing h1{font-size:4.4rem}
+  .grille-modules .module-card:nth-child(4){grid-column:1}
+  .grille-modules .module-card:nth-child(5){grid-column:3}
+}
+@media(min-width:900px){
+  .container{padding:0 40px}
+  .hero-landing h1{font-size:5.2rem;letter-spacing:10px}
+  .grille-modules{grid-template-columns:repeat(3,1fr)}
+  .grille-modules .module-card:nth-child(4){grid-column:1}
+  .grille-modules .module-card:nth-child(5){grid-column:3}
+}
+@media(max-width:639px){
+  .hero-landing h1{font-size:2.6rem;letter-spacing:2px}
+  section{padding:50px 0}
+  .punchline{padding:28px 20px}
+  .pedagogie{padding:28px 20px}
+  .formules-para .para{padding:28px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="top-bar">
+    <div class="inner">
+        <a href="indexmce.html" class="brand">MCE</a>
+        <a href="indexmce.html#newvision" class="back">← Retour à MCE</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero-landing" style="border-bottom:1px solid rgba(255,255,255,.03);">
+        <div class="eyebrow">Formation immersive — MCE</div>
+        <h1>NEW VISION</h1>
+        <p class="sous-titre">
+            Une expérience immersive pour transformer votre vision.<br>
+            Et votre capacité d'action.
+        </p>
+        <p class="tagline">"On y rentre participant. On en sort entrepreneur."</p>
+    </section>
+
+    <!-- ===== MODULES ===== -->
+    <section id="modules">
+        <div class="section-titre">
+            <h2>Les Modules</h2>
+            <div class="divider"></div>
+            <p>Cinq piliers fondamentaux pour structurer votre vision entrepreneuriale.</p>
+        </div>
+        <div class="grille-modules">
+            <div class="module-card">
+                <div class="nom">Marketing</div>
+                <div class="desc">
+                    Acquisition des bases.<br>
+                    Visualisation et positionnement.
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="nom">Management</div>
+                <div class="desc">
+                    Management augmenté.<br>
+                    Leadership et prise de décision.
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="nom">Banque</div>
+                <div class="desc">
+                    Comprendre le système.<br>
+                    Financement et pilotage.
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="nom">IA</div>
+                <div class="desc">
+                    Adopter les outils IA.<br>
+                    Productivité et automatisation.
+                </div>
+            </div>
+            <div class="module-card">
+                <div class="nom">Entrepreneuriat</div>
+                <div class="desc">
+                    Vision structurée et rentable.<br>
+                    Du concept au marché.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== AXES ===== -->
+    <section id="axes">
+        <div class="section-titre">
+            <h2>Trois Axes Fondamentaux</h2>
+            <div class="divider"></div>
+            <p>Une méthodologie propriétaire articulée autour de trois dimensions clés.</p>
+        </div>
+        <div class="grille-axes">
+            <div class="axe-card">
+                <div class="num">01</div>
+                <div class="nom">Culture Business</div>
+                <div class="desc">
+                    Comprendre les règles du jeu.<br>
+                    Les codes du marché.
+                </div>
+            </div>
+            <div class="axe-card">
+                <div class="num">02</div>
+                <div class="nom">Outils IA</div>
+                <div class="desc">
+                    Maîtriser les leviers technologiques.<br>
+                    L'IA au service de la décision.
+                </div>
+            </div>
+            <div class="axe-card">
+                <div class="num">03</div>
+                <div class="nom">Mindset Business</div>
+                <div class="desc">
+                    Construire la posture entrepreneuriale.<br>
+                    Résilience, risque et vision.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FORMULES (paragraphes) ===== -->
+    <section id="formules">
+        <div class="formules-para">
+
+            <!-- Paragraphe Présentiel -->
+            <div class="para">
+                <div class="para-titre">Présentiel Immersif</div>
+                <div class="para-sous">
+                    50h en présentiel — Catering all inclusive de 8h à 17h.
+                </div>
+                <div class="para-rythme">Choisissez le rythme qui correspond à votre disponibilité.</div>
+                <ul class="para-rythmes-liste">
+                    <li>6 jours successifs</li>
+                    <li>1 jour par semaine × 6</li>
+                    <li>3 week-ends</li>
+                </ul>
+                <div class="para-prix">880 <small>DT</small></div>
+                <div class="para-note">* Tarif en DT. Non assujetti à la TVA.</div>
+            </div>
+
+            <!-- Paragraphe En Ligne -->
+            <div class="para">
+                <div class="para-titre">En Ligne</div>
+                <div class="para-sous">
+                    30h en ligne — accessible partout en Tunisie.
+                </div>
+                <div class="para-prix">290 <small>DT</small></div>
+                <div class="para-note">* Tarif en DT. Non assujetti à la TVA.</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== PEDAGOGIE ===== -->
+    <section id="pedagogie">
+        <div class="pedagogie">
+            <div class="peda-titre">Pédagogie</div>
+            <ul class="peda-liste">
+                <li>
+                    <span class="pct">30%</span>
+                    <span class="txt">Fondamentale</span>
+                </li>
+                <li>
+                    <span class="pct">40%</span>
+                    <span class="txt">Jeux de rôle et jeux cognitifs</span>
+                </li>
+                <li>
+                    <span class="pct">30%</span>
+                    <span class="txt">Jeux de stratégie et de compétition</span>
+                </li>
+            </ul>
+            <div class="peda-total">
+                <span class="gold">100%</span> En dialecte Tunisien
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== LIVRABLES ===== -->
+    <section id="livrables">
+        <div class="punchline">
+            <div class="livrables-titre">Livrables</div>
+            <ul class="livrables">
+                <li>Diagnostic personnel cognitif</li>
+                <li>Plan de développement cognitif</li>
+                <li>Outils IA</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ===== CTA FINAL ===== -->
+    <div class="cta-final">
+        <h2>Prêt à transformer votre vision ?</h2>
+        <div class="divider"></div>
+        <div class="sessions-info">
+            Les sessions débutent <span class="gold">début Octobre</span>.<br>
+            <span class="gold">9 participants</span> par session.
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;">
+            <a href="indexmce.html#inscriptions" class="btn-hero">S'inscrire à New Vision</a>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p>MCE — Mindset Cognitive Experience</p>
+        <p style="margin-top:6px;font-size:.65rem;color:#2a2a2a;">New Vision © 2026 — Créé en Tunisie.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>

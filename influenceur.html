@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>CAS · Influenceur — Stratégique</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #eaf5ea;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            margin: 0;
+            touch-action: manipulation;
+        }
+        .agent-card {
+            max-width: 760px;
+            width: 100%;
+            background: rgba(240, 248, 240, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 56px 56px 48px 48px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 10px 25px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            padding: 24px 20px 32px;
+            border: 1px solid rgba(160, 200, 160, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(100, 180, 100, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .agent-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(60, 150, 80, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+        .avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(145deg, #5a9e6f, #2d7a4a);
+            border-radius: 28px 12px 28px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f0faf0;
+            font-size: 30px;
+            box-shadow: 0 8px 14px rgba(40, 100, 60, 0.25);
+            flex-shrink: 0;
+        }
+        .title-group {
+            flex: 1;
+        }
+        .title-group h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: #1a3a24;
+            line-height: 1.2;
+        }
+        .title-group span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #3d6b4a;
+            opacity: 0.85;
+            letter-spacing: 0.2px;
+        }
+        .status-badge {
+            background: #c8e0c8;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1a4028;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #8fbf8f;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        .status-badge i {
+            font-size: 0.65rem;
+            color: #2a7a4a;
+        }
+        .chat-window {
+            background: rgba(235, 248, 235, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            margin: 12px 0 20px;
+            min-height: 180px;
+            max-height: 420px;
+            overflow-y: auto;
+            border: 1px solid rgba(160, 200, 160, 0.2);
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.02);
+            position: relative;
+            z-index: 2;
+            transition: all 0.2s;
+        }
+        .chat-window p,
+        .chat-window div {
+            color: #1a3422;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .chat-window .agent-msg {
+            font-weight: 500;
+            color: #1a4028;
+        }
+        .chat-window .user-msg {
+            background: #cce0cc;
+            padding: 8px 16px;
+            border-radius: 24px 24px 8px 24px;
+            display: inline-block;
+            margin: 6px 0 10px;
+            color: #0f2a18;
+        }
+        .chat-window strong {
+            color: #1a4a2a;
+        }
+        .chat-window em {
+            color: #3d6b4a;
+        }
+        .question-block {
+            margin: 14px 0 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .question-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1a4028;
+            margin-bottom: 10px;
+            display: block;
+            letter-spacing: -0.2px;
+        }
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 6px 0 14px;
+        }
+        .option-btn {
+            background: rgba(220, 240, 220, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid #a8c8a8;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1a3a24;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            flex: 1 0 auto;
+            justify-content: center;
+            min-width: 70px;
+        }
+        .option-btn:active,
+        .option-btn.active {
+            background: #8fbf8f;
+            border-color: #5a9e6f;
+            box-shadow: 0 4px 8px rgba(40, 100, 60, 0.2);
+            transform: scale(0.97);
+            color: #0f2a18;
+        }
+        .option-btn i {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-primary {
+            background: #3d8a55;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #f0faf0;
+            box-shadow: 0 6px 14px rgba(40, 120, 60, 0.3);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            touch-action: manipulation;
+            cursor: pointer;
+            border: 1px solid #5a9e6f;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+            background: #2d7a4a;
+            box-shadow: 0 2px 6px rgba(30, 80, 40, 0.25);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #8fbf8f;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #1a4028;
+            touch-action: manipulation;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-secondary:active {
+            background: #c8e0c8;
+            border-color: #5a9e6f;
+        }
+        .footer {
+            margin-top: 22px;
+            font-size: 0.7rem;
+            color: #4a7a55;
+            text-align: center;
+            border-top: 1px solid rgba(140, 190, 140, 0.2);
+            padding-top: 16px;
+            letter-spacing: 0.4px;
+            position: relative;
+            z-index: 2;
+        }
+        .footer i {
+            margin: 0 4px;
+            color: #5a9e6f;
+        }
+        .chat-window::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-window::-webkit-scrollbar-thumb {
+            background: #8fbf8f;
+            border-radius: 12px;
+        }
+        .chat-window::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .decor-illustration {
+            display: flex;
+            justify-content: flex-end;
+            margin: 4px 0 -6px;
+            opacity: 0.3;
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
+        }
+        .decor-illustration i {
+            font-size: 3.2rem;
+            color: #5a9e6f;
+            transform: rotate(8deg);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.03));
+        }
+        .response-feedback {
+            background: #c8e0c8;
+            border-radius: 40px;
+            padding: 4px 16px 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #1a4028;
+        }
+        .chat-window .msg-block {
+            background: rgba(200, 230, 200, 0.3);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #5a9e6f;
+            margin: 10px 0;
+        }
+        .chat-window .strategy-block {
+            background: rgba(180, 215, 180, 0.25);
+            padding: 16px 20px;
+            border-radius: 20px;
+            border-left: 4px solid #2d7a4a;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .chat-window .budget-block {
+            background: rgba(160, 210, 170, 0.2);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #1a6a3a;
+            margin: 10px 0;
+        }
+        @media (max-width: 480px) {
+            .agent-card {
+                padding: 16px;
+            }
+            .header {
+                gap: 10px;
+            }
+            .title-group h1 {
+                font-size: 1.2rem;
+            }
+            .option-btn {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="agent-card" id="app">
+        <div class="header">
+            <div class="avatar"><i class="fas fa-star"></i></div>
+            <div class="title-group">
+                <h1>CAS Influenceur <span style="font-weight: 400; font-size: 0.9rem;">· Stratégique</span></h1>
+                <span><i class="fas fa-circle" style="color: #3a9e5a; font-size: 0.5rem;"></i> consulting premium</span>
+            </div>
+            <div class="status-badge"><i class="fas fa-check-circle"></i> Ready</div>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <p class="agent-msg"><i class="fas fa-comment-dots" style="margin-right: 8px;"></i>CAS Influenceur...Ready!</p>
+            <p style="font-size: 0.9rem; color: #2a4a32;">Bienvenue. Pour démarrer, tapez <strong>"Go"</strong> ou cliquez sur le bouton ci-dessous.</p>
+        </div>
+
+        <div id="dynamicZone"></div>
+
+        <div class="action-row">
+            <button class="btn-primary" id="mainActionBtn"><i class="fas fa-play"></i> Go</button>
+            <button class="btn-secondary" id="resetBtn"><i class="fas fa-undo-alt"></i> Réinitialiser</button>
+        </div>
+
+        <div class="decor-illustration"><i class="fas fa-hashtag"></i></div>
+        <div class="footer"><i class="fas fa-rocket"></i> stratégie · monétisation · pérennité <i class="fas fa-crown" style="opacity: 0.4;"></i></div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ÉTAT GLOBAL
+        // ============================================================
+        const state = {
+            step: 'idle',
+            q1: [], // Profil
+            q2: [], // Cognitif
+            q3: [], // Compétences
+            q4: [], // Situationnel (5 questions stratégiques)
+            currentQuestionIndex: 0,
+            currentType: null,
+            questions: [],
+            need: '',
+            level: 'B', // A, B, C
+            strategicInsights: null,
+        };
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const chatWindow = document.getElementById('chatWindow');
+        const dynamicZone = document.getElementById('dynamicZone');
+        const mainBtn = document.getElementById('mainActionBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // ============================================================
+        // FONCTIONS D'AFFICHAGE
+        // ============================================================
+        function appendMessage(html, isUser = false) {
+            const msg = document.createElement('div');
+            if (isUser) {
+                msg.innerHTML = `<div class="user-msg">${html}</div>`;
+            } else {
+                msg.innerHTML = `<div class="agent-msg">${html}</div>`;
+            }
+            chatWindow.appendChild(msg);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function clearDynamic() {
+            dynamicZone.innerHTML = '';
+        }
+
+        function setMainButton(text, icon = 'fa-play', action = null) {
+            mainBtn.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+            mainBtn.onclick = action || null;
+        }
+
+        // ============================================================
+        // QUESTIONNAIRES
+        // ============================================================
+        const q1Data = [
+            { q: 'Quel est votre rôle principal en tant que créateur ?', options: ['a) Youtubeur / Vidéaste',
+                    'b) Instagrameur / TikTokeur', 'c) Podcasteur / Écrivain'
+                ] },
+            { q: 'Quelle est la taille de votre audience ?', options: ['a) Moins de 10k abonnés',
+                    'b) Entre 10k et 100k abonnés', 'c) Plus de 100k abonnés'
+                ] },
+            { q: 'Quelle est votre plateforme principale ?', options: ['a) YouTube', 'b) Instagram / TikTok',
+                    'c) LinkedIn / Blog / Podcast'
+                ] },
+            { q: 'Quel est votre statut actuel ?', options: ['a) Créateur amateur / en démarrage',
+                    'b) Créateur à temps partiel', 'c) Créateur à temps plein / professionnel'
+                ] }
+        ];
+
+        const q2Data = [
+            { q: 'Comment qualifieriez-vous votre engagement actuel ?', options: ['a) Faible (moins de 3% de taux)',
+                    'b) Moyen (3-6% de taux)', 'c) Élevé (plus de 6% de taux)'
+                ] },
+            { q: 'Quelle est votre principale préoccupation ?', options: ['a) Croissance de l\'audience',
+                    'b) Monétisation', 'c) Structuration juridique/fiscale'
+                ] },
+            { q: 'Comment décririez-vous votre relation avec les marques ?', options: ['a) Peu de collaborations',
+                    'b) Collaborations ponctuelles', 'c) Collaborations régulières'
+                ] },
+            { q: 'Quelle est votre ambition à 2 ans ?', options: ['a) Atteindre la rentabilité',
+                    'b) Diversifier mes revenus', 'c) Devenir une référence dans ma niche'
+                ] }
+        ];
+
+        const q3Data = [
+            { q: 'Quelle est votre qualité principale en création de contenu ?', options: ['a) Créativité / Originalité',
+                    'b) Rigueur / Organisation', 'c) Relation à la communauté'
+                ] },
+            { q: 'Sur quel point souhaiteriez-vous progresser ?', options: ['a) Storytelling / Écriture',
+                    'b) Stratégie de croissance', 'c) Monétisation / Business'
+                ] },
+            { q: 'Maîtrisez-vous les outils de création (montage, photo, audio) ?', options: ['a) Niveau débutant',
+                    'b) Niveau intermédiaire', 'c) Niveau expert'
+                ] },
+            { q: 'Comment abordez-vous la formation ?', options: ['a) Je préfère apprendre seul',
+                    'b) Je suis des formations ponctuelles', 'c) Je suis un plan structuré'
+                ] }
+        ];
+
+        // ============================================================
+        // QUESTIONNAIRE SITUATIONNEL STRATÉGIQUE (5 questions)
+        // ============================================================
+        function getQ4Data() {
+            return [
+                { q: 'Quel est votre revenu mensuel moyen actuel (en TND) ?', options: ['a) Moins de 500 TND',
+                        'b) Entre 500 et 2000 TND', 'c) Plus de 2000 TND'
+                    ] },
+                { q: 'Combien de marques différentes collaborez-vous par mois ?', options: ['a) 0-1', 'b) 2-4',
+                        'c) Plus de 5'
+                    ] },
+                { q: 'Avez-vous une stratégie de contenu définie sur 3 mois ?', options: ['a) Non, je publie au fil',
+                        'b) Oui, de manière informelle', 'c) Oui, avec un calendrier éditorial'
+                    ] },
+                { q: 'Quelle est votre principale source de revenus actuelle ?', options: ['a) Brand deals',
+                        'b) Affiliation / Publicité', 'c) Produits / Services / Abonnements'
+                    ] },
+                { q: 'Avez-vous un statut juridique déclaré ?', options: ['a) Non', 'b) Oui, auto-entrepreneur',
+                        'c) Oui, société (SASU, EURL, etc.)'
+                    ] }
+            ];
+        }
+
+        // ============================================================
+        // RENDU D'UNE QUESTION
+        // ============================================================
+        function renderQuestion(questions, type) {
+            clearDynamic();
+            state.questions = questions;
+            state.currentType = type;
+            state.currentQuestionIndex = 0;
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            const questions = state.questions;
+            if (index >= questions.length) return;
+
+            const q = questions[index];
+            const type = state.currentType;
+            const map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+            const arrKey = map[type];
+            const answers = state[arrKey] || [];
+            const already = answers[index] || null;
+
+            let html = `
+                <div class="question-block">
+                    <span class="question-label"><i class="fas fa-question-circle"></i> ${q.q}</span>
+                    <div class="options-grid">
+            `;
+
+            q.options.forEach((opt, idx) => {
+                const val = String.fromCharCode(97 + idx);
+                const active = (already === val) ? 'active' : '';
+                html += `<div class="option-btn ${active}" data-value="${val}">${opt}</div>`;
+            });
+
+            html += `
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                        <span style="font-size:0.75rem;color:#4a7a55;">
+                            <i class="far fa-circle"></i> ${already ? 'réponse enregistrée' : 'sélectionnez une réponse'}
+                        </span>
+                        <span style="font-size:0.7rem;color:#4a7a55;">${index+1}/${questions.length}</span>
+                    </div>
+                </div>
+            `;
+
+            dynamicZone.innerHTML = html;
+
+            const options = dynamicZone.querySelectorAll('.option-btn');
+            options.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    options.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const value = this.dataset.value;
+                    const map2 = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+                    const arrKey2 = map2[type];
+                    if (arrKey2) {
+                        state[arrKey2][index] = value;
+                    }
+
+                    const container = dynamicZone.querySelector('.question-block');
+                    let fb = container.querySelector('.response-feedback');
+                    if (!fb) {
+                        fb = document.createElement('div');
+                        fb.className = 'response-feedback';
+                        container.appendChild(fb);
+                    }
+                    fb.innerHTML = `<i class="fas fa-check"></i> réponse ${value}`;
+
+                    if (index === questions.length - 1) {
+                        setMainButton('Valider', 'fa-check', () => validateQuestions(type));
+                    } else {
+                        setMainButton('Suivant →', 'fa-arrow-right', () => {
+                            state.currentQuestionIndex = index + 1;
+                            showQuestion(index + 1);
+                        });
+                    }
+                });
+            });
+
+            if (already) {
+                if (index === questions.length - 1) {
+                    setMainButton('Valider', 'fa-check', () => validateQuestions(type));
+                } else {
+                    setMainButton('Suivant →', 'fa-arrow-right', () => {
+                        state.currentQuestionIndex = index + 1;
+                        showQuestion(index + 1);
+                    });
+                }
+            } else {
+                setMainButton('Choisissez une réponse', 'fa-hand-pointer', null);
+            }
+        }
+
+        // ============================================================
+        // VALIDATION D'UN QUESTIONNAIRE
+        // ============================================================
+        function validateQuestions(type) {
+            const map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+            const arrKey = map[type];
+            const answers = state[arrKey];
+            const total = state.questions.length;
+
+            if (!answers || answers.length < total || answers.some(a => !a)) {
+                appendMessage('⚠️ Veuillez répondre à toutes les questions avant de valider.', false);
+                return;
+            }
+
+            if (type === 'profil') {
+                // Calibrage du niveau de développement
+                const firstAns = answers[0] || 'b';
+                const levelMap = { 'a': 'A', 'b': 'B', 'c': 'C' };
+                state.level = levelMap[firstAns] || 'B';
+
+                appendMessage('✅ Réponses enregistrées. Agent en Calibrage.');
+                appendMessage('📊 <strong>Profil Influenceur</strong> : lecture stratégique effectuée.');
+                state.step = 'q1done';
+                setTimeout(() => {
+                    renderQuestion(q2Data, 'cognitif');
+                    appendMessage('📋 <strong>Questionnaire Cognitif Influenceur</strong> (4 questions)');
+                    appendMessage('💡 Le prochain questionnaire me renseignera sur votre état d\'esprit de créateur.');
+                }, 400);
+            } else if (type === 'cognitif') {
+                appendMessage('✅ Réponses enregistrées. Matrice influenceur constituée.');
+                state.step = 'q2done';
+                setTimeout(() => {
+                    renderQuestion(q3Data, 'competences');
+                    appendMessage('📋 <strong>Questionnaire Compétences Influenceur</strong> (4 questions)');
+                    appendMessage('💡 Le prochain questionnaire me renseignera sur vos compétences de créateur.');
+                }, 400);
+            } else if (type === 'competences') {
+                appendMessage('✅ Réponses enregistrées. Archétype Influenceur établi.');
+
+                // Tableau récapitulatif
+                appendMessage(`
+                    📊 <strong>Récapitulatif des profils</strong><br>
+                    • Profil : ${q1Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q1[i])}`).join(' / ')}<br>
+                    • Cognitif : ${q2Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q2[i])}`).join(' / ')}<br>
+                    • Compétences : ${q3Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q3[i])}`).join(' / ')}
+                `);
+
+                state.step = 'q3done';
+                setTimeout(() => {
+                    appendMessage('✏️ Formulez votre besoin principal avec vos mots (Objectif, Contrainte, Cible, Style).');
+                    clearDynamic();
+                    dynamicZone.innerHTML = `
+                        <div style="background:#dce8dc;padding:16px;border-radius:24px;margin:8px 0;">
+                            <label style="font-weight:500;display:block;margin-bottom:8px;color:#1a4028;">Votre demande stratégique :</label>
+                            <textarea id="needInput" rows="2" style="width:100%;padding:12px;border-radius:20px;border:1px solid #8fbf8f;background:#f5faf5;font-size:0.95rem;">Je veux structurer et monétiser mon audience</textarea>
+                            <button id="submitNeed" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre</button>
+                        </div>
+                    `;
+                    document.getElementById('submitNeed').addEventListener('click', function() {
+                        const raw = document.getElementById('needInput').value.trim();
+                        if (raw.length < 5) {
+                            appendMessage('Veuillez décrire votre besoin plus précisément.', false);
+                            return;
+                        }
+                        state.need = raw;
+                        appendMessage(`📝 Besoin enregistré : "${raw}"`);
+
+                        // Optimisation en prompt structuré
+                        const optimized = `Objectif : ${raw} | Contrainte : temps/budget | Cible : communauté engagée | Style : authentique et stratégique`;
+                        state.validatedPrompt = optimized;
+                        appendMessage(`✅ Prompt optimisé : ${optimized}`);
+                        appendMessage('👉 Validez ce prompt en cliquant sur "OK" ci-dessous.');
+
+                        clearDynamic();
+                        dynamicZone.innerHTML = `
+                            <div style="display:flex;gap:12px;margin:8px 0;">
+                                <button id="okPrompt" class="btn-primary" style="flex:1;"><i class="fas fa-check"></i> OK</button>
+                                <button id="modifyPrompt" class="btn-secondary" style="flex:1;"><i class="fas fa-edit"></i> Modifier</button>
+                            </div>
+                        `;
+
+                        document.getElementById('okPrompt').addEventListener('click', function() {
+                            appendMessage('✅ Prompt validé. Lancement de l\'analyse des modules.');
+                            appendMessage('💡 Le prochain questionnaire me permettra de mieux comprendre votre situation de créateur.');
+                            state.step = 'q4ready';
+                            setTimeout(() => {
+                                const q4 = getQ4Data();
+                                renderQuestion(q4, 'situationnel');
+                                appendMessage('📋 <strong>Questionnaire Situationnel Influenceur</strong> (5 questions stratégiques)');
+                            }, 400);
+                        });
+
+                        document.getElementById('modifyPrompt').addEventListener('click', function() {
+                            appendMessage('Veuillez reformuler votre besoin.');
+                            clearDynamic();
+                            dynamicZone.innerHTML = `
+                                <div style="background:#dce8dc;padding:16px;border-radius:24px;margin:8px 0;">
+                                    <label style="font-weight:500;display:block;margin-bottom:8px;color:#1a4028;">Votre demande :</label>
+                                    <textarea id="needInput2" rows="2" style="width:100%;padding:12px;border-radius:20px;border:1px solid #8fbf8f;background:#f5faf5;font-size:0.95rem;">${raw}</textarea>
+                                    <button id="submitNeed2" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre</button>
+                                </div>
+                            `;
+                            document.getElementById('submitNeed2').addEventListener('click', function() {
+                                const newRaw = document.getElementById('needInput2').value.trim();
+                                if (newRaw.length < 5) {
+                                    appendMessage('Plus de détails svp.', false);
+                                    return;
+                                }
+                                state.need = newRaw;
+                                const newOpt =
+                                    `Objectif : ${newRaw} | Contrainte : temps/budget | Cible : communauté engagée | Style : authentique et stratégique`;
+                                state.validatedPrompt = newOpt;
+                                appendMessage(`✅ Prompt optimisé : ${newOpt}`);
+                                appendMessage('✅ Validé automatiquement. Lancement analyse.');
+                                state.step = 'q4ready';
+                                setTimeout(() => {
+                                    const q4 = getQ4Data();
+                                    renderQuestion(q4, 'situationnel');
+                                    appendMessage('📋 <strong>Questionnaire Situationnel Influenceur</strong> (5 questions)');
+                                }, 400);
+                            });
+                        });
+                    });
+                }, 400);
+            } else if (type === 'situationnel') {
+                appendMessage('✅ Réponses enregistrées. Réalité Terrain Influenceur identifiée.');
+                state.step = 'q4done';
+                setTimeout(() => {
+                    generateStrategicReport();
+                }, 400);
+            }
+        }
+
+        // ============================================================
+        // ANALYSE STRATÉGIQUE (réflexion croisée personnalisée)
+        // ============================================================
+        function generateStrategicReport() {
+            const q1 = state.q1;
+            const q2 = state.q2;
+            const q3 = state.q3;
+            const q4 = state.q4;
+
+            // ---- DÉCODAGE DES RÉPONSES ----
+            const role = q1[0] === 'a' ? 'Youtubeur/Vidéaste' :
+                q1[0] === 'b' ? 'Instagrameur/TikTokeur' :
+                'Podcasteur/Écrivain';
+
+            const audience = q1[1] === 'a' ? 'moins de 10k abonnés (débutant)' :
+                q1[1] === 'b' ? '10k-100k abonnés (émergent)' :
+                'plus de 100k abonnés (établi)';
+
+            const plateforme = q1[2] === 'a' ? 'YouTube' :
+                q1[2] === 'b' ? 'Instagram/TikTok' :
+                'LinkedIn/Blog/Podcast';
+
+            const statut = q1[3] === 'a' ? 'amateur/en démarrage' :
+                q1[3] === 'b' ? 'à temps partiel' :
+                'à temps plein/professionnel';
+
+            const engagement = q2[0] === 'a' ? 'faible (<3%)' :
+                q2[0] === 'b' ? 'moyen (3-6%)' :
+                'élevé (>6%)';
+
+            const preoccupation = q2[1] === 'a' ? 'croissance de l\'audience' :
+                q2[1] === 'b' ? 'monétisation' :
+                'structuration juridique/fiscale';
+
+            const relationMarques = q2[2] === 'a' ? 'peu de collaborations' :
+                q2[2] === 'b' ? 'collaborations ponctuelles' :
+                'collaborations régulières';
+
+            const ambition = q2[3] === 'a' ? 'atteindre la rentabilité' :
+                q2[3] === 'b' ? 'diversifier les revenus' :
+                'devenir une référence dans la niche';
+
+            const qualite = q3[0] === 'a' ? 'créativité/originalité' :
+                q3[0] === 'b' ? 'rigueur/organisation' :
+                'relation à la communauté';
+
+            const faiblesse = q3[1] === 'a' ? 'storytelling/écriture' :
+                q3[1] === 'b' ? 'stratégie de croissance' :
+                'monétisation/business';
+
+            const outils = q3[2] === 'a' ? 'débutant' :
+                q3[2] === 'b' ? 'intermédiaire' :
+                'expert';
+
+            const formation = q3[3] === 'a' ? 'apprentissage seul' :
+                q3[3] === 'b' ? 'formations ponctuelles' :
+                'plan structuré';
+
+            // ---- DONNÉES SITUATIONNELLES ----
+            const revenu = q4[0] === 'a' ? 'moins de 500 TND/mois' :
+                q4[0] === 'b' ? '500-2000 TND/mois' :
+                'plus de 2000 TND/mois';
+
+            const nbMarques = q4[1] === 'a' ? '0-1 marque/mois' :
+                q4[1] === 'b' ? '2-4 marques/mois' :
+                'plus de 5 marques/mois';
+
+            const strategieContenu = q4[2] === 'a' ? 'aucune stratégie définie' :
+                q4[2] === 'b' ? 'stratégie informelle' :
+                'calendrier éditorial structuré';
+
+            const sourceRevenus = q4[3] === 'a' ? 'brand deals' :
+                q4[3] === 'b' ? 'affiliation/publicité' :
+                'produits/services/abonnements';
+
+            const statutJuridique = q4[4] === 'a' ? 'non déclaré' :
+                q4[4] === 'b' ? 'auto-entrepreneur' :
+                'société (SASU/EURL)';
+
+            // ---- DIAGNOSTIC STRATÉGIQUE ----
+            appendMessage('📄 <strong>Analyse Stratégique</strong> — Synthèse de la situation');
+
+            // 1. DIAGNOSTIC MACRO
+            let macro = `
+                <div class="msg-block">
+                    <strong>🔍 Diagnostic stratégique</strong><br>
+                    Vous êtes ${role} avec une audience de ${audience} sur ${plateforme}. Vous êtes ${statut}.
+                    Votre engagement est ${engagement} et votre préoccupation principale est ${preoccupation}.
+                    <br><br>
+                    <strong>Analyse croisée :</strong>
+            `;
+
+            if (q1[1] === 'a' && q2[1] === 'a') {
+                macro +=
+                    'Vous débutez et votre priorité est la croissance. C\'est cohérent. L\'enjeu est de trouver votre niche et de créer un contenu qui résonne avec votre public. La régularité et la qualité sont vos meilleurs alliés.';
+            } else if (q1[1] === 'b' && q2[1] === 'b') {
+                macro +=
+                    'Vous avez une audience émergente et cherchez à monétiser. C\'est le bon moment pour structurer votre offre, diversifier vos revenus et professionnaliser votre approche.';
+            } else if (q1[1] === 'c' && q2[1] === 'c') {
+                macro +=
+                    'Vous êtes un créateur établi. La structuration juridique et fiscale devient cruciale pour protéger vos revenus et pérenniser votre activité à long terme.';
+            } else {
+                macro +=
+                    `Votre situation est ${audience} avec une préoccupation ${preoccupation}. L'enjeu est d'aligner votre stratégie avec votre réalité.`;
+            }
+
+            macro +=
+                `<br><br><strong>Relation avec les marques :</strong> ${relationMarques}. ${q2[2] === 'a' ? 'C\'est un axe de développement majeur. Travaillez votre media kit et approchez des marques alignées avec votre univers.' : q2[2] === 'b' ? 'Vous avez une base, structurez vos offres et vos tarifs pour passer à l\'étape supérieure.' : 'Excellent, structurez ces relations en contrats clairs et professionnels.'}`;
+
+            macro += `</div>`;
+            appendMessage(macro);
+
+            // 2. ANALYSE DES LEVIERS
+            let leviers = `
+                <div class="msg-block">
+                    <strong>⚡ Leviers stratégiques identifiés</strong><br>
+            `;
+
+            leviers +=
+                `<strong>Revenus :</strong> ${revenu}. ${q4[0] === 'a' ? 'Votre revenu est encore faible. Priorisez la croissance d\'audience et les premières collaborations.' : q4[0] === 'b' ? 'Vous avez une base solide, diversifiez vos sources (affiliation, produits, services) pour augmenter votre revenu.' : 'Très bon niveau, concentrez-vous sur l\'optimisation et la structuration pour maximiser.'}<br><br>`;
+
+            leviers +=
+                `<strong>Collaborations :</strong> ${nbMarques}. ${q4[1] === 'a' ? 'Développez votre réseau, créez un media kit professionnel et approchez 5 marques par mois.' : q4[1] === 'b' ? 'Vous avez un bon rythme, travaillez sur vos tarifs et la valeur ajoutée que vous apportez.' : 'Vous êtes très sollicité, structurez votre processus de sélection et de négociation.'}<br><br>`;
+
+            leviers +=
+                `<strong>Stratégie de contenu :</strong> ${strategieContenu}. ${q4[2] === 'a' ? 'C\'est un point critique. Un calendrier éditorial sur 3 mois vous apporterait régularité et sérénité.' : q4[2] === 'b' ? 'Vous êtes sur la bonne voie, formalisez votre stratégie pour gagner en efficacité.' : 'Excellent, continuez à planifier et à analyser vos performances.'}<br><br>`;
+
+            leviers +=
+                `<strong>Source de revenus principale :</strong> ${sourceRevenus}. ${q4[3] === 'a' ? 'Dépendre des brand deals est risqué. Diversifiez avec de l\'affiliation, des produits dérivés ou des abonnements.' : q4[3] === 'b' ? 'Une bonne base, ajoutez des produits ou services pour équilibrer.' : 'C\'est la voie la plus pérenne, continuez à développer cette offre.'}<br><br>`;
+
+            leviers +=
+                `<strong>Statut juridique :</strong> ${statutJuridique}. ${q4[4] === 'a' ? 'C\'est un risque majeur. Une déclaration en auto-entrepreneur est rapide et vous sécurise.' : q4[4] === 'b' ? 'C\'est un bon début. Quand vos revenus dépasseront 30k TND/an, envisagez une SASU.' : 'Vous êtes bien structuré, assurez-vous d\'être accompagné par un expert-comptable.'}`;
+
+            leviers += `</div>`;
+            appendMessage(leviers);
+
+            // 3. RECOMMANDATIONS STRATÉGIQUES
+            let recommandations = `
+                <div class="strategy-block">
+                    <strong>🎯 Recommandations stratégiques</strong><br>
+            `;
+
+            recommandations +=
+                `Votre qualité principale est ${qualite}, mais votre point de progression est ${faiblesse}. `;
+
+            if (q3[0] === 'a' && q3[1] === 'a') {
+                recommandations +=
+                    'Vous êtes créatif mais manquez de structure narrative. Suivez une formation en storytelling et travaillez vos scripts pour captiver votre audience du début à la fin.';
+            } else if (q3[0] === 'b' && q3[1] === 'b') {
+                recommandations +=
+                    'Vous êtes rigoureux mais peinez à croître. Analysez vos données, identifiez vos contenus les plus performants et doublez vos efforts sur ce qui fonctionne.';
+            } else if (q3[0] === 'c' && q3[1] === 'c') {
+                recommandations +=
+                    'Vous êtes proche de votre communauté mais la monétisation vous échappe. Structurez votre offre (abonnements, produits, services) et communiquez-la clairement à votre audience.';
+            } else {
+                recommandations +=
+                    `Utilisez votre ${qualite} pour adresser votre faiblesse ${faiblesse}. Par exemple, si vous êtes créatif, imaginez des formats innovants pour résoudre vos lacunes.`;
+            }
+
+            recommandations += `<br><br>`;
+
+            recommandations +=
+                `Votre ambition est de ${ambition}. `;
+
+            if (q2[3] === 'a') {
+                recommandations +=
+                    'Pour atteindre la rentabilité, fixez-vous un objectif de revenus mensuels et identifiez 3 sources de revenus à activer dans les 6 mois.';
+            } else if (q2[3] === 'b') {
+                recommandations +=
+                    'Pour diversifier, listez 5 idées (formations, produits, services, abonnements, partenariats) et testez-en 2 dans les 3 mois.';
+            } else {
+                recommandations +=
+                    'Pour devenir une référence, investissez dans votre marque : site web, identité visuelle, présence sur les plateformes clés et une newsletter régulière.';
+            }
+
+            recommandations += `</div>`;
+            appendMessage(recommandations);
+
+            // 4. BUDGET EN TND
+            let budget = calculateBudget(q1, q2, q3, q4);
+            appendMessage(budget);
+
+            // 5. PROPOSITION PLAN D'ACTION
+            appendMessage('📌 Souhaitez-vous un <strong>plan d\'action détaillé</strong> avec des étapes concrètes ?');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="actionBtn" class="btn-primary" style="flex:1;"><i class="fas fa-bullseye"></i> Oui, plan d'action</button>
+                    <button id="skipActionBtn" class="btn-secondary" style="flex:1;">Passer</button>
+                </div>
+            `;
+
+            document.getElementById('actionBtn').addEventListener('click', function() {
+                generateActionPlan();
+            });
+
+            document.getElementById('skipActionBtn').addEventListener('click', function() {
+                appendMessage('✅ <strong>Influenceur structuré. CAS Influenceur opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+        }
+
+        // ============================================================
+        // CALCUL DU BUDGET EN TND
+        // ============================================================
+        function calculateBudget(q1, q2, q3, q4) {
+            let totalBudget = 0;
+            let details = [];
+
+            const base = q1[1] === 'c' ? 3000 : q1[1] === 'b' ? 1500 : 500;
+
+            if (q4[2] === 'a') {
+                totalBudget += 400;
+                details.push('Accompagnement stratégie de contenu : 400 TND');
+            }
+            if (q4[4] === 'a') {
+                totalBudget += 600;
+                details.push('Création statut juridique (auto-entrepreneur) : 600 TND');
+            }
+            if (q3[1] === 'b') {
+                totalBudget += 500;
+                details.push('Formation stratégie de croissance : 500 TND');
+            }
+            if (q3[1] === 'c') {
+                totalBudget += 700;
+                details.push('Formation monétisation et business : 700 TND');
+            }
+            if (q4[1] === 'a') {
+                totalBudget += 300;
+                details.push('Création media kit professionnel : 300 TND');
+            }
+            if (q3[2] === 'a') {
+                totalBudget += 400;
+                details.push('Formation outils de création : 400 TND');
+            }
+
+            totalBudget += base;
+
+            let html = `
+                <div class="budget-block">
+                    <strong>💰 Budget prévisionnel (TND)</strong><br>
+                    <strong>Enveloppe totale estimée : ${totalBudget} TND</strong><br><br>
+                    <strong>Détail :</strong><br>
+                    • Budget de base : ${base} TND<br>
+                    ${details.map(d => '• ' + d).join('<br>')}
+                    <br><br>
+                    <em>📌 Ce budget est indicatif. Un devis précis peut être établi selon vos priorités.</em>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // ============================================================
+        // PLAN D'ACTION DÉTAILLÉ
+        // ============================================================
+        function generateActionPlan() {
+            const q1 = state.q1;
+            const q2 = state.q2;
+            const q3 = state.q3;
+            const q4 = state.q4;
+
+            appendMessage('📋 <strong>Plan d\'action stratégique — 90 jours</strong>');
+
+            let actions = [];
+
+            // Action 1 : Stratégie de contenu
+            if (q4[2] === 'a') {
+                actions.push(
+                    '🔹 <strong>Semaine 1-2 : Cadrage stratégique</strong><br>Définir votre niche, vos personas et vos objectifs. Créer un calendrier éditorial sur 3 mois avec 3 formats différents.');
+            } else if (q4[2] === 'b') {
+                actions.push(
+                    '🔹 <strong>Semaine 1-3 : Formalisation</strong><br>Transformer votre stratégie informelle en plan structuré avec des objectifs quantifiés (abonnés, engagement, vues).');
+            }
+
+            // Action 2 : Croissance d'audience
+            if (q2[1] === 'a' || q1[1] === 'a') {
+                actions.push(
+                    '🔹 <strong>Semaine 2-6 : Croissance audience</strong><br>Identifier 5 comptes similaires pour des collaborations croisées. Publier 1 contenu "viral" par semaine (tendances, défis).');
+            }
+
+            // Action 3 : Monétisation
+            if (q2[1] === 'b' || q4[3] === 'a') {
+                actions.push(
+                    '🔹 <strong>Semaine 3-8 : Diversification des revenus</strong><br>Activer l\'affiliation (Amazon, programmes partenaires). Créer un produit numérique (guide, formation, template).');
+            }
+
+            // Action 4 : Structuration juridique
+            if (q4[4] === 'a') {
+                actions.push(
+                    '🔹 <strong>Semaine 4-7 : Structuration juridique</strong><br>Déclarer votre activité en auto-entrepreneur. Ouvrir un compte professionnel. Mettre en place un système de facturation.');
+            } else if (q4[4] === 'b' && q1[1] === 'c') {
+                actions.push(
+                    '🔹 <strong>Semaine 6-10 : Évolution juridique</strong><br>Étudier le passage en SASU/EURL pour optimiser votre fiscalité et protéger votre patrimoine.');
+            }
+
+            // Action 5 : Relation marques
+            if (q2[2] === 'a' || q4[1] === 'a') {
+                actions.push(
+                    '🔹 <strong>Semaine 5-9 : Prospection marques</strong><br>Créer un media kit professionnel. Contacter 5 marques par semaine avec une proposition personnalisée.');
+            } else if (q2[2] === 'b') {
+                actions.push(
+                    '🔹 <strong>Semaine 7-12 : Optimisation des collaborations</strong><br>Revoir vos tarifs, structurer vos offres (forfaits, options) et formaliser vos contrats.');
+            }
+
+            // Action 6 : Formation
+            if (q3[1] === 'b' || q3[1] === 'c') {
+                actions.push(
+                    '🔹 <strong>Semaine 8-12 : Montée en compétences</strong><br>Suivre une formation sur ' + (q3[1] === 'b' ?
+                        'la stratégie de croissance' : 'la monétisation et le business') +
+                    ' (budget 500-700 TND). Appliquer immédiatement les enseignements.');
+            }
+
+            actions.forEach(action => {
+                appendMessage(`<div class="msg-block">${action}</div>`);
+            });
+
+            appendMessage(`
+                <div class="msg-block">
+                    <strong>📊 Indicateurs de suivi</strong><br>
+                    • Croissance mensuelle des abonnés<br>
+                    • Taux d'engagement (likes, commentaires, partages)<br>
+                    • Revenus mensuels par source<br>
+                    • Nombre de collaborations mensuelles<br>
+                    • Taux de conversion des offres
+                    <br><br>
+                    <strong>📅 Points d'étape</strong> : J30 (bilan stratégie contenu), J60 (bilan croissance), J90 (bilan global)
+                </div>
+            `);
+
+            // Proposition Upgrade
+            appendMessage('📚 Souhaitez-vous un programme <strong>Skills Up Grade Influenceur</strong> (21 jours) ? (ok / non)');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="upgradeOk" class="btn-primary" style="flex:1;">ok</button>
+                    <button id="upgradeNo" class="btn-secondary" style="flex:1;">non</button>
+                </div>
+            `;
+
+            document.getElementById('upgradeOk').addEventListener('click', function() {
+                generateUpgradePlan();
+            });
+
+            document.getElementById('upgradeNo').addEventListener('click', function() {
+                proposePdf();
+            });
+        }
+
+        // ============================================================
+        // SKILLS UP GRADE
+        // ============================================================
+        function generateUpgradePlan() {
+            const q3 = state.q3;
+
+            let focus = [];
+            if (q3[1] === 'a') focus.push('le storytelling et l\'écriture');
+            if (q3[1] === 'b') focus.push('la stratégie de croissance');
+            if (q3[1] === 'c') focus.push('la monétisation et le business');
+            if (focus.length === 0) focus.push('le personal branding');
+
+            appendMessage('📘 <strong>Skills Up Grade Influenceur — Parcours 21 jours</strong>');
+
+            appendMessage(`
+                <div class="msg-block">
+                    Programme personnalisé sur <strong>${focus.join(', ')}</strong>.
+                    <br><br>
+                    <strong>📆 Semaine 1 — Fondamentaux du créateur</strong><br>
+                    🔹 J1-2 : Définir votre niche et votre proposition de valeur<br>
+                    🔹 J3-4 : Les bases du storytelling et de la narration<br>
+                    🔹 J5-6 : Techniques d'engagement et d'interaction<br>
+                    🔹 J7 : Analyse de vos contenus et ajustement
+                    <br><br>
+                    <strong>📆 Semaine 2 — Stratégie et croissance</strong><br>
+                    🔹 J8-9 : Comprendre les algorithmes des plateformes<br>
+                    🔹 J10-11 : Stratégies de collaboration et de cross-posting<br>
+                    🔹 J12-13 : Techniques de croissance organique et payante<br>
+                    🔹 J14 : Planification et calendrier éditorial
+                    <br><br>
+                    <strong>📆 Semaine 3 — Business et monétisation</strong><br>
+                    🔹 J15-16 : Les différentes sources de revenus pour les créateurs<br>
+                    🔹 J17-18 : Négociation et tarification des collaborations<br>
+                    🔹 J19-20 : Structuration juridique et fiscale<br>
+                    🔹 J21 : Synthèse et plan d'action personnalisé
+                    <br><br>
+                    <em>📚 Ressources : podcasts ("The Creator Class"), livres ("Jab, Jab, Jab, Right Hook"), formations en ligne.</em>
+                </div>
+            `);
+
+            proposePdf();
+        }
+
+        // ============================================================
+        // PROPOSITION PDF
+        // ============================================================
+        function proposePdf() {
+            appendMessage('📄 Souhaitez-vous un <strong>PDF récapitulatif</strong> avec tous les éléments ? (ok / non)');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="pdfOk" class="btn-primary" style="flex:1;">ok</button>
+                    <button id="pdfNo" class="btn-secondary" style="flex:1;">non</button>
+                </div>
+            `;
+
+            document.getElementById('pdfOk').addEventListener('click', function() {
+                appendMessage('📎 <strong>PDF récapitulatif</strong>');
+                appendMessage(`
+                    <div class="msg-block">
+                        Contenu du document :
+                        <br><br>
+                        ✅ 4 questionnaires (Profil, Cognitif, Compétences, Situationnel)<br>
+                        ✅ Diagnostic stratégique personnalisé<br>
+                        ✅ Analyse des leviers de croissance<br>
+                        ✅ Plan d'action 90 jours détaillé<br>
+                        ✅ Budget en TND<br>
+                        ✅ Programme Skills Up Grade 21 jours
+                        <br><br>
+                        <em>📥 PDF prêt à être téléchargé.</em>
+                    </div>
+                `);
+                appendMessage('✅ <strong>Influenceur structuré. CAS Influenceur opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+
+            document.getElementById('pdfNo').addEventListener('click', function() {
+                appendMessage('✅ <strong>Influenceur structuré. CAS Influenceur opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+        }
+
+        // ============================================================
+        // HANDLE GO
+        // ============================================================
+        function handleGo() {
+            if (state.step === 'idle' || state.step === 'go') {
+                appendMessage('✅ Go lancé. Démarrage du <strong>Profil Influenceur</strong>.');
+                state.step = 'go';
+                state.q1 = [];
+                state.q2 = [];
+                state.q3 = [];
+                state.q4 = [];
+                renderQuestion(q1Data, 'profil');
+                appendMessage('📋 <strong>Questionnaire Profil Influenceur</strong> (4 questions)');
+            } else {
+                appendMessage('⚠️ Session en cours. Utilisez les boutons pour répondre.', false);
+            }
+        }
+
+        // ============================================================
+        // RESET
+        // ============================================================
+        function resetAgent() {
+            Object.assign(state, {
+                step: 'idle',
+                q1: [],
+                q2: [],
+                q3: [],
+                q4: [],
+                currentQuestionIndex: 0,
+                currentType: null,
+                questions: [],
+                need: '',
+                level: 'B',
+                strategicInsights: null,
+            });
+            chatWindow.innerHTML = '';
+            clearDynamic();
+            appendMessage('CAS Influenceur...Ready!');
+            appendMessage('Bienvenue. Pour démarrer, tapez <strong>"Go"</strong>.');
+            setMainButton('Go', 'fa-play', handleGo);
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        resetBtn.addEventListener('click', resetAgent);
+        setMainButton('Go', 'fa-play', handleGo);
+
+        console.log('✅ CAS Influenceur Stratégique chargé');
+    </script>
+</body>
+</html>

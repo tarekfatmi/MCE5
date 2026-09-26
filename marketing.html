@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>CAS · Marketing — Stratégique</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #f5f0fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            margin: 0;
+            touch-action: manipulation;
+        }
+        .agent-card {
+            max-width: 760px;
+            width: 100%;
+            background: rgba(250, 245, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 56px 56px 48px 48px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08), 0 10px 25px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            padding: 24px 20px 32px;
+            border: 1px solid rgba(200, 180, 220, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(160, 100, 200, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .agent-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            left: -5%;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(80, 160, 220, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+        .avatar {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(145deg, #8a6ab8, #6a4a9a);
+            border-radius: 28px 12px 28px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f5f0fa;
+            font-size: 30px;
+            box-shadow: 0 8px 14px rgba(100, 60, 160, 0.25);
+            flex-shrink: 0;
+        }
+        .title-group {
+            flex: 1;
+        }
+        .title-group h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: #2a1a3a;
+            line-height: 1.2;
+        }
+        .title-group span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #5a4a6a;
+            opacity: 0.85;
+            letter-spacing: 0.2px;
+        }
+        .status-badge {
+            background: #e8d8f0;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #3a2a4a;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #c8b0d8;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        .status-badge i {
+            font-size: 0.65rem;
+            color: #8a6ab8;
+        }
+        .chat-window {
+            background: rgba(245, 240, 250, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 20px 18px;
+            margin: 12px 0 20px;
+            min-height: 180px;
+            max-height: 420px;
+            overflow-y: auto;
+            border: 1px solid rgba(200, 180, 220, 0.2);
+            box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.02);
+            position: relative;
+            z-index: 2;
+            transition: all 0.2s;
+        }
+        .chat-window p,
+        .chat-window div {
+            color: #2a1a3a;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .chat-window .agent-msg {
+            font-weight: 500;
+            color: #3a2a4a;
+        }
+        .chat-window .user-msg {
+            background: #e8d8f0;
+            padding: 8px 16px;
+            border-radius: 24px 24px 8px 24px;
+            display: inline-block;
+            margin: 6px 0 10px;
+            color: #1a0a2a;
+        }
+        .chat-window strong {
+            color: #8a6ab8;
+        }
+        .chat-window em {
+            color: #6a4a8a;
+        }
+        .question-block {
+            margin: 14px 0 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .question-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #3a2a4a;
+            margin-bottom: 10px;
+            display: block;
+            letter-spacing: -0.2px;
+        }
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 6px 0 14px;
+        }
+        .option-btn {
+            background: rgba(235, 225, 245, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid #c8b8d8;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #3a2a4a;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            flex: 1 0 auto;
+            justify-content: center;
+            min-width: 70px;
+        }
+        .option-btn:active,
+        .option-btn.active {
+            background: #d8c0e8;
+            border-color: #8a6ab8;
+            box-shadow: 0 4px 8px rgba(100, 60, 160, 0.2);
+            transform: scale(0.97);
+            color: #1a0a2a;
+        }
+        .option-btn i {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 18px;
+            position: relative;
+            z-index: 2;
+        }
+        .btn-primary {
+            background: #8a6ab8;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #f5f0fa;
+            box-shadow: 0 6px 14px rgba(120, 70, 180, 0.3);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            touch-action: manipulation;
+            cursor: pointer;
+            border: 1px solid #a080c8;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+            background: #6a4a9a;
+            box-shadow: 0 2px 6px rgba(80, 40, 140, 0.25);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #c8b0d8;
+            padding: 12px 20px;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #4a3a5a;
+            touch-action: manipulation;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+        .btn-secondary:active {
+            background: #e8d8f0;
+            border-color: #8a6ab8;
+        }
+        .footer {
+            margin-top: 22px;
+            font-size: 0.7rem;
+            color: #6a5a7a;
+            text-align: center;
+            border-top: 1px solid rgba(180, 160, 200, 0.2);
+            padding-top: 16px;
+            letter-spacing: 0.4px;
+            position: relative;
+            z-index: 2;
+        }
+        .footer i {
+            margin: 0 4px;
+            color: #8a6ab8;
+        }
+        .chat-window::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-window::-webkit-scrollbar-thumb {
+            background: #c8b8d8;
+            border-radius: 12px;
+        }
+        .chat-window::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .decor-illustration {
+            display: flex;
+            justify-content: flex-end;
+            margin: 4px 0 -6px;
+            opacity: 0.3;
+            pointer-events: none;
+            position: relative;
+            z-index: 1;
+        }
+        .decor-illustration i {
+            font-size: 3.2rem;
+            color: #8a6ab8;
+            transform: rotate(8deg);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.03));
+        }
+        .response-feedback {
+            background: #e8d8f0;
+            border-radius: 40px;
+            padding: 4px 16px 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #3a2a4a;
+        }
+        .chat-window .msg-block {
+            background: rgba(235, 225, 245, 0.3);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #8a6ab8;
+            margin: 10px 0;
+        }
+        .chat-window .strategy-block {
+            background: rgba(225, 210, 240, 0.25);
+            padding: 16px 20px;
+            border-radius: 20px;
+            border-left: 4px solid #6a4a9a;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .chat-window .budget-block {
+            background: rgba(210, 195, 230, 0.2);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #5a3a8a;
+            margin: 10px 0;
+        }
+        .chat-window .plan-block {
+            background: rgba(220, 210, 240, 0.15);
+            padding: 14px 18px;
+            border-radius: 20px;
+            border-left: 4px solid #7a5aaa;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 480px) {
+            .agent-card {
+                padding: 16px;
+            }
+            .header {
+                gap: 10px;
+            }
+            .title-group h1 {
+                font-size: 1.2rem;
+            }
+            .option-btn {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="agent-card" id="app">
+        <div class="header">
+            <div class="avatar"><i class="fas fa-bullhorn"></i></div>
+            <div class="title-group">
+                <h1>CAS Marketing <span style="font-weight: 400; font-size: 0.9rem;">· Stratégique</span></h1>
+                <span><i class="fas fa-circle" style="color: #8a6ab8; font-size: 0.5rem;"></i> consulting premium</span>
+            </div>
+            <div class="status-badge"><i class="fas fa-check-circle"></i> Ready</div>
+        </div>
+
+        <div class="chat-window" id="chatWindow">
+            <p class="agent-msg"><i class="fas fa-comment-dots" style="margin-right: 8px;"></i>CAS Marketing...Ready!</p>
+            <p style="font-size: 0.9rem; color: #4a3a5a;">Bienvenue. Pour démarrer, tapez <strong>"Go"</strong> ou cliquez sur le bouton ci-dessous.</p>
+        </div>
+
+        <div id="dynamicZone"></div>
+
+        <div class="action-row">
+            <button class="btn-primary" id="mainActionBtn"><i class="fas fa-play"></i> Go</button>
+            <button class="btn-secondary" id="resetBtn"><i class="fas fa-undo-alt"></i> Réinitialiser</button>
+        </div>
+
+        <div class="decor-illustration"><i class="fas fa-chart-simple"></i></div>
+        <div class="footer"><i class="fas fa-rocket"></i> stratégie · croissance · maîtrise <i class="fas fa-crown" style="opacity: 0.4;"></i></div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ÉTAT GLOBAL
+        // ============================================================
+        const state = {
+            step: 'idle',
+            q1: [], // Profil
+            q2: [], // Cognitif
+            q3: [], // Compétences
+            q4: [], // Situationnel (5 questions stratégiques)
+            currentQuestionIndex: 0,
+            currentType: null,
+            questions: [],
+            need: '',
+            level: 'B',
+            learningPlan: false,
+            strategicInsights: null,
+        };
+
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const chatWindow = document.getElementById('chatWindow');
+        const dynamicZone = document.getElementById('dynamicZone');
+        const mainBtn = document.getElementById('mainActionBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // ============================================================
+        // FONCTIONS D'AFFICHAGE
+        // ============================================================
+        function appendMessage(html, isUser = false) {
+            const msg = document.createElement('div');
+            if (isUser) {
+                msg.innerHTML = `<div class="user-msg">${html}</div>`;
+            } else {
+                msg.innerHTML = `<div class="agent-msg">${html}</div>`;
+            }
+            chatWindow.appendChild(msg);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function clearDynamic() {
+            dynamicZone.innerHTML = '';
+        }
+
+        function setMainButton(text, icon = 'fa-play', action = null) {
+            mainBtn.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+            mainBtn.onclick = action || null;
+        }
+
+        // ============================================================
+        // QUESTIONNAIRES
+        // ============================================================
+        const q1Data = [
+            { q: 'Quel est votre niveau d\'expertise en marketing ?', options: ['a) Débutant (découverte)',
+                    'b) Intermédiaire (bases maîtrisées)', 'c) Avancé (stratégie et pilotage)'
+                ] },
+            { q: 'Dans quel secteur d\'activité évoluez-vous ?', options: ['a) Service / Conseil',
+                    'b) E-commerce / Retail', 'c) Autre (santé, éducation, industrie)'
+                ] },
+            { q: 'Quel est votre niveau de connaissance des concepts marketing ?', options: ['a) Notions de base',
+                    'b) Connaissances opérationnelles', 'c) Maîtrise avancée'
+                ] },
+            { q: 'Quels canaux marketing maîtrisez-vous ?', options: ['a) Réseaux sociaux uniquement',
+                    'b) SEO / SEA / Réseaux', 'c) Omnicanal (tous les canaux)'
+                ] }
+        ];
+
+        const q2Data = [
+            { q: 'Quel domaine marketing souhaitez-vous approfondir en priorité ?', options: ['a) Branding / Positionnement',
+                    'b) Digital (SEO, SEA, réseaux)', 'c) Content / Storytelling'
+                ] },
+            { q: 'Quel est votre principal objectif d\'apprentissage ?', options: ['a) Comprendre les fondamentaux',
+                    'b) Passer à l\'action (opérationnel)', 'c) Devenir un expert stratégique'
+                ] },
+            { q: 'Quelle est votre disponibilité pour apprendre ?', options: ['a) 1h par jour',
+                    'b) 2-3h par semaine', 'c) Intensif (plusieurs heures par jour)'
+                ] },
+            { q: 'Quelle est votre ambition marketing à 1 an ?', options: ['a) Maîtriser les bases',
+                    'b) Pilotage opérationnel', 'c) Devenir référent marketing'
+                ] }
+        ];
+
+        const q3Data = [
+            { q: 'Quelle est votre qualité principale en marketing ?', options: ['a) Créativité / Idées',
+                    'b) Analyse / Data', 'c) Relationnel / Communication'
+                ] },
+            { q: 'Sur quel point souhaiteriez-vous progresser ?', options: ['a) Stratégie et vision',
+                    'b) Technique (outils, canaux)', 'c) Mesure et optimisation'
+                ] },
+            { q: 'Maîtrisez-vous les outils marketing (analytics, CRM, etc.) ?', options: ['a) Niveau débutant',
+                    'b) Niveau intermédiaire', 'c) Niveau expert'
+                ] },
+            { q: 'Comment abordez-vous la formation marketing ?', options: ['a) En autodidacte',
+                    'b) Avec des formations ponctuelles', 'c) Avec un programme structuré'
+                ] }
+        ];
+
+        // ============================================================
+        // QUESTIONNAIRE SITUATIONNEL STRATÉGIQUE (5 questions)
+        // ============================================================
+        function getQ4Data() {
+            return [
+                { q: 'Avez-vous déjà défini votre persona (client idéal) ?', options: ['a) Non, pas encore',
+                        'b) Oui, de manière générale', 'c) Oui, avec une analyse détaillée'
+                    ] },
+                { q: 'Quel est votre budget marketing annuel (en TND) ?', options: ['a) Moins de 1000 TND',
+                        'b) Entre 1000 et 5000 TND', 'c) Plus de 5000 TND'
+                    ] },
+                { q: 'Avez-vous une stratégie de contenu définie ?', options: ['a) Non', 'b) Oui, de manière informelle',
+                        'c) Oui, avec un calendrier'
+                    ] },
+                { q: 'Mesurez-vous vos performances marketing (KPIs) ?', options: ['a) Non, jamais',
+                        'b) Oui, de manière ponctuelle', 'c) Oui, régulièrement'
+                    ] },
+                { q: 'Quel est votre principal défi marketing actuel ?', options: ['a) Visibilité / Notoriété',
+                        'b) Conversion / Ventes', 'c) Fidélisation / Relation client'
+                    ] }
+            ];
+        }
+
+        // ============================================================
+        // RENDU D'UNE QUESTION
+        // ============================================================
+        function renderQuestion(questions, type) {
+            clearDynamic();
+            state.questions = questions;
+            state.currentType = type;
+            state.currentQuestionIndex = 0;
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            const questions = state.questions;
+            if (index >= questions.length) return;
+
+            const q = questions[index];
+            const type = state.currentType;
+            const map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+            const arrKey = map[type];
+            const answers = state[arrKey] || [];
+            const already = answers[index] || null;
+
+            let html = `
+                <div class="question-block">
+                    <span class="question-label"><i class="fas fa-question-circle"></i> ${q.q}</span>
+                    <div class="options-grid">
+            `;
+
+            q.options.forEach((opt, idx) => {
+                const val = String.fromCharCode(97 + idx);
+                const active = (already === val) ? 'active' : '';
+                html += `<div class="option-btn ${active}" data-value="${val}">${opt}</div>`;
+            });
+
+            html += `
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                        <span style="font-size:0.75rem;color:#6a5a7a;">
+                            <i class="far fa-circle"></i> ${already ? 'réponse enregistrée' : 'sélectionnez une réponse'}
+                        </span>
+                        <span style="font-size:0.7rem;color:#6a5a7a;">${index+1}/${questions.length}</span>
+                    </div>
+                </div>
+            `;
+
+            dynamicZone.innerHTML = html;
+
+            const options = dynamicZone.querySelectorAll('.option-btn');
+            options.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    options.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const value = this.dataset.value;
+                    const map2 = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+                    const arrKey2 = map2[type];
+                    if (arrKey2) {
+                        state[arrKey2][index] = value;
+                    }
+
+                    const container = dynamicZone.querySelector('.question-block');
+                    let fb = container.querySelector('.response-feedback');
+                    if (!fb) {
+                        fb = document.createElement('div');
+                        fb.className = 'response-feedback';
+                        container.appendChild(fb);
+                    }
+                    fb.innerHTML = `<i class="fas fa-check"></i> réponse ${value}`;
+
+                    if (index === questions.length - 1) {
+                        setMainButton('Valider', 'fa-check', () => validateQuestions(type));
+                    } else {
+                        setMainButton('Suivant →', 'fa-arrow-right', () => {
+                            state.currentQuestionIndex = index + 1;
+                            showQuestion(index + 1);
+                        });
+                    }
+                });
+            });
+
+            if (already) {
+                if (index === questions.length - 1) {
+                    setMainButton('Valider', 'fa-check', () => validateQuestions(type));
+                } else {
+                    setMainButton('Suivant →', 'fa-arrow-right', () => {
+                        state.currentQuestionIndex = index + 1;
+                        showQuestion(index + 1);
+                    });
+                }
+            } else {
+                setMainButton('Choisissez une réponse', 'fa-hand-pointer', null);
+            }
+        }
+
+        // ============================================================
+        // VALIDATION D'UN QUESTIONNAIRE
+        // ============================================================
+        function validateQuestions(type) {
+            const map = { profil: 'q1', cognitif: 'q2', competences: 'q3', situationnel: 'q4' };
+            const arrKey = map[type];
+            const answers = state[arrKey];
+            const total = state.questions.length;
+
+            if (!answers || answers.length < total || answers.some(a => !a)) {
+                appendMessage('⚠️ Veuillez répondre à toutes les questions avant de valider.', false);
+                return;
+            }
+
+            if (type === 'profil') {
+                const firstAns = answers[0] || 'b';
+                const levelMap = { 'a': 'A', 'b': 'B', 'c': 'C' };
+                state.level = levelMap[firstAns] || 'B';
+
+                appendMessage('✅ Réponses enregistrées. Agent en Calibrage.');
+                appendMessage('📊 <strong>Profil Marketing</strong> : lecture stratégique effectuée.');
+                state.step = 'q1done';
+                setTimeout(() => {
+                    renderQuestion(q2Data, 'cognitif');
+                    appendMessage('📋 <strong>Questionnaire Cognitif Marketing</strong> (4 questions)');
+                    appendMessage('💡 Le prochain questionnaire me renseignera sur les domaines marketing que vous souhaitez approfondir.');
+                }, 400);
+            } else if (type === 'cognitif') {
+                appendMessage('✅ Réponses enregistrées. Matrice marketing constituée.');
+                state.step = 'q2done';
+                setTimeout(() => {
+                    renderQuestion(q3Data, 'competences');
+                    appendMessage('📋 <strong>Questionnaire Compétences Marketing</strong> (4 questions)');
+                    appendMessage('💡 Le prochain questionnaire me renseignera sur vos compétences marketing et vos lacunes.');
+                }, 400);
+            } else if (type === 'competences') {
+                appendMessage('✅ Réponses enregistrées. Archétype Marketeur établi.');
+
+                appendMessage(`
+                    📊 <strong>Récapitulatif des profils</strong><br>
+                    • Profil : ${q1Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q1[i])}`).join(' / ')}<br>
+                    • Cognitif : ${q2Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q2[i])}`).join(' / ')}<br>
+                    • Compétences : ${q3Data.map((q, i) => `${q.options.find((_, idx) => String.fromCharCode(97+idx) === state.q3[i])}`).join(' / ')}
+                `);
+
+                state.step = 'q3done';
+                setTimeout(() => {
+                    appendMessage('✏️ Formulez votre besoin principal avec vos mots (Objectif, Contrainte, Cible, Style).');
+                    clearDynamic();
+                    dynamicZone.innerHTML = `
+                        <div style="background:#e8d8f0;padding:16px;border-radius:24px;margin:8px 0;">
+                            <label style="font-weight:500;display:block;margin-bottom:8px;color:#3a2a4a;">Votre demande stratégique :</label>
+                            <textarea id="needInput" rows="2" style="width:100%;padding:12px;border-radius:20px;border:1px solid #c8b0d8;background:#f5f0fa;font-size:0.95rem;">Je veux structurer une stratégie digitale</textarea>
+                            <button id="submitNeed" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre</button>
+                        </div>
+                    `;
+                    document.getElementById('submitNeed').addEventListener('click', function() {
+                        const raw = document.getElementById('needInput').value.trim();
+                        if (raw.length < 5) {
+                            appendMessage('Veuillez décrire votre besoin plus précisément.', false);
+                            return;
+                        }
+                        state.need = raw;
+                        appendMessage(`📝 Besoin enregistré : "${raw}"`);
+
+                        const optimized =
+                            `Objectif : ${raw} | Contrainte : temps/budget | Cible : marché cible | Style : pédagogique et opérationnel`;
+                        state.validatedPrompt = optimized;
+                        appendMessage(`✅ Prompt optimisé : ${optimized}`);
+                        appendMessage('👉 Validez ce prompt en cliquant sur "OK" ci-dessous.');
+
+                        clearDynamic();
+                        dynamicZone.innerHTML = `
+                            <div style="display:flex;gap:12px;margin:8px 0;">
+                                <button id="okPrompt" class="btn-primary" style="flex:1;"><i class="fas fa-check"></i> OK</button>
+                                <button id="modifyPrompt" class="btn-secondary" style="flex:1;"><i class="fas fa-edit"></i> Modifier</button>
+                            </div>
+                        `;
+
+                        document.getElementById('okPrompt').addEventListener('click', function() {
+                            appendMessage('✅ Prompt validé. Lancement de l\'analyse des modules.');
+                            appendMessage('💡 Le prochain questionnaire me permettra de mieux comprendre vos cas concrets pour personnaliser votre plan d\'apprentissage.');
+                            state.step = 'q4ready';
+                            setTimeout(() => {
+                                const q4 = getQ4Data();
+                                renderQuestion(q4, 'situationnel');
+                                appendMessage('📋 <strong>Questionnaire Situationnel Marketing</strong> (5 questions stratégiques)');
+                            }, 400);
+                        });
+
+                        document.getElementById('modifyPrompt').addEventListener('click', function() {
+                            appendMessage('Veuillez reformuler votre besoin.');
+                            clearDynamic();
+                            dynamicZone.innerHTML = `
+                                <div style="background:#e8d8f0;padding:16px;border-radius:24px;margin:8px 0;">
+                                    <label style="font-weight:500;display:block;margin-bottom:8px;color:#3a2a4a;">Votre demande :</label>
+                                    <textarea id="needInput2" rows="2" style="width:100%;padding:12px;border-radius:20px;border:1px solid #c8b0d8;background:#f5f0fa;font-size:0.95rem;">${raw}</textarea>
+                                    <button id="submitNeed2" class="btn-primary" style="margin-top:10px;width:100%;"><i class="fas fa-pen"></i> Soumettre</button>
+                                </div>
+                            `;
+                            document.getElementById('submitNeed2').addEventListener('click', function() {
+                                const newRaw = document.getElementById('needInput2').value.trim();
+                                if (newRaw.length < 5) {
+                                    appendMessage('Plus de détails svp.', false);
+                                    return;
+                                }
+                                state.need = newRaw;
+                                const newOpt =
+                                    `Objectif : ${newRaw} | Contrainte : temps/budget | Cible : marché cible | Style : pédagogique et opérationnel`;
+                                state.validatedPrompt = newOpt;
+                                appendMessage(`✅ Prompt optimisé : ${newOpt}`);
+                                appendMessage('✅ Validé automatiquement. Lancement analyse.');
+                                state.step = 'q4ready';
+                                setTimeout(() => {
+                                    const q4 = getQ4Data();
+                                    renderQuestion(q4, 'situationnel');
+                                    appendMessage('📋 <strong>Questionnaire Situationnel Marketing</strong> (5 questions)');
+                                }, 400);
+                            });
+                        });
+                    });
+                }, 400);
+            } else if (type === 'situationnel') {
+                appendMessage('✅ Réponses enregistrées. Réalité Terrain Marketing identifiée.');
+                state.step = 'q4done';
+                setTimeout(() => {
+                    generateStrategicReport();
+                }, 400);
+            }
+        }
+
+        // ============================================================
+        // ANALYSE STRATÉGIQUE
+        // ============================================================
+        function generateStrategicReport() {
+            const q1 = state.q1;
+            const q2 = state.q2;
+            const q3 = state.q3;
+            const q4 = state.q4;
+
+            // ---- DÉCODAGE ----
+            const niveau = q1[0] === 'a' ? 'débutant' :
+                q1[0] === 'b' ? 'intermédiaire' :
+                'avancé';
+
+            const secteur = q1[1] === 'a' ? 'Service / Conseil' :
+                q1[1] === 'b' ? 'E-commerce / Retail' :
+                'Autre (santé, éducation, industrie)';
+
+            const connaissances = q1[2] === 'a' ? 'notions de base' :
+                q1[2] === 'b' ? 'connaissances opérationnelles' :
+                'maîtrise avancée';
+
+            const canaux = q1[3] === 'a' ? 'réseaux sociaux' :
+                q1[3] === 'b' ? 'SEO/SEA/réseaux' :
+                'omnicanal';
+
+            const priorite = q2[0] === 'a' ? 'branding / positionnement' :
+                q2[0] === 'b' ? 'digital (SEO, SEA, réseaux)' :
+                'content / storytelling';
+
+            const objectif = q2[1] === 'a' ? 'comprendre les fondamentaux' :
+                q2[1] === 'b' ? 'passer à l\'action (opérationnel)' :
+                'devenir un expert stratégique';
+
+            const disponibilite = q2[2] === 'a' ? '1h par jour' :
+                q2[2] === 'b' ? '2-3h par semaine' :
+                'intensif (plusieurs heures par jour)';
+
+            const ambition = q2[3] === 'a' ? 'maîtriser les bases' :
+                q2[3] === 'b' ? 'pilotage opérationnel' :
+                'devenir référent marketing';
+
+            const qualite = q3[0] === 'a' ? 'créativité / idées' :
+                q3[0] === 'b' ? 'analyse / data' :
+                'relationnel / communication';
+
+            const progression = q3[1] === 'a' ? 'stratégie et vision' :
+                q3[1] === 'b' ? 'technique (outils, canaux)' :
+                'mesure et optimisation';
+
+            const outils = q3[2] === 'a' ? 'débutant' :
+                q3[2] === 'b' ? 'intermédiaire' :
+                'expert';
+
+            const formation = q3[3] === 'a' ? 'autodidacte' :
+                q3[3] === 'b' ? 'formations ponctuelles' :
+                'programme structuré';
+
+            const persona = q4[0] === 'a' ? 'non défini' :
+                q4[0] === 'b' ? 'défini globalement' :
+                'défini en détail';
+
+            const budget = q4[1] === 'a' ? 'moins de 1000 TND' :
+                q4[1] === 'b' ? '1000-5000 TND' :
+                'plus de 5000 TND';
+
+            const strategieContenu = q4[2] === 'a' ? 'aucune' :
+                q4[2] === 'b' ? 'informelle' :
+                'structurée avec calendrier';
+
+            const mesure = q4[3] === 'a' ? 'aucune mesure' :
+                q4[3] === 'b' ? 'mesure ponctuelle' :
+                'mesure régulière';
+
+            const defi = q4[4] === 'a' ? 'visibilité / notoriété' :
+                q4[4] === 'b' ? 'conversion / ventes' :
+                'fidélisation / relation client';
+
+            // ---- DIAGNOSTIC ----
+            appendMessage('📄 <strong>Analyse Stratégique</strong> — Synthèse marketing');
+
+            let macro = `
+                <div class="msg-block">
+                    <strong>📊 Diagnostic stratégique</strong><br>
+                    Vous êtes un professionnel de niveau ${niveau} évoluant dans le secteur ${secteur}.
+                    Vos connaissances sont ${connaissances} et vous maîtrisez les canaux ${canaux}.
+                    <br><br>
+                    <strong>Analyse croisée :</strong>
+            `;
+
+            if (q1[0] === 'a' && q2[0] === 'a') {
+                macro +=
+                    'Vous débutez en marketing et souhaitez comprendre les fondamentaux. C\'est une excellente approche. Concentrez-vous sur l\'acquisition des bases : persona, positionnement, 4P avant d\'aborder les canaux digitaux.';
+            } else if (q1[0] === 'b' && q2[0] === 'b') {
+                macro +=
+                    'Vous avez des bases solides et souhaitez passer à l\'action sur le digital. C\'est le bon moment pour structurer votre stratégie omnicanale et maîtriser les outils.';
+            } else if (q1[0] === 'c' && q2[0] === 'c') {
+                macro +=
+                    'Vous êtes un expert et cherchez à approfondir la stratégie de marque et le storytelling. Votre défi est de faire passer votre marque d\'un niveau technique à un niveau émotionnel.';
+            } else {
+                macro += `Votre situation est ${niveau} avec un objectif ${objectif}. L'enjeu est d'aligner votre apprentissage avec votre niveau actuel.`;
+            }
+
+            macro +=
+                `<br><br><strong>Priorité d'apprentissage :</strong> ${priorite}. ${q2[0] === 'a' ? 'Pour le branding, travaillez sur votre identité de marque et votre positionnement différenciant.' : q2[0] === 'b' ? 'Pour le digital, maîtrisez les fondamentaux SEO, SEA et les réseaux sociaux.' : 'Pour le content, développez votre storytelling et votre calendrier éditorial.'}`;
+
+            macro += `</div>`;
+            appendMessage(macro);
+
+            // 2. LEVIERS
+            let leviers = `
+                <div class="msg-block">
+                    <strong>🎯 Leviers stratégiques identifiés</strong><br>
+            `;
+
+            leviers +=
+                `<strong>Persona :</strong> ${persona}. ${q4[0] === 'a' ? 'Définir votre persona est la base de toute stratégie. Identifiez 3 profils types, leurs besoins et leurs comportements.' : q4[0] === 'b' ? 'Affinez votre persona avec des données réelles (entretiens, analytics).' : 'Excellent, continuez à l\'enrichir avec des données comportementales.'}<br><br>`;
+
+            leviers +=
+                `<strong>Budget :</strong> ${budget}. ${q4[1] === 'a' ? 'Un petit budget nécessite une approche frugale. Priorisez les canaux à fort ROI (réseaux sociaux, emailing, SEO).' : q4[1] === 'b' ? 'Un budget correct pour une stratégie équilibrée. Investissez dans les outils et la formation.' : 'Un budget important vous permet de tester plusieurs canaux et d\'optimiser rapidement.'}<br><br>`;
+
+            leviers +=
+                `<strong>Stratégie de contenu :</strong> ${strategieContenu}. ${q4[2] === 'a' ? 'C\'est un levier majeur à activer. Créez un calendrier éditorial sur 3 mois avec 3 formats différents.' : q4[2] === 'b' ? 'Formalisez votre stratégie avec des objectifs et des indicateurs.' : 'Parfait, continuez à itérer et à optimiser.'}<br><br>`;
+
+            leviers +=
+                `<strong>Mesure :</strong> ${mesure}. ${q4[3] === 'a' ? 'Commencez par identifier vos KPIs clés (trafic, conversion, ROI) et mettez en place un tableau de bord.' : q4[3] === 'b' ? 'Structurez votre mesure avec un reporting régulier (hebdomadaire/mensuel).' : 'Une excellente pratique, poussez l\'analyse plus loin avec des tests A/B.'}<br><br>`;
+
+            leviers +=
+                `<strong>Défi principal :</strong> ${defi}. ${q4[4] === 'a' ? 'Pour la visibilité, investissez dans le contenu et le SEO. La régularité est votre meilleur allié.' : q4[4] === 'b' ? 'Pour la conversion, travaillez votre tunnel de vente et vos call-to-action.' : 'Pour la fidélisation, développez votre CRM et des programmes de fidélité.'}`;
+
+            leviers += `</div>`;
+            appendMessage(leviers);
+
+            // 3. RECOMMANDATIONS
+            let recommandations = `
+                <div class="strategy-block">
+                    <strong>💡 Recommandations stratégiques</strong><br>
+            `;
+
+            recommandations +=
+                `Votre qualité principale est ${qualite}, mais votre point de progression est ${progression}. `;
+
+            if (q3[0] === 'a' && q3[1] === 'a') {
+                recommandations +=
+                    'Vous êtes créatif mais la stratégie vous manque. Structurez votre approche avec un plan marketing sur 12 mois. Fixez-vous des objectifs SMART et les actions pour les atteindre.';
+            } else if (q3[0] === 'b' && q3[1] === 'b') {
+                recommandations +=
+                    'Vous êtes analytique mais la technique vous challenge. Suivez une formation pratique sur les outils (Google Analytics, SEO, Ads). La pratique régulière est la clé.';
+            } else if (q3[0] === 'c' && q3[1] === 'c') {
+                recommandations +=
+                    'Vous êtes relationnel mais la mesure vous échappe. Formez-vous sur les tableaux de bord et les indicateurs de performance. La data vous aidera à prendre de meilleures décisions.';
+            } else {
+                recommandations +=
+                    `Utilisez votre ${qualite} pour adresser votre besoin de progression sur ${progression}. Une approche pragmatique est recommandée.`;
+            }
+
+            recommandations += `<br><br>`;
+
+            recommandations +=
+                `Votre ambition est ${ambition}. `;
+
+            if (q2[3] === 'a') {
+                recommandations +=
+                    'Pour maîtriser les bases, suivez un parcours structuré sur les fondamentaux (persona, positionnement, 4P) avant d\'aborder les canaux digitaux.';
+            } else if (q2[3] === 'b') {
+                recommandations +=
+                    'Pour piloter opérationnellement, concentrez-vous sur 2-3 canaux prioritaires et devenez expert sur ces leviers avant de les diversifier.';
+            } else {
+                recommandations +=
+                    'Pour devenir référent, développez une vision 360 : stratégie, exécution, mesure et optimisation. La pédagogie et la transmission seront vos atouts.';
+            }
+
+            recommandations += `</div>`;
+            appendMessage(recommandations);
+
+            // 4. BUDGET
+            let budgetCalc = calculateBudget(q1, q2, q3, q4);
+            appendMessage(budgetCalc);
+
+            // 5. PROPOSITION PLAN D'APPRENTISSAGE
+            appendMessage('📌 Souhaitez-vous un <strong>plan d\'apprentissage express de 60 jours</strong> (1h par jour) ?');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="learnBtn" class="btn-primary" style="flex:1;"><i class="fas fa-graduation-cap"></i> Apprendre</button>
+                    <button id="skipLearnBtn" class="btn-secondary" style="flex:1;">Passer</button>
+                </div>
+            `;
+
+            document.getElementById('learnBtn').addEventListener('click', function() {
+                generateLearningPlan();
+            });
+
+            document.getElementById('skipLearnBtn').addEventListener('click', function() {
+                appendMessage('✅ <strong>Marketing maîtrisé. CAS Marketing opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+        }
+
+        // ============================================================
+        // CALCUL DU BUDGET
+        // ============================================================
+        function calculateBudget(q1, q2, q3, q4) {
+            let totalBudget = 0;
+            let details = [];
+
+            const base = q1[0] === 'c' ? 2000 : q1[0] === 'b' ? 1000 : 300;
+
+            if (q4[0] === 'a') {
+                totalBudget += 200;
+                details.push('Atelier définition persona : 200 TND');
+            }
+            if (q4[2] === 'a') {
+                totalBudget += 500;
+                details.push('Création calendrier éditorial + templates : 500 TND');
+            }
+            if (q4[3] === 'a') {
+                totalBudget += 300;
+                details.push('Mise en place tableau de bord KPIs : 300 TND');
+            }
+            if (q3[1] === 'b') {
+                totalBudget += 600;
+                details.push('Formation outils digitaux (SEO, Ads) : 600 TND');
+            }
+            if (q3[1] === 'a') {
+                totalBudget += 500;
+                details.push('Formation stratégie marketing : 500 TND');
+            }
+            if (q4[1] === 'a') {
+                totalBudget += 200;
+                details.push('Kit de démarrage (canva, templates) : 200 TND');
+            }
+
+            totalBudget += base;
+
+            let html = `
+                <div class="budget-block">
+                    <strong>💰 Budget prévisionnel (TND)</strong><br>
+                    <strong>Enveloppe totale estimée : ${totalBudget} TND</strong><br><br>
+                    <strong>Détail :</strong><br>
+                    • Budget de base : ${base} TND<br>
+                    ${details.map(d => '• ' + d).join('<br>')}
+                    <br><br>
+                    <em>📌 Ce budget est indicatif. Un devis précis peut être établi selon vos priorités.</em>
+                </div>
+            `;
+
+            return html;
+        }
+
+        // ============================================================
+        // PLAN D'APPRENTISSAGE 60 JOURS
+        // ============================================================
+        function generateLearningPlan() {
+            const q1 = state.q1;
+            const q2 = state.q2;
+            const q3 = state.q3;
+            const q4 = state.q4;
+
+            // Déterminer le niveau et les priorités
+            const niveau = q1[0] === 'a' ? 'débutant' : q1[0] === 'b' ? 'intermédiaire' : 'avancé';
+            const priorite = q2[0] === 'a' ? 'branding' : q2[0] === 'b' ? 'digital' : 'content';
+            const lacune = q3[1] === 'a' ? 'stratégie' : q3[1] === 'b' ? 'technique' : 'mesure';
+
+            appendMessage('📚 <strong>Plan d\'apprentissage express — 60 jours</strong>');
+            appendMessage(`
+                <div class="msg-block">
+                    <strong>📌 Vue d'ensemble</strong><br>
+                    • Niveau : ${niveau}<br>
+                    • Priorité : ${priorite}<br>
+                    • Lacune ciblée : ${lacune}<br>
+                    • Rythme : 1 tâche par jour (1h)<br>
+                    • Durée : 60 jours
+                </div>
+            `);
+
+            // Générer les 60 jours (résumé par semaines)
+            let planHtml = `
+                <div class="plan-block">
+                    <strong>📅 Calendrier d'apprentissage</strong><br><br>
+            `;
+
+            // Semaines 1-2 : Fondamentaux
+            if (niveau === 'débutant') {
+                planHtml += `
+                    <strong>🔹 Semaine 1-2 : Fondamentaux du marketing</strong><br>
+                    • Jour 1 : Définir son persona (modèle)<br>
+                    • Jour 2 : Analyser sa concurrence (matrice SWOT)<br>
+                    • Jour 3 : Définir son positionnement<br>
+                    • Jour 4 : Comprendre les 4P du marketing<br>
+                    • Jour 5 : Créer sa proposition de valeur<br>
+                    • Jour 6 : Identifier ses canaux prioritaires<br>
+                    • Jour 7 : Quiz de validation #1<br><br>
+                `;
+            } else {
+                planHtml += `
+                    <strong>🔹 Semaine 1-2 : Approfondissement stratégique</strong><br>
+                    • Jour 1 : Revoir et affiner son persona (données réelles)<br>
+                    • Jour 2 : Cartographie du parcours client<br>
+                    • Jour 3 : Analyse concurrentielle avancée (5 forces)<br>
+                    • Jour 4 : Définir ses objectifs SMART<br>
+                    • Jour 5 : Créer sa stratégie de marque<br>
+                    • Jour 6 : Définir son mix marketing<br>
+                    • Jour 7 : Quiz de validation #1<br><br>
+                `;
+            }
+
+            // Semaines 3-4 : Digital / Branding / Content selon priorité
+            if (priorite === 'digital') {
+                planHtml += `
+                    <strong>🔹 Semaine 3-4 : Marketing digital</strong><br>
+                    • Jour 8-9 : Fondamentaux du SEO (recherche de mots-clés)<br>
+                    • Jour 10-11 : Création d'un compte Google Analytics<br>
+                    • Jour 12-13 : Mise en place d'une campagne SEA (simulation)<br>
+                    • Jour 14 : Quiz de validation #2<br><br>
+                    <strong>🔹 Semaine 5-6 : Réseaux sociaux et contenu</strong><br>
+                    • Jour 15-16 : Stratégie de contenu pour réseaux sociaux<br>
+                    • Jour 17-18 : Création d'un calendrier éditorial<br>
+                    • Jour 19-20 : Techniques de copywriting<br>
+                    • Jour 21 : Quiz de validation #3<br><br>
+                `;
+            } else if (priorite === 'branding') {
+                planHtml += `
+                    <strong>🔹 Semaine 3-4 : Branding et positionnement</strong><br>
+                    • Jour 8-9 : Définir l'identité de marque<br>
+                    • Jour 10-11 : Créer un storytelling de marque<br>
+                    • Jour 12-13 : Développer la charte graphique (brief)<br>
+                    • Jour 14 : Quiz de validation #2<br><br>
+                    <strong>🔹 Semaine 5-6 : Expérience client et communication</strong><br>
+                    • Jour 15-16 : Cartographie du parcours client<br>
+                    • Jour 17-18 : Stratégie de communication<br>
+                    • Jour 19-20 : Création d'un message de marque<br>
+                    • Jour 21 : Quiz de validation #3<br><br>
+                `;
+            } else {
+                planHtml += `
+                    <strong>🔹 Semaine 3-4 : Marketing de contenu</strong><br>
+                    • Jour 8-9 : Stratégie de contenu (objectifs, formats)<br>
+                    • Jour 10-11 : Création d'un calendrier éditorial<br>
+                    • Jour 12-13 : Techniques de copywriting<br>
+                    • Jour 14 : Quiz de validation #2<br><br>
+                    <strong>🔹 Semaine 5-6 : Distribution et promotion</strong><br>
+                    • Jour 15-16 : Stratégie de distribution des contenus<br>
+                    • Jour 17-18 : Promotion sur les réseaux sociaux<br>
+                    • Jour 19-20 : Newsletter et emailing<br>
+                    • Jour 21 : Quiz de validation #3<br><br>
+                `;
+            }
+
+            // Semaines 7-8 : Mesure et optimisation
+            planHtml += `
+                <strong>🔹 Semaine 7-8 : Mesure et optimisation</strong><br>
+                • Jour 22-23 : Définir ses KPIs marketing<br>
+                • Jour 24-25 : Mise en place d'un tableau de bord<br>
+                • Jour 26-27 : Analyse des données et interprétation<br>
+                • Jour 28 : Quiz de validation #4<br><br>
+            `;
+
+            // Semaines 9-10 : Cas pratique
+            planHtml += `
+                <strong>🔹 Semaine 9-10 : Cas pratique intégré</strong><br>
+                • Jour 29-30 : Audit marketing de son entreprise/projet<br>
+                • Jour 31-33 : Élaboration d'un plan marketing 12 mois<br>
+                • Jour 34-35 : Présentation et validation<br>
+                • Jour 35 : Quiz de validation #5<br><br>
+            `;
+
+            // Semaines 11-12 : Projet final
+            planHtml += `
+                <strong>🔹 Semaine 11-12 : Projet final</strong><br>
+                • Jour 36-40 : Mise en œuvre du plan marketing (actions concrètes)<br>
+                • Jour 41-45 : Suivi et ajustements<br>
+                • Jour 46-50 : Analyse des résultats et optimisation<br>
+                • Jour 51-60 : Bilan et plan de progression<br><br>
+            `;
+
+            planHtml += `
+                <strong>📌 Ressources recommandées</strong><br>
+                • Google Digital Garage (formations gratuites)<br>
+                • HubSpot Academy (certification marketing)<br>
+                • Livres : "Marketing 5.0" (Kotler), "Influence et Manipulation" (Cialdini)<br>
+                • Outils : Canva, Google Analytics, Hootsuite<br>
+                <br>
+                <strong>✅ Validation</strong> : 6 quiz de validation (un toutes les 2 semaines)<br>
+                <strong>🎯 Objectif final</strong> : Un plan marketing opérationnel pour votre activité
+            `;
+
+            planHtml += `</div>`;
+
+            appendMessage(planHtml);
+
+            // Proposition PDF
+            appendMessage('📄 Souhaitez-vous un <strong>PDF récapitulatif</strong> avec tous les éléments ? (ok / non)');
+            clearDynamic();
+            dynamicZone.innerHTML = `
+                <div style="display:flex;gap:12px;margin:8px 0;">
+                    <button id="pdfOk" class="btn-primary" style="flex:1;">ok</button>
+                    <button id="pdfNo" class="btn-secondary" style="flex:1;">non</button>
+                </div>
+            `;
+
+            document.getElementById('pdfOk').addEventListener('click', function() {
+                appendMessage('📎 <strong>PDF récapitulatif</strong>');
+                appendMessage(`
+                    <div class="msg-block">
+                        Contenu du document :
+                        <br><br>
+                        ✅ 4 questionnaires (Profil, Cognitif, Compétences, Situationnel)<br>
+                        ✅ Diagnostic stratégique personnalisé<br>
+                        ✅ Analyse des leviers d'apprentissage<br>
+                        ✅ Plan d'apprentissage 60 jours détaillé<br>
+                        ✅ Budget en TND<br>
+                        ✅ Ressources recommandées
+                        <br><br>
+                        <em>📥 PDF prêt à être téléchargé.</em>
+                    </div>
+                `);
+                appendMessage('✅ <strong>Marketing maîtrisé. CAS Marketing opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+
+            document.getElementById('pdfNo').addEventListener('click', function() {
+                appendMessage('✅ <strong>Marketing maîtrisé. CAS Marketing opérationnel.</strong>');
+                setMainButton('Terminé', 'fa-check', () => {});
+            });
+        }
+
+        // ============================================================
+        // HANDLE GO
+        // ============================================================
+        function handleGo() {
+            if (state.step === 'idle' || state.step === 'go') {
+                appendMessage('✅ Go lancé. Démarrage du <strong>Profil Marketing</strong>.');
+                state.step = 'go';
+                state.q1 = [];
+                state.q2 = [];
+                state.q3 = [];
+                state.q4 = [];
+                renderQuestion(q1Data, 'profil');
+                appendMessage('📋 <strong>Questionnaire Profil Marketing</strong> (4 questions)');
+            } else {
+                appendMessage('⚠️ Session en cours. Utilisez les boutons pour répondre.', false);
+            }
+        }
+
+        // ============================================================
+        // RESET
+        // ============================================================
+        function resetAgent() {
+            Object.assign(state, {
+                step: 'idle',
+                q1: [],
+                q2: [],
+                q3: [],
+                q4: [],
+                currentQuestionIndex: 0,
+                currentType: null,
+                questions: [],
+                need: '',
+                level: 'B',
+                learningPlan: false,
+                strategicInsights: null,
+            });
+            chatWindow.innerHTML = '';
+            clearDynamic();
+            appendMessage('CAS Marketing...Ready!');
+            appendMessage('Bienvenue. Pour démarrer, tapez <strong>"Go"</strong>.');
+            setMainButton('Go', 'fa-play', handleGo);
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        resetBtn.addEventListener('click', resetAgent);
+        setMainButton('Go', 'fa-play', handleGo);
+
+        console.log('✅ CAS Marketing Stratégique chargé');
+    </script>
+</body>
+</html>
